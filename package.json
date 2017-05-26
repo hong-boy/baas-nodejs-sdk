@@ -1,0 +1,35 @@
+{
+    "name":"baas-nodejs-sdk",
+    "version":"1.0.0",
+    "description":"nodejs sdk of baas rest api",
+    "main":"index.js",
+    "scripts":{
+        "test":"mocha --require intelli-espower-loader test/**/*.test.js",
+        "start":"node ./src/gen.js",
+        "build":"npm start"
+    },
+    "repository":{
+        "type":"git",
+        "url":"git+https://github.com/hong-boy/baas-nodejs-sdk.git"
+    },
+    "keywords":[
+        "chinamobile",
+        "baas api"
+    ],
+    "author":"IOT Chinamobile",
+    "license":"MIT",
+    "bugs":{
+        "url":"https://github.com/hong-boy/baas-nodejs-sdk/issues"
+    },
+    "homepage":"https://github.com/hong-boy/baas-nodejs-sdk#readme",
+    "devDependencies":{
+        "intelli-espower-loader":"^1.0.1",
+        "mocha":"^3.4.2",
+        "power-assert":"^1.4.2",
+        "swagger-js-codegen":"^1.10.0"
+    },
+    "dependencies":{
+        "q":"^1.5.0",
+        "request":"^2.81.0"
+    }
+}

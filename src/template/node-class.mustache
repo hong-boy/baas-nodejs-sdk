@@ -1,0 +1,98 @@
+/*jshint -W069 */
+/**
+* {{&description}}
+* @class {{&className}}
+* @param {(string|object)} [domainOrOptions] - The project domain or options object. If object, see the object's optional properties.
+* @param {string} [domainOrOptions.domain] - The project domain
+* @param {object} [domainOrOptions.token] - auth token - object with value property and optional headerOrQueryName and isQuery properties
+*/
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} {{&className}} = (function(){
+'use strict';
+
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} request = require('request');
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} Q = require('q');
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} fs = require('fs');
+
+function {{&className}}(options){
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} domain = (typeof options === 'object') ? options.domain : options;
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} ca = (typeof options === 'object') ? options.ca : null;
+this.domain = domain ? domain : '{{&domain}}';
+if(/^https:\/\//.test(this.domain)){
+this.ca = ca||fs.readFileSync('{{&ca}}'); // For https
+}
+if(this.domain.length === 0) {
+throw new Error('Domain parameter must be specified as a string.');
+}
+}
+
+function mergeQueryParams(parameters, queryParameters) {
+if (parameters.$queryParameters) {
+Object.keys(parameters.$queryParameters)
+.forEach(function(parameterName) {
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} parameter = parameters.$queryParameters[parameterName];
+queryParameters[parameterName] = parameter;
+});
+}
+return queryParameters;
+}
+
+/**
+* HTTP Request
+* @method
+* @name {{&className}}#request
+* @param {string} method - http method
+* @param {string} url - url to do request
+* @param {object} parameters
+* @param {object} body - body parameters / object
+* @param {object} headers - header parameters
+* @param {object} queryParameters - querystring parameters
+* @param {object} form - form data object
+* @param {object} deferred - promise object
+*/
+{{&className}}.prototype.request = function(method, url, parameters, body, headers, queryParameters, form, deferred){
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} req = {
+method: method,
+uri: this.domain + url,
+qs: queryParameters,
+headers: headers,
+body: body
+};
+
+if(this.ca){
+req.ca = this.ca;
+}
+
+if(Object.keys(form).length > 0) {
+req.form = form;
+}
+if(typeof(body) === 'object' && !(body instanceof Buffer)) {
+req.json = true;
+}
+request(req, function(error, response, body){
+if(error) {
+deferred.reject(error);
+} else {
+if(/^application\/(.*\\+)?json/.test(response.headers['content-type'])) {
+try {
+body = JSON.parse(body);
+} catch(e) {}
+}
+if(response.statusCode === 204) {
+deferred.resolve({ response: response });
+} else if(response.statusCode >= 200 && response.statusCode <= 299) {
+deferred.resolve({ response: response, body: body });
+} else {
+deferred.reject({ response: response, body: body });
+}
+}
+});
+};
+
+{{#methods}}
+    {{> method}}
+{{/methods}}
+
+return {{&className}};
+})();
+
+exports.{{&className}} = {{&className}};
