@@ -24,7 +24,7 @@ function processError(ret, msg) {
     if (resp.statusCode == 200) {
         return;
     }
-    return `Status:${resp.statusCode} | ${resp.statusText} | ${msg}`;
+    return `Status:${resp.statusCode} | ${resp.statusMessage} | ${msg}`;
 }
 
 describe('dist/APIClient.js', function () {
