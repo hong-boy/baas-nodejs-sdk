@@ -12,13 +12,14 @@
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} request = require('request');
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} Q = require('q');
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} fs = require('fs');
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} path = require('path');
 
 function {{&className}}(options){
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} domain = (typeof options === 'object') ? options.domain : options;
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} ca = (typeof options === 'object') ? options.ca : null;
 this.domain = domain ? domain : '{{&domain}}';
 if(/^https:\/\//.test(this.domain)){
-this.ca = ca||fs.readFileSync('{{&ca}}'); // For https
+this.ca = ca||fs.readFileSync(path.join(__dirname, '{{&ca}}')); // For https
 }
 if(this.domain.length === 0) {
 throw new Error('Domain parameter must be specified as a string.');

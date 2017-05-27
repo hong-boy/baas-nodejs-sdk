@@ -12,13 +12,14 @@ var APIClient = (function () {
     var request = require('request');
     var Q = require('q');
     var fs = require('fs');
+    var path = require('path');
 
     function APIClient(options) {
         var domain = (typeof options === 'object') ? options.domain : options;
         var ca = (typeof options === 'object') ? options.ca : null;
         this.domain = domain ? domain : 'https://baas.heclouds.com/api';
         if (/^https:\/\//.test(this.domain)) {
-            this.ca = ca || fs.readFileSync('.\\dist\\baas-chinamobile.pem'); // For https
+            this.ca = ca || fs.readFileSync(path.join(__dirname, './baas-chinamobile.pem')); // For https
         }
         if (this.domain.length === 0) {
             throw new Error('Domain parameter must be specified as a string.');

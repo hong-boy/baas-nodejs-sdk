@@ -1,11 +1,11 @@
 {
     "name":"baas-nodejs-sdk",
-    "version":"1.0.0",
+    "version":"1.0.1",
     "description":"nodejs sdk of baas rest api",
     "main":"index.js",
     "scripts":{
         "test":"mocha --require intelli-espower-loader test/**/*.test.js",
-        "start":"node ./src/gen.js",
+        "start":"node ./src/generator.js",
         "build":"npm start"
     },
     "repository":{
@@ -16,7 +16,7 @@
         "chinamobile",
         "baas api"
     ],
-    "author":"IOT Chinamobile",
+    "author":"hong-boy",
     "license":"MIT",
     "bugs":{
         "url":"https://github.com/hong-boy/baas-nodejs-sdk/issues"

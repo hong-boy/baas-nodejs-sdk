@@ -1,3 +1,5 @@
-'use strict';
-let conf = require('./config/base.conf.js');
-module.exports = require(`./dist/${conf.className}`).APIClient;
+/*jshint -W069 */
+/**
+ * Export APIClient
+ */
+module.exports = require('./dist/APIClient.js');
