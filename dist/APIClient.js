@@ -3116,4 +3116,4 @@ var APIClient = (function () {
     return APIClient;
 })();
 
-exports.APIClient = APIClient;
+module.exports = APIClient;
