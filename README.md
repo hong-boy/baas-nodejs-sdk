@@ -1,7 +1,8 @@
 # 轻应用Baas API SDK
 
 * [如何使用](#user-content-如何使用)
-* [在线API接口文档](#user-content-在线api接口文档)
+* [JS API文档](https://www.baidu.com)
+* [REST API接口文档](https://baas.heclouds.com/api/swagger-ui.html)
 
 ## 如何使用
 ### 安装
@@ -63,5 +64,3 @@ async function login(user){
 login();
 
 ```
-## 在线API接口文档
-[https://baas.heclouds.com/api/swagger-ui.html](https://baas.heclouds.com/api/swagger-ui.html)
