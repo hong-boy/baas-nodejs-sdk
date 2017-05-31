@@ -1,7 +1,7 @@
 # 轻应用Baas API SDK
 
 * [如何使用](#user-content-如何使用)
-* [JS API文档](https://www.baidu.com)
+* [JS API文档](https://hong-boy.github.io/baas-nodejs-sdk/index.html)
 * [REST API接口文档](https://baas.heclouds.com/api/swagger-ui.html)
 
 ## 如何使用
