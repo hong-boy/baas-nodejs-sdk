@@ -6,7 +6,7 @@
     "scripts":{
         "test":"mocha --require intelli-espower-loader test/**/*.test.js",
         "start":"node ./src/generator.js",
-        "doc":"node_modules/.bin/jsdoc --readme README.md dist/APIClient.js -d jsdoc",
+        "doc":"node_modules/.bin/jsdoc --readme README.md dist/APIClient.js -d docs",
         "build":"npm start"
     },
     "repository":{

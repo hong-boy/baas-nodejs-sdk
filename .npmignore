@@ -1,7 +1,7 @@
 node_moduels/
 config/
 src/
-jsdoc/
+docs/
 .editorconfig
 .gitignore
 .travis.yml

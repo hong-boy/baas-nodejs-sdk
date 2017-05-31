@@ -241,6 +241,7 @@ tr > th:last-child{ border-right:1px solid #ddd; }
 .prettyprint.linenums li{
     border-left:3px #ddd solid;
 }
+
 .prettyprint.linenums li.selected,
 .prettyprint.linenums li.selected *{
     background-color:lightyellow;
@@ -256,6 +257,7 @@ tr > th:last-child{ border-right:1px solid #ddd; }
     font-family:Consolas, Monaco, 'Andale Mono', monospace;
     font-size:100%;
 }
+
 .params td.description > p:first-child,
 .props td.description > p:first-child{
     margin-top:0;

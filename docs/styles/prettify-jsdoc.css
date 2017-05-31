@@ -6,47 +6,55 @@
     font-weight:normal;
     font-style:normal;
 }
+
 /* string content */
 .str{
     color:#006400;
     font-weight:normal;
     font-style:normal;
 }
+
 /* a keyword */
 .kwd{
     color:#000000;
     font-weight:bold;
     font-style:normal;
 }
+
 /* a comment */
 .com{
     font-weight:normal;
     font-style:italic;
 }
+
 /* a type name */
 .typ{
     color:#000000;
     font-weight:normal;
     font-style:normal;
 }
+
 /* a literal value */
 .lit{
     color:#006400;
     font-weight:normal;
     font-style:normal;
 }
+
 /* punctuation */
 .pun{
     color:#000000;
     font-weight:bold;
     font-style:normal;
 }
+
 /* lisp open bracket */
 .opn{
     color:#000000;
     font-weight:bold;
     font-style:normal;
 }
+
 /* lisp close bracket */
 .clo{
     color:#000000;

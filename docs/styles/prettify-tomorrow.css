@@ -89,6 +89,7 @@ pre.prettyprint {
 ol.linenums{
     margin-top:0;
     margin-bottom:0; }
+
 /* IE indents via margin-left */
 li.L0,
 li.L1,
@@ -101,6 +102,7 @@ li.L7,
 li.L8,
 li.L9{
     /* */ }
+
 /* Alternate shading for lines */
 li.L1,
 li.L3,
