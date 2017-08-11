@@ -2,6 +2,12 @@
 const path = require('path');
 const rootdir = path.join(__dirname, '..');
 
+let config4Dev = {
+    protocol: 'https',
+    host: '172.19.3.140:8765',
+    basePath: '/rest',
+};
+
 let config = {
     protocol: 'https',
     host: 'baas.heclouds.com',
@@ -12,7 +18,7 @@ let config = {
     dist: path.join(rootdir, 'dist/') // 默认输出路径
 };
 
-module.exports = Object.assign(config, {
+module.exports = Object.assign(config, config4Dev, {
     ca: {// ca证书配置
         src: path.join(rootdir, 'config', config.caName),
         dest: path.join(config.dist, config.caName) // ca证书输出路径

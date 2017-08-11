@@ -1396,6 +1396,13 @@ var APIClient = (function () {
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
 
+        let signatureParam = Object.assign({}, queryParameters, form, body, parameters);
+        delete signatureParam['sessionToken'];
+        let accessId = 'EUqV2yIU';
+        let nonce = 'B2d1a32w112a3ldkKDKNEN';
+        let timestamp = '123456';
+        headers['authCode'] = genAuthCode('GET', this.accessKey, accessId, nonce, signatureParam, timestamp);
+
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
