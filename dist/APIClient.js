@@ -13,17 +13,83 @@ var APIClient = (function () {
     var Q = require('q');
     var fs = require('fs');
     var path = require('path');
+    var lodash = require('lodash');
+    var crypto = require('crypto');
+    var CryptoJS = require('crypto-js');
+    var uuid = require('uuid');
 
+    /**
+     * 构造函数
+     * @param{string} options.accessId - 密钥ID
+     * @param{string} options.accessKey - 由平台系统和accessId一起生成，签名的密钥，严格保密只有平台方和用户知道
+     * @param{string} options.domain - BaaS API服务地址（可选）
+     * @param{string} options.ca - https证书（可选）
+     */
     function APIClient(options) {
-        var domain = (typeof options === 'object') ? options.domain : options;
-        var ca = (typeof options === 'object') ? options.ca : null;
+        if (!lodash.isPlainObject(options) || !options.domain || !options.accessKey || !options.accessId) {
+            throw Error('Illegal parameters: All of options.doamin, options.accessKey and options.accessId is required!');
+        }
+        var domain = options.domain;
+        var ca = options.ca;
+
+        this.accessKey = options.accessKey;
+        this.accessId = options.accessId;
         this.domain = domain ? domain : 'https://baas.heclouds.com/api';
+
         if (/^https:\/\//.test(this.domain)) {
             this.ca = ca || fs.readFileSync(path.join(__dirname, './baas-chinamobile.pem')); // For https
         }
         if (this.domain.length === 0) {
             throw new Error('Domain parameter must be specified as a string.');
         }
+    }
+
+    /**
+     * 包装请求参数
+     * @param method
+     * @param params
+     * @param accessKey
+     * @param accessId
+     * @param req
+     */
+    function wrap4SignatureKey(method, params, accessKey, accessId, req) {
+        let signatureParams = Object.assign({}, params);
+        delete signatureParams['sessionToken'];
+        let authCode = genAuthCode(method, accessKey, accessId, undefined, signatureParams, undefined);
+        req.headers['authCode'] = authCode;
+    }
+
+    /**
+     * 生成authCode
+     * @param{string} requestMethod
+     * @param{string} ak accessKey
+     * @param{string} accessId
+     * @param{string} nonce 随机字符串
+     * @param{object} params
+     * @param{string} timestamp
+     * @returns {string} authCode（形如：accessId=EUqV2yIU&nonce=B2d1a32w112a3ldkKDKNEN&timestamp=1501661974308&signature=gGORxQcvvKG%2B2kp8%2FwgnRM5nvlA%3D）
+     */
+    function genAuthCode(requestMethod, ak, accessId, nonce, params, timestamp) {
+        // 1. 获得authPerfixString
+        let arr = [];
+        arr.push('accessId=' + accessId);
+        arr.push('nonce=' + (!nonce ? uuid.v1() : nonce));
+        arr.push('timestamp=' + (!timestamp ? Date.now() : timestamp));
+        let authPerfixString = arr.join('&');
+
+        // 2. 获得signature
+        let signingKey = CryptoJS.HmacSHA1(authPerfixString, ak).toString(CryptoJS.enc.Base64);
+
+        // 3. 获取signatureContent
+        arr = [];
+        for (let key of Object.keys(params).sort()) {
+            arr.push([key, encodeURIComponent(params[key])].join('='));
+        }
+        let signatureContent = requestMethod.toUpperCase() + '-' + arr.join('&');
+
+        // 4. 获得signature
+        let signature = CryptoJS.HmacSHA1(signatureContent, signingKey).toString(CryptoJS.enc.Base64);
+        return (authPerfixString + '&signature=' + encodeURIComponent(signature));
     }
 
     function mergeQueryParams(parameters, queryParameters) {
@@ -58,6 +124,8 @@ var APIClient = (function () {
             headers: headers,
             body: body
         };
+
+        wrap4SignatureKey(method, parameters, this.accessKey, this.accessId, req);
 
         if (this.ca) {
             req.ca = this.ca;
@@ -1395,13 +1463,6 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
-        let signatureParam = Object.assign({}, queryParameters, form, body, parameters);
-        delete signatureParam['sessionToken'];
-        let accessId = 'EUqV2yIU';
-        let nonce = 'B2d1a32w112a3ldkKDKNEN';
-        let timestamp = '123456';
-        headers['authCode'] = genAuthCode('GET', this.accessKey, accessId, nonce, signatureParam, timestamp);
 
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 

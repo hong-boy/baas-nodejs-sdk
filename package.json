@@ -37,7 +37,11 @@
         "swagger-js-codegen":"^1.10.0"
     },
     "dependencies":{
+        "crypto":"^1.0.1",
+        "crypto-js":"^3.1.9-1",
+        "lodash":"^4.17.4",
         "q":"^1.5.0",
-        "request":"^2.81.0"
+        "request":"^2.81.0",
+        "uuid":"^3.1.0"
     }
 }
