@@ -53,9 +53,9 @@ var APIClient = (function () {
      * @param req
      */
     function wrap4SignatureKey(method, params, accessKey, accessId, req) {
-        let signatureParams = Object.assign({}, params);
+        var signatureParams = Object.assign({}, params);
         delete signatureParams['sessionToken'];
-        let authCode = genAuthCode(method, accessKey, accessId, undefined, signatureParams, undefined);
+        var authCode = genAuthCode(method, accessKey, accessId, undefined, signatureParams, undefined);
         req.headers['authCode'] = authCode;
     }
 
@@ -71,24 +71,30 @@ var APIClient = (function () {
      */
     function genAuthCode(requestMethod, ak, accessId, nonce, params, timestamp) {
         // 1. 获得authPerfixString
-        let arr = [];
+        var arr = [];
         arr.push('accessId=' + accessId);
         arr.push('nonce=' + (!nonce ? uuid.v1() : nonce));
         arr.push('timestamp=' + (!timestamp ? Date.now() : timestamp));
-        let authPerfixString = arr.join('&');
+        var authPerfixString = arr.join('&');
 
         // 2. 获得signature
-        let signingKey = CryptoJS.HmacSHA1(authPerfixString, ak).toString(CryptoJS.enc.Base64);
+        var signingKey = CryptoJS.HmacSHA1(authPerfixString, ak).toString(CryptoJS.enc.Base64);
 
         // 3. 获取signatureContent
         arr = [];
-        for (let key of Object.keys(params).sort()) {
-            arr.push([key, encodeURIComponent(params[key])].join('='));
+
+        var paramsKeyArr = Object.keys(params).sort();
+        for (var i = 0, len = paramsKeyArr.length; i < len; i++) {
+            var paramsKey = paramsKeyArr[i];
+            var value = params[paramsKey];
+            value = lodash.isArray(value) || lodash.isPlainObject(value) ? JSON.stringify(value) : value;
+            arr.push([paramsKey, encodeURIComponent(value)].join('='));
         }
-        let signatureContent = requestMethod.toUpperCase() + '-' + arr.join('&');
+
+        var signatureContent = requestMethod.toUpperCase() + '-' + arr.join('&');
 
         // 4. 获得signature
-        let signature = CryptoJS.HmacSHA1(signatureContent, signingKey).toString(CryptoJS.enc.Base64);
+        var signature = CryptoJS.HmacSHA1(signatureContent, signingKey).toString(CryptoJS.enc.Base64);
         return (authPerfixString + '&signature=' + encodeURIComponent(signature));
     }
 

@@ -29,7 +29,7 @@ async function getSessionToken() {
         console.log('/v1.0/login 用户登录', sessionToken, ret.body);
         return sessionToken;
     } catch (e) {
-        processError(e);
+        processError(ret);
     }
 }
 
@@ -46,14 +46,28 @@ describe('dist/APIClient.js', function () {
         beforeEach(async function () {
             this.sessionToken = await getSessionToken();
         });
-        it('/v1.0/users 查询用户列表', async function () {
+        //it('/v1.0/users 查询用户列表', async function () {
+        //    debugger;
+        //    let ret = await client.getUsersUsingGET({
+        //        sessionToken: this.sessionToken
+        //    });
+        //    debugger;
+        //    assert.ok(ret.body, processError(ret, '查询用户列表失败'));
+        //});
+        it('/v1.0/users 查询用户列表', function (done) {
             debugger;
-            let ret = await client.getUsersUsingGET({
+            let promise = client.getUsersUsingGET({
                 sessionToken: this.sessionToken,
-                email: '123@qq.com'
+                //email: '1232@qq.com'
             });
-            debugger;
-            assert.ok(ret.body, processError(ret, '查询用户列表失败'));
+            promise.then(function (ret) {
+                assert.ok(ret, processError(ret, '查询用户列表失败'));
+                done();
+            }).catch(function (e) {
+                console.log(e);
+                done();
+            })
+
         });
     });
 });

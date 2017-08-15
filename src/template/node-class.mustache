@@ -53,9 +53,9 @@ throw new Error('Domain parameter must be specified as a string.');
 * @param req
 */
 function wrap4SignatureKey(method, params, accessKey, accessId, req){
-let signatureParams = Object.assign({}, params);
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} signatureParams = Object.assign({}, params);
 delete signatureParams['sessionToken'];
-let authCode = genAuthCode(method, accessKey, accessId, undefined, signatureParams, undefined);
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} authCode = genAuthCode(method, accessKey, accessId, undefined, signatureParams, undefined);
 req.headers['authCode'] = authCode;
 }
 
@@ -71,24 +71,40 @@ req.headers['authCode'] = authCode;
 */
 function genAuthCode(requestMethod, ak, accessId, nonce, params, timestamp) {
 // 1. 获得authPerfixString
-let arr = [];
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} arr = [];
 arr.push('accessId=' + accessId);
 arr.push('nonce=' + (!nonce ? uuid.v1() : nonce));
 arr.push('timestamp=' + (!timestamp ? Date.now() : timestamp));
-let authPerfixString = arr.join('&');
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} authPerfixString = arr.join('&');
 
 // 2. 获得signature
-let signingKey = CryptoJS.HmacSHA1(authPerfixString, ak).toString(CryptoJS.enc.Base64);
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} signingKey = CryptoJS.HmacSHA1(authPerfixString, ak).toString(CryptoJS.enc.Base64);
 
 // 3. 获取signatureContent
 arr = [];
+
+{{#isES6}}
 for (let key of Object.keys(params).sort()) {
-arr.push([key, encodeURIComponent(params[key])].join('='));
+let value = params[key];
+value = lodash.isArray(value) || lodash.isPlainObject(value) ? JSON.stringify(value) : value;
+arr.push([key, encodeURIComponent(value)].join('='));
 }
-let signatureContent = requestMethod.toUpperCase() + '-' + arr.join('&');
+{{/isES6}}
+
+{{^isES6}}
+    var paramsKeyArr = Object.keys(params).sort();
+    for(var i = 0, len = paramsKeyArr.length; i < len; i++){
+    var paramsKey = paramsKeyArr[i];
+    var value = params[paramsKey];
+    value = lodash.isArray(value) || lodash.isPlainObject(value) ? JSON.stringify(value) : value;
+    arr.push([paramsKey, encodeURIComponent(value)].join('='));
+    }
+{{/isES6}}
+
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} signatureContent = requestMethod.toUpperCase() + '-' + arr.join('&');
 
 // 4. 获得signature
-let signature = CryptoJS.HmacSHA1(signatureContent, signingKey).toString(CryptoJS.enc.Base64);
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} signature = CryptoJS.HmacSHA1(signatureContent, signingKey).toString(CryptoJS.enc.Base64);
 return (authPerfixString + '&signature=' + encodeURIComponent(signature));
 }
 
