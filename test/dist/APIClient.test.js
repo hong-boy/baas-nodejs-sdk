@@ -45,20 +45,16 @@ describe('dist/APIClient.js', function () {
             this.sessionToken = await getSessionToken();
         });
 
-        it('/v1.0/devices 导入单个设备', function (done) {
-            let promise = client.addDeviceUsingPOST({
+        it('/v1.0/devices 查询设备', function (done) {
+            let promise = client.getDevicesListUsingGET({
                 sessionToken: this.sessionToken,
-                addDevice: {
-                    masterKey: '2323',
-                    apiKey: '2323243',
-                    deviceId: 'ewwr123',
-                    deviceName: 'wetret',
-                    deviceOwner: 'manager',
-                    deviceGroupId: 0
-                }
+                deviceName: 0,
+                deviceOwner: '',
+                pageNum: 1,
+                pageSize: 10
             });
             promise.then(function (ret) {
-                assert.ok(ret, processError(ret || {}, '导入单个设备失败'));
+                assert.ok(ret, processError(ret || {}, '查询设备失败'));
                 done();
             }).catch(function (e) {
                 //console.log(e);
@@ -66,6 +62,25 @@ describe('dist/APIClient.js', function () {
             })
         });
 
-
+        //it('/v1.0/devices 导入单个设备', function (done) {
+        //    let promise = client.addDeviceUsingPOST({
+        //        sessionToken: this.sessionToken,
+        //        addDevice: {
+        //            masterKey: '2323',
+        //            apiKey: '2323243',
+        //            deviceId: 'ewwr123',
+        //            deviceName: 'wetret',
+        //            deviceOwner: 'manager',
+        //            deviceGroupId: 0
+        //        }
+        //    });
+        //    promise.then(function (ret) {
+        //        assert.ok(ret, processError(ret || {}, '导入单个设备失败'));
+        //        done();
+        //    }).catch(function (e) {
+        //        //console.log(e);
+        //        done();
+        //    })
+        //});
     });
 });

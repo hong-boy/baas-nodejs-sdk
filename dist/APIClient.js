@@ -65,6 +65,7 @@ var APIClient = (function () {
      * @param req
      */
     function wrap4SignatureKey(method, params, accessKey, accessId, req) {
+        delete params['sessionToken'];
         var authCode = genAuthCode.call(this, method, accessKey, accessId, undefined, params, undefined);
         logger(this, 'authCode: ', authCode);
         req.headers['authCode'] = authCode;
@@ -101,7 +102,9 @@ var APIClient = (function () {
             var paramsKey = paramsKeyArr[i];
             var value = params[paramsKey];
             value = lodash.isArray(value) || lodash.isPlainObject(value) ? JSON.stringify(value) : value;
-            arr.push([paramsKey, encodeURIComponent(value)].join('='));
+            if (value || lodash.isNumber(value)) {
+                arr.push([paramsKey, encodeURIComponent(value)].join('='));
+            }
         }
 
         var signatureContent = requestMethod.toUpperCase() + '-' + arr.join('&');

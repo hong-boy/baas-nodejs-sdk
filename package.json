@@ -1,6 +1,6 @@
 {
     "name":"baas-nodejs-sdk",
-    "version":"1.1.4",
+    "version":"1.1.6",
     "description":"nodejs sdk of baas rest api",
     "main":"index.js",
     "scripts":{

@@ -65,6 +65,7 @@ console.log.apply(console, Array.prototype.slice.call(arguments, 1));
 * @param req
 */
 function wrap4SignatureKey(method, params, accessKey, accessId, req){
+delete params['sessionToken'];
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} authCode = genAuthCode.call(this, method, accessKey, accessId, undefined, params, undefined);
 logger(this, 'authCode: ', authCode);
 req.headers['authCode'] = authCode;
@@ -110,7 +111,9 @@ arr.push([key, encodeURIComponent(value)].join('='));
     var paramsKey = paramsKeyArr[i];
     var value = params[paramsKey];
     value = lodash.isArray(value) || lodash.isPlainObject(value) ? JSON.stringify(value) : value;
+    if(value || lodash.isNumber(value)){
     arr.push([paramsKey, encodeURIComponent(value)].join('='));
+    }
     }
 {{/isES6}}
 
