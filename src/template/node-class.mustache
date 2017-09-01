@@ -24,6 +24,7 @@
 * @param{string} options.accessKey - 由平台系统和accessId一起生成，签名的密钥，严格保密只有平台方和用户知道
 * @param{string} options.domain - BaaS API服务地址（可选）
 * @param{string} options.ca - https证书（可选）
+* @param{boolean} options.debug - 是否启用debug模式（可以打印出日志）（可选）
 */
 function {{&className}}(options){
 if(!lodash.isPlainObject(options) || !options.domain || !options.accessKey || !options.accessId){
@@ -32,6 +33,7 @@ throw Error('Illegal parameters: All of options.doamin, options.accessKey and op
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} domain = options.domain;
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} ca = options.ca;
 
+this.debug = options.debug;
 this.accessKey = options.accessKey;
 this.accessId = options.accessId;
 this.domain = domain ? domain : '{{&domain}}';
@@ -45,6 +47,16 @@ throw new Error('Domain parameter must be specified as a string.');
 }
 
 /**
+* 日志记录
+* @param msg
+*/
+function logger(ctx, msg){
+if(ctx.debug){
+console.log.apply(console, Array.prototype.slice.call(arguments, 1));
+}
+}
+
+/**
 * 包装请求参数
 * @param method
 * @param params
@@ -53,9 +65,8 @@ throw new Error('Domain parameter must be specified as a string.');
 * @param req
 */
 function wrap4SignatureKey(method, params, accessKey, accessId, req){
-{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} signatureParams = Object.assign({}, params);
-delete signatureParams['sessionToken'];
-{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} authCode = genAuthCode(method, accessKey, accessId, undefined, signatureParams, undefined);
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} authCode = genAuthCode.call(this, method, accessKey, accessId, undefined, params, undefined);
+logger(this, 'authCode: ', authCode);
 req.headers['authCode'] = authCode;
 }
 
@@ -76,9 +87,11 @@ arr.push('accessId=' + accessId);
 arr.push('nonce=' + (!nonce ? uuid.v1() : nonce));
 arr.push('timestamp=' + (!timestamp ? Date.now() : timestamp));
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} authPerfixString = arr.join('&');
+logger(this, 'authPrefixString: ', authPerfixString);
 
 // 2. 获得signature
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} signingKey = CryptoJS.HmacSHA1(authPerfixString, ak).toString(CryptoJS.enc.Base64);
+logger(this, 'signingKey: ', signingKey);
 
 // 3. 获取signatureContent
 arr = [];
@@ -102,6 +115,7 @@ arr.push([key, encodeURIComponent(value)].join('='));
 {{/isES6}}
 
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} signatureContent = requestMethod.toUpperCase() + '-' + arr.join('&');
+logger(this, 'signatureContent: ', signatureContent);
 
 // 4. 获得signature
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} signature = CryptoJS.HmacSHA1(signatureContent, signingKey).toString(CryptoJS.enc.Base64);
@@ -141,7 +155,7 @@ headers: headers,
 body: body
 };
 
-wrap4SignatureKey(method, parameters, this.accessKey, this.accessId, req);
+wrap4SignatureKey.call(this, method, lodash.assign({}, body, queryParameters), this.accessKey, this.accessId, req);
 
 if(this.ca){
 req.ca = this.ca;

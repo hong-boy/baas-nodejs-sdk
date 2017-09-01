@@ -24,6 +24,7 @@ var APIClient = (function () {
      * @param{string} options.accessKey - 由平台系统和accessId一起生成，签名的密钥，严格保密只有平台方和用户知道
      * @param{string} options.domain - BaaS API服务地址（可选）
      * @param{string} options.ca - https证书（可选）
+     * @param{boolean} options.debug - 是否启用debug模式（可以打印出日志）（可选）
      */
     function APIClient(options) {
         if (!lodash.isPlainObject(options) || !options.domain || !options.accessKey || !options.accessId) {
@@ -32,6 +33,7 @@ var APIClient = (function () {
         var domain = options.domain;
         var ca = options.ca;
 
+        this.debug = options.debug;
         this.accessKey = options.accessKey;
         this.accessId = options.accessId;
         this.domain = domain ? domain : 'https://baas.heclouds.com/api';
@@ -45,6 +47,16 @@ var APIClient = (function () {
     }
 
     /**
+     * 日志记录
+     * @param msg
+     */
+    function logger(ctx, msg) {
+        if (ctx.debug) {
+            console.log.apply(console, Array.prototype.slice.call(arguments, 1));
+        }
+    }
+
+    /**
      * 包装请求参数
      * @param method
      * @param params
@@ -53,9 +65,8 @@ var APIClient = (function () {
      * @param req
      */
     function wrap4SignatureKey(method, params, accessKey, accessId, req) {
-        var signatureParams = Object.assign({}, params);
-        delete signatureParams['sessionToken'];
-        var authCode = genAuthCode(method, accessKey, accessId, undefined, signatureParams, undefined);
+        var authCode = genAuthCode.call(this, method, accessKey, accessId, undefined, params, undefined);
+        logger(this, 'authCode: ', authCode);
         req.headers['authCode'] = authCode;
     }
 
@@ -76,9 +87,11 @@ var APIClient = (function () {
         arr.push('nonce=' + (!nonce ? uuid.v1() : nonce));
         arr.push('timestamp=' + (!timestamp ? Date.now() : timestamp));
         var authPerfixString = arr.join('&');
+        logger(this, 'authPrefixString: ', authPerfixString);
 
         // 2. 获得signature
         var signingKey = CryptoJS.HmacSHA1(authPerfixString, ak).toString(CryptoJS.enc.Base64);
+        logger(this, 'signingKey: ', signingKey);
 
         // 3. 获取signatureContent
         arr = [];
@@ -92,6 +105,7 @@ var APIClient = (function () {
         }
 
         var signatureContent = requestMethod.toUpperCase() + '-' + arr.join('&');
+        logger(this, 'signatureContent: ', signatureContent);
 
         // 4. 获得signature
         var signature = CryptoJS.HmacSHA1(signatureContent, signingKey).toString(CryptoJS.enc.Base64);
@@ -131,7 +145,7 @@ var APIClient = (function () {
             body: body
         };
 
-        wrap4SignatureKey(method, parameters, this.accessKey, this.accessId, req);
+        wrap4SignatureKey.call(this, method, lodash.assign({}, body, queryParameters), this.accessKey, this.accessId, req);
 
         if (this.ca) {
             req.ca = this.ca;
@@ -188,6 +202,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getDevicesListUsingGET = function (parameters) {
+        logger(this, '-------------getDevicesListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -243,7 +258,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -257,6 +273,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.addDeviceUsingPOST = function (parameters) {
+        logger(this, '-------------addDeviceUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -289,7 +306,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -308,6 +326,7 @@ var APIClient = (function () {
      * @param {string} parameters.endDate - 结束时间
      */
     APIClient.prototype.findDeviceAlarmUsingGET = function (parameters) {
+        logger(this, '-------------findDeviceAlarmUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -375,7 +394,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -392,6 +412,7 @@ var APIClient = (function () {
      * @param {string} parameters.limit - 最大查询数据量
      */
     APIClient.prototype.findArchivesUsingGET = function (parameters) {
+        logger(this, '-------------findArchivesUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -436,7 +457,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -450,6 +472,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.addArchivesUsingPOST = function (parameters) {
+        logger(this, '-------------addArchivesUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -482,7 +505,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -496,6 +520,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.updateArchivesUsingPUT = function (parameters) {
+        logger(this, '-------------updateArchivesUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -528,7 +553,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -544,6 +570,7 @@ var APIClient = (function () {
      * @param {string} parameters.archiveId - 设备档案ID
      */
     APIClient.prototype.deleteArchivesUsingDELETE = function (parameters) {
+        logger(this, '-------------deleteArchivesUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -579,7 +606,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -593,6 +621,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.findSingleArchiveUsingGET = function (parameters) {
+        logger(this, '-------------findSingleArchiveUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -623,7 +652,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -642,6 +672,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getCommandStatusListUsingGET = function (parameters) {
+        logger(this, '-------------getCommandStatusListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -689,7 +720,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -703,6 +735,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.sendCommandsUsingPOST = function (parameters) {
+        logger(this, '-------------sendCommandsUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -735,7 +768,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -749,6 +783,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.getCommandStatusByCmdUuidUsingGET = function (parameters) {
+        logger(this, '-------------getCommandStatusByCmdUuidUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -779,7 +814,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -798,6 +834,7 @@ var APIClient = (function () {
      * @param {string} parameters.endDate - 结束时间
      */
     APIClient.prototype.findDeviceDatasUsingGET = function (parameters) {
+        logger(this, '-------------findDeviceDatasUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -865,7 +902,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -884,6 +922,7 @@ var APIClient = (function () {
      * @param {string} parameters.endDate - 结束时间
      */
     APIClient.prototype.findSingleDeviceDatasUsingGET = function (parameters) {
+        logger(this, '-------------findSingleDeviceDatasUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -954,7 +993,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -974,6 +1014,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getDeviceDelegationsListUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceDelegationsListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1025,7 +1066,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1039,6 +1081,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.addDeviceDelegationsUsingPOST = function (parameters) {
+        logger(this, '-------------addDeviceDelegationsUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1071,7 +1114,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1090,6 +1134,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getDeviceDelegateOthersUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceDelegateOthersUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1137,7 +1182,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1156,6 +1202,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getDeviceDelegateSelfUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceDelegateSelfUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1203,7 +1250,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1217,6 +1265,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.getDeviceDelegationsByIdUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceDelegationsByIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1247,7 +1296,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1261,6 +1311,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.deleteDeviceDelegationsUsingDELETE = function (parameters) {
+        logger(this, '-------------deleteDeviceDelegationsUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1291,7 +1342,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1305,6 +1357,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.disableDevicesByIdUsingPUT = function (parameters) {
+        logger(this, '-------------disableDevicesByIdUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1335,7 +1388,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1349,6 +1403,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.enableDevicesByIdUsingPUT = function (parameters) {
+        logger(this, '-------------enableDevicesByIdUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1379,7 +1434,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1393,6 +1449,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.addDevicesUsingPOST = function (parameters) {
+        logger(this, '-------------addDevicesUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1425,7 +1482,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1439,6 +1497,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.getDevicesByIdUsingGET = function (parameters) {
+        logger(this, '-------------getDevicesByIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1469,7 +1528,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1484,6 +1544,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.updateDevicesUsingPUT = function (parameters) {
+        logger(this, '-------------updateDevicesUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1523,7 +1584,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1545,6 +1607,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getDeviceLogsListUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceLogsListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1604,7 +1667,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1624,6 +1688,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getDeviceSharesListUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceSharesListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1675,7 +1740,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1689,6 +1755,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.addDeviceSharesUsingPOST = function (parameters) {
+        logger(this, '-------------addDeviceSharesUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1721,7 +1788,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1740,6 +1808,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getDeviceShareOthersUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceShareOthersUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1787,7 +1856,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1806,6 +1876,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getDeviceShareSelfUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceShareSelfUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1853,7 +1924,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1867,6 +1939,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.getDeviceSharesByIdUsingGET = function (parameters) {
+        logger(this, '-------------getDeviceSharesByIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1897,7 +1970,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1911,6 +1985,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.deleteDeviceSharesUsingDELETE = function (parameters) {
+        logger(this, '-------------deleteDeviceSharesUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1941,7 +2016,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -1959,6 +2035,7 @@ var APIClient = (function () {
      * @param {string} parameters.endDate - 结束时间限制
      */
     APIClient.prototype.findStatisticsDatasUsingGET = function (parameters) {
+        logger(this, '-------------findStatisticsDatasUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2022,7 +2099,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2036,6 +2114,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.deleteDevicesUsingDELETE = function (parameters) {
+        logger(this, '-------------deleteDevicesUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2066,7 +2145,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2080,6 +2160,7 @@ var APIClient = (function () {
      * @param {string} parameters.key - 外部数据key
      */
     APIClient.prototype.findExternalDataUsingGET = function (parameters) {
+        logger(this, '-------------findExternalDataUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2112,7 +2193,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2126,6 +2208,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.addExternalDataUsingPOST = function (parameters) {
+        logger(this, '-------------addExternalDataUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2158,7 +2241,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2172,6 +2256,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.updateExternalDataUsingPUT = function (parameters) {
+        logger(this, '-------------updateExternalDataUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2204,7 +2289,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2219,6 +2305,7 @@ var APIClient = (function () {
      * @param {string} parameters.recordId - 外部数据id
      */
     APIClient.prototype.deleteExternalDataUsingDELETE = function (parameters) {
+        logger(this, '-------------deleteExternalDataUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2255,7 +2342,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2272,6 +2360,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.findCustomPermissionUsingGET = function (parameters) {
+        logger(this, '-------------findCustomPermissionUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2311,7 +2400,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2324,6 +2414,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.findCustomPermissionByUserUsingGET = function (parameters) {
+        logger(this, '-------------findCustomPermissionByUserUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2347,7 +2438,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2362,6 +2454,7 @@ var APIClient = (function () {
      * @param {string} parameters.password - 密码
      */
     APIClient.prototype.loginUsingGET = function (parameters) {
+        logger(this, '-------------loginUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2388,7 +2481,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2403,6 +2497,7 @@ var APIClient = (function () {
      * @param {string} parameters.invalid - 失效时间
      */
     APIClient.prototype.sendEmailVerificationUsingPOST = function (parameters) {
+        logger(this, '-------------sendEmailVerificationUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2439,7 +2534,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2453,6 +2549,7 @@ var APIClient = (function () {
      * @param {string} parameters.appToken - appToken
      */
     APIClient.prototype.emailVerificationUsingPOST = function (parameters) {
+        logger(this, '-------------emailVerificationUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2485,7 +2582,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2499,6 +2597,7 @@ var APIClient = (function () {
      * @param {string} parameters.appToken - appToken
      */
     APIClient.prototype.registerUserUsingPOST = function (parameters) {
+        logger(this, '-------------registerUserUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2531,7 +2630,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2544,6 +2644,7 @@ var APIClient = (function () {
      * @param {string} parameters.appToken - appToken
      */
     APIClient.prototype.findRoleAllowRegUsingGET = function (parameters) {
+        logger(this, '-------------findRoleAllowRegUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2567,7 +2668,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2580,6 +2682,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.findRoleNameListUsingGET = function (parameters) {
+        logger(this, '-------------findRoleNameListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2603,7 +2706,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2618,6 +2722,7 @@ var APIClient = (function () {
      * @param {string} parameters.invalid - 失效时间
      */
     APIClient.prototype.sendSmsVerificationUsingPOST = function (parameters) {
+        logger(this, '-------------sendSmsVerificationUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2654,7 +2759,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2668,6 +2774,7 @@ var APIClient = (function () {
      * @param {string} parameters.appToken - appToken
      */
     APIClient.prototype.checkCommandScriptUsingPOST = function (parameters) {
+        logger(this, '-------------checkCommandScriptUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2700,7 +2807,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2718,6 +2826,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.getUsersUsingGET = function (parameters) {
+        logger(this, '-------------getUsersUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2761,7 +2870,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2775,6 +2885,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.insertUserUsingPOST = function (parameters) {
+        logger(this, '-------------insertUserUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2807,7 +2918,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2822,6 +2934,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.updateUserUsingPUT = function (parameters) {
+        logger(this, '-------------updateUserUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2861,7 +2974,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2875,6 +2989,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.deleteUserByUserIdUsingDELETE = function (parameters) {
+        logger(this, '-------------deleteUserByUserIdUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2905,7 +3020,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2919,6 +3035,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.updatePasswordUsingPUT = function (parameters) {
+        logger(this, '-------------updatePasswordUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2951,7 +3068,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -2965,6 +3083,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.getUserByUserIdUsingGET = function (parameters) {
+        logger(this, '-------------getUserByUserIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2995,7 +3114,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -3011,6 +3131,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageSize - 每页条数
      */
     APIClient.prototype.queryChildInfoUsingGET = function (parameters) {
+        logger(this, '-------------queryChildInfoUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3049,7 +3170,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -3063,6 +3185,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.disableUserUsingPUT = function (parameters) {
+        logger(this, '-------------disableUserUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3093,7 +3216,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -3107,6 +3231,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.enableUserUsingPUT = function (parameters) {
+        logger(this, '-------------enableUserUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3137,7 +3262,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
@@ -3151,6 +3277,7 @@ var APIClient = (function () {
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.resetPasswordUsingPUT = function (parameters) {
+        logger(this, '-------------resetPasswordUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3181,7 +3308,8 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;

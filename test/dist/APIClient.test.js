@@ -4,16 +4,14 @@ const APIClient = require('../../index.js');
 let sessionToken = null;
 
 const CONFIG_ENV_TEST = {
-    //domain: 'https://172.19.3.140:8765/rest',
+    debug: true,
     domain: 'http://172.19.3.138:6549',
-    accessId: 'EUqV2yIU',
-    accessKey: '3d41e13190eb42569cf2068e842c23fc',
+    accessId: 'PZwI2qTh',
+    accessKey: '7896620c92b54d93a21bdea5b5aff2f2',
     user: {
-        loginName: 'admin',
-        password: '123456',
-        appToken: '862cc132-f764-4dd7-8a94-db303c454b43'
-        //password: 'admin',
-        //appToken: '59c33855-d089-487e-8c66-6e9e1121e0b1'
+        loginName: 'manager',
+        password: 'manager',
+        appToken: '5d42b8ff-32d7-40b0-bf56-e4fc357f01fa'
     }
 };
 
@@ -29,7 +27,7 @@ async function getSessionToken() {
         console.log('/v1.0/login 用户登录', sessionToken, ret.body);
         return sessionToken;
     } catch (e) {
-        processError(ret);
+        processError(e);
     }
 }
 
@@ -46,28 +44,28 @@ describe('dist/APIClient.js', function () {
         beforeEach(async function () {
             this.sessionToken = await getSessionToken();
         });
-        //it('/v1.0/users 查询用户列表', async function () {
-        //    debugger;
-        //    let ret = await client.getUsersUsingGET({
-        //        sessionToken: this.sessionToken
-        //    });
-        //    debugger;
-        //    assert.ok(ret.body, processError(ret, '查询用户列表失败'));
-        //});
-        it('/v1.0/users 查询用户列表', function (done) {
-            debugger;
-            let promise = client.getUsersUsingGET({
+
+        it('/v1.0/devices 导入单个设备', function (done) {
+            let promise = client.addDeviceUsingPOST({
                 sessionToken: this.sessionToken,
-                //email: '1232@qq.com'
+                addDevice: {
+                    masterKey: '2323',
+                    apiKey: '2323243',
+                    deviceId: 'ewwr123',
+                    deviceName: 'wetret',
+                    deviceOwner: 'manager',
+                    deviceGroupId: 0
+                }
             });
             promise.then(function (ret) {
-                assert.ok(ret, processError(ret, '查询用户列表失败'));
+                assert.ok(ret, processError(ret || {}, '导入单个设备失败'));
                 done();
             }).catch(function (e) {
-                console.log(e);
+                //console.log(e);
                 done();
             })
-
         });
+
+
     });
 });

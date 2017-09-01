@@ -8,6 +8,7 @@
 {{/parameters}}
 */
 {{&className}}.prototype.{{&methodName}} = function(parameters){
+logger(this, '-------------{{&methodName}}---------------');
 if(parameters === undefined) {
 parameters = {};
 }
@@ -89,7 +90,8 @@ parameters = {};
 
 {{/parameters}}
 queryParameters = mergeQueryParams(parameters, queryParameters);
-
+logger(this, 'Parameter.body: ', body);
+logger(this, 'Parameter.queryParamters: ', queryParameters);
 this.request('{{method}}', path, parameters, body, headers, queryParameters, form, deferred);
 
 return deferred.promise;
