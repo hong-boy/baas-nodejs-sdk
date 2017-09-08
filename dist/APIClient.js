@@ -102,7 +102,7 @@ var APIClient = (function () {
             var paramsKey = paramsKeyArr[i];
             var value = params[paramsKey];
             value = lodash.isArray(value) || lodash.isPlainObject(value) ? JSON.stringify(value) : value;
-            if (value || lodash.isNumber(value)) {
+            if (value || lodash.isNumber(value) || lodash.isBoolean(value)) {
                 arr.push([paramsKey, encodeURIComponent(value)].join('='));
             }
         }
@@ -189,6 +189,54 @@ var APIClient = (function () {
         });
     };
 
+    /**
+     * 根据sql删除外部数据
+     * @method
+     * @name APIClient#deleteExternalDataBySQLUsingDELETE
+     * @param {object} parameters - method options and parameters
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
+     * @param {string} parameters.sessionToken - session-token
+     */
+    APIClient.prototype.deleteExternalDataBySQLUsingDELETE = function (parameters) {
+        logger(this, '-------------deleteExternalDataBySQLUsingDELETE---------------');
+        if (parameters === undefined) {
+            parameters = {};
+        }
+        var deferred = Q.defer();
+        var path = '/v1.0/deleteExternalData';
+        var body = {},
+            queryParameters = {},
+            headers = {},
+            form = {};
+
+        headers['Accept'] = ['*/*'];
+        headers['Content-Type'] = ['application/json'];
+
+        if (parameters['mongoDataRequest'] !== undefined) {
+            body = parameters['mongoDataRequest'];
+        }
+
+        if (parameters['mongoDataRequest'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: mongoDataRequest'));
+            return deferred.promise;
+        }
+
+        if (parameters['sessionToken'] !== undefined) {
+            headers['session-token'] = parameters['sessionToken'];
+        }
+
+        if (parameters['sessionToken'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: sessionToken'));
+            return deferred.promise;
+        }
+
+        queryParameters = mergeQueryParams(parameters, queryParameters);
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
+        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+
+        return deferred.promise;
+    };
     /**
      * 查询设备列表
      * @method
@@ -312,157 +360,6 @@ var APIClient = (function () {
         logger(this, 'Parameter.body: ', body);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
-
-        return deferred.promise;
-    };
-    /**
-     * 查询告警数据
-     * @method
-     * @name APIClient#findDeviceAlarmUsingGET
-     * @param {object} parameters - method options and parameters
-     * @param {string} parameters.sessionToken - session-token
-     * @param {string} parameters.alarmName - 告警数据名
-     * @param {string} parameters.deviceIds - 设备id
-     * @param {string} parameters.filters - 过滤条件
-     * @param {string} parameters.limit - 数量限制
-     * @param {string} parameters.startDate - 开始时间
-     * @param {string} parameters.endDate - 结束时间
-     */
-    APIClient.prototype.findDeviceAlarmUsingGET = function (parameters) {
-        logger(this, '-------------findDeviceAlarmUsingGET---------------');
-        if (parameters === undefined) {
-            parameters = {};
-        }
-        var deferred = Q.defer();
-        var path = '/v1.0/devices/alarms';
-        var body = {},
-            queryParameters = {},
-            headers = {},
-            form = {};
-
-        headers['Accept'] = ['*/*'];
-        headers['Content-Type'] = ['application/json'];
-
-        if (parameters['sessionToken'] !== undefined) {
-            headers['session-token'] = parameters['sessionToken'];
-        }
-
-        if (parameters['sessionToken'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: sessionToken'));
-            return deferred.promise;
-        }
-
-        if (parameters['alarmName'] !== undefined) {
-            queryParameters['alarmName'] = parameters['alarmName'];
-        }
-
-        if (parameters['alarmName'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: alarmName'));
-            return deferred.promise;
-        }
-
-        if (parameters['deviceIds'] !== undefined) {
-            queryParameters['deviceIds'] = parameters['deviceIds'];
-        }
-
-        if (parameters['filters'] !== undefined) {
-            queryParameters['filters'] = parameters['filters'];
-        }
-
-        if (parameters['limit'] !== undefined) {
-            queryParameters['limit'] = parameters['limit'];
-        }
-
-        if (parameters['limit'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: limit'));
-            return deferred.promise;
-        }
-
-        if (parameters['startDate'] !== undefined) {
-            queryParameters['startDate'] = parameters['startDate'];
-        }
-
-        if (parameters['startDate'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: startDate'));
-            return deferred.promise;
-        }
-
-        if (parameters['endDate'] !== undefined) {
-            queryParameters['endDate'] = parameters['endDate'];
-        }
-
-        if (parameters['endDate'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: endDate'));
-            return deferred.promise;
-        }
-
-        queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
-        logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
-
-        return deferred.promise;
-    };
-    /**
-     * 查询设备档案列表
-     * @method
-     * @name APIClient#findArchivesUsingGET
-     * @param {object} parameters - method options and parameters
-     * @param {string} parameters.sessionToken - session-token
-     * @param {string} parameters.archiveName - 设备档案类型
-     * @param {string} parameters.deviceId - 设备ID
-     * @param {string} parameters.deviceOwner - 设备拥有人loginName
-     * @param {string} parameters.limit - 最大查询数据量
-     */
-    APIClient.prototype.findArchivesUsingGET = function (parameters) {
-        logger(this, '-------------findArchivesUsingGET---------------');
-        if (parameters === undefined) {
-            parameters = {};
-        }
-        var deferred = Q.defer();
-        var path = '/v1.0/devices/archives';
-        var body = {},
-            queryParameters = {},
-            headers = {},
-            form = {};
-
-        headers['Accept'] = ['*/*'];
-        headers['Content-Type'] = ['application/json'];
-
-        if (parameters['sessionToken'] !== undefined) {
-            headers['session-token'] = parameters['sessionToken'];
-        }
-
-        if (parameters['sessionToken'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: sessionToken'));
-            return deferred.promise;
-        }
-
-        if (parameters['archiveName'] !== undefined) {
-            queryParameters['archiveName'] = parameters['archiveName'];
-        }
-
-        if (parameters['archiveName'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: archiveName'));
-            return deferred.promise;
-        }
-
-        if (parameters['deviceId'] !== undefined) {
-            queryParameters['deviceId'] = parameters['deviceId'];
-        }
-
-        if (parameters['deviceOwner'] !== undefined) {
-            queryParameters['deviceOwner'] = parameters['deviceOwner'];
-        }
-
-        if (parameters['limit'] !== undefined) {
-            queryParameters['limit'] = parameters['limit'];
-        }
-
-        queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
-        logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
     };
@@ -824,94 +721,6 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 查询全局设备数据
-     * @method
-     * @name APIClient#findDeviceDatasUsingGET
-     * @param {object} parameters - method options and parameters
-     * @param {string} parameters.sessionToken - session-token
-     * @param {string} parameters.deviceDataName - 设备数据名
-     * @param {string} parameters.deviceIds - 设备id
-     * @param {string} parameters.filters - 过滤条件
-     * @param {string} parameters.limit - 数量限制
-     * @param {string} parameters.startDate - 开始时间
-     * @param {string} parameters.endDate - 结束时间
-     */
-    APIClient.prototype.findDeviceDatasUsingGET = function (parameters) {
-        logger(this, '-------------findDeviceDatasUsingGET---------------');
-        if (parameters === undefined) {
-            parameters = {};
-        }
-        var deferred = Q.defer();
-        var path = '/v1.0/devices/datas';
-        var body = {},
-            queryParameters = {},
-            headers = {},
-            form = {};
-
-        headers['Accept'] = ['*/*'];
-        headers['Content-Type'] = ['application/json'];
-
-        if (parameters['sessionToken'] !== undefined) {
-            headers['session-token'] = parameters['sessionToken'];
-        }
-
-        if (parameters['sessionToken'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: sessionToken'));
-            return deferred.promise;
-        }
-
-        if (parameters['deviceDataName'] !== undefined) {
-            queryParameters['deviceDataName'] = parameters['deviceDataName'];
-        }
-
-        if (parameters['deviceDataName'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: deviceDataName'));
-            return deferred.promise;
-        }
-
-        if (parameters['deviceIds'] !== undefined) {
-            queryParameters['deviceIds'] = parameters['deviceIds'];
-        }
-
-        if (parameters['filters'] !== undefined) {
-            queryParameters['filters'] = parameters['filters'];
-        }
-
-        if (parameters['limit'] !== undefined) {
-            queryParameters['limit'] = parameters['limit'];
-        }
-
-        if (parameters['limit'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: limit'));
-            return deferred.promise;
-        }
-
-        if (parameters['startDate'] !== undefined) {
-            queryParameters['startDate'] = parameters['startDate'];
-        }
-
-        if (parameters['startDate'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: startDate'));
-            return deferred.promise;
-        }
-
-        if (parameters['endDate'] !== undefined) {
-            queryParameters['endDate'] = parameters['endDate'];
-        }
-
-        if (parameters['endDate'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: endDate'));
-            return deferred.promise;
-        }
-
-        queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
-        logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
-
-        return deferred.promise;
-    };
-    /**
      * 查询单个设备数据
      * @method
      * @name APIClient#findSingleDeviceDatasUsingGET
@@ -993,79 +802,6 @@ var APIClient = (function () {
         if (parameters['endDate'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: endDate'));
             return deferred.promise;
-        }
-
-        queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
-        logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
-
-        return deferred.promise;
-    };
-    /**
-     * 查询设备转授列表
-     * @method
-     * @name APIClient#getDeviceDelegationsListUsingGET
-     * @param {object} parameters - method options and parameters
-     * @param {string} parameters.sessionToken - session-token
-     * @param {string} parameters.deviceId - 设备ID
-     * @param {string} parameters.fromUser - 转授人
-     * @param {string} parameters.toUser - 被转授人
-     * @param {string} parameters.startDate - 开始日期
-     * @param {string} parameters.endDate - 截止日期
-     * @param {string} parameters.pageNum - 页数
-     * @param {string} parameters.pageSize - 每页条数
-     */
-    APIClient.prototype.getDeviceDelegationsListUsingGET = function (parameters) {
-        logger(this, '-------------getDeviceDelegationsListUsingGET---------------');
-        if (parameters === undefined) {
-            parameters = {};
-        }
-        var deferred = Q.defer();
-        var path = '/v1.0/devices/delegations';
-        var body = {},
-            queryParameters = {},
-            headers = {},
-            form = {};
-
-        headers['Accept'] = ['*/*'];
-        headers['Content-Type'] = ['application/json'];
-
-        if (parameters['sessionToken'] !== undefined) {
-            headers['session-token'] = parameters['sessionToken'];
-        }
-
-        if (parameters['sessionToken'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: sessionToken'));
-            return deferred.promise;
-        }
-
-        if (parameters['deviceId'] !== undefined) {
-            queryParameters['deviceId'] = parameters['deviceId'];
-        }
-
-        if (parameters['fromUser'] !== undefined) {
-            queryParameters['fromUser'] = parameters['fromUser'];
-        }
-
-        if (parameters['toUser'] !== undefined) {
-            queryParameters['toUser'] = parameters['toUser'];
-        }
-
-        if (parameters['startDate'] !== undefined) {
-            queryParameters['startDate'] = parameters['startDate'];
-        }
-
-        if (parameters['endDate'] !== undefined) {
-            queryParameters['endDate'] = parameters['endDate'];
-        }
-
-        if (parameters['pageNum'] !== undefined) {
-            queryParameters['pageNum'] = parameters['pageNum'];
-        }
-
-        if (parameters['pageSize'] !== undefined) {
-            queryParameters['pageSize'] = parameters['pageSize'];
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
@@ -1192,7 +928,7 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 查询转授自己的设备列表
+     * 查询转授给自己的设备列表
      * @method
      * @name APIClient#getDeviceDelegateSelfUsingGET
      * @param {object} parameters - method options and parameters
@@ -1332,6 +1068,54 @@ var APIClient = (function () {
 
         if (parameters['delegateId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: delegateId'));
+            return deferred.promise;
+        }
+
+        if (parameters['sessionToken'] !== undefined) {
+            headers['session-token'] = parameters['sessionToken'];
+        }
+
+        if (parameters['sessionToken'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: sessionToken'));
+            return deferred.promise;
+        }
+
+        queryParameters = mergeQueryParams(parameters, queryParameters);
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
+        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+
+        return deferred.promise;
+    };
+    /**
+     * 根据sql删除设备档案
+     * @method
+     * @name APIClient#deleteArchivesBySQLUsingDELETE
+     * @param {object} parameters - method options and parameters
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
+     * @param {string} parameters.sessionToken - session-token
+     */
+    APIClient.prototype.deleteArchivesBySQLUsingDELETE = function (parameters) {
+        logger(this, '-------------deleteArchivesBySQLUsingDELETE---------------');
+        if (parameters === undefined) {
+            parameters = {};
+        }
+        var deferred = Q.defer();
+        var path = '/v1.0/devices/deleteArchives';
+        var body = {},
+            queryParameters = {},
+            headers = {},
+            form = {};
+
+        headers['Accept'] = ['*/*'];
+        headers['Content-Type'] = ['application/json'];
+
+        if (parameters['mongoDataRequest'] !== undefined) {
+            body = parameters['mongoDataRequest'];
+        }
+
+        if (parameters['mongoDataRequest'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: mongoDataRequest'));
             return deferred.promise;
         }
 
@@ -1677,26 +1461,20 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 查询设备分享信息列表
+     * 查询告警数据
      * @method
-     * @name APIClient#getDeviceSharesListUsingGET
+     * @name APIClient#findDeviceAlarmUsingPOST
      * @param {object} parameters - method options and parameters
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
-     * @param {string} parameters.deviceId - 设备ID
-     * @param {string} parameters.fromUser - 分享人
-     * @param {string} parameters.toUser - 被分享人
-     * @param {string} parameters.startDate - 开始时间
-     * @param {string} parameters.endDate - 结束时间
-     * @param {string} parameters.pageNum - 页数
-     * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceSharesListUsingGET = function (parameters) {
-        logger(this, '-------------getDeviceSharesListUsingGET---------------');
+    APIClient.prototype.findDeviceAlarmUsingPOST = function (parameters) {
+        logger(this, '-------------findDeviceAlarmUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
         var deferred = Q.defer();
-        var path = '/v1.0/devices/shares';
+        var path = '/v1.0/devices/queryAlarms';
         var body = {},
             queryParameters = {},
             headers = {},
@@ -1704,6 +1482,15 @@ var APIClient = (function () {
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
+
+        if (parameters['mongoDataRequest'] !== undefined) {
+            body = parameters['mongoDataRequest'];
+        }
+
+        if (parameters['mongoDataRequest'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: mongoDataRequest'));
+            return deferred.promise;
+        }
 
         if (parameters['sessionToken'] !== undefined) {
             headers['session-token'] = parameters['sessionToken'];
@@ -1714,38 +1501,154 @@ var APIClient = (function () {
             return deferred.promise;
         }
 
-        if (parameters['deviceId'] !== undefined) {
-            queryParameters['deviceId'] = parameters['deviceId'];
+        queryParameters = mergeQueryParams(parameters, queryParameters);
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
+        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+
+        return deferred.promise;
+    };
+    /**
+     * 查询设备档案列表
+     * @method
+     * @name APIClient#findArchivesUsingPOST
+     * @param {object} parameters - method options and parameters
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
+     * @param {string} parameters.sessionToken - session-token
+     */
+    APIClient.prototype.findArchivesUsingPOST = function (parameters) {
+        logger(this, '-------------findArchivesUsingPOST---------------');
+        if (parameters === undefined) {
+            parameters = {};
+        }
+        var deferred = Q.defer();
+        var path = '/v1.0/devices/queryArchives';
+        var body = {},
+            queryParameters = {},
+            headers = {},
+            form = {};
+
+        headers['Accept'] = ['*/*'];
+        headers['Content-Type'] = ['application/json'];
+
+        if (parameters['mongoDataRequest'] !== undefined) {
+            body = parameters['mongoDataRequest'];
         }
 
-        if (parameters['fromUser'] !== undefined) {
-            queryParameters['fromUser'] = parameters['fromUser'];
+        if (parameters['mongoDataRequest'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: mongoDataRequest'));
+            return deferred.promise;
         }
 
-        if (parameters['toUser'] !== undefined) {
-            queryParameters['toUser'] = parameters['toUser'];
+        if (parameters['sessionToken'] !== undefined) {
+            headers['session-token'] = parameters['sessionToken'];
         }
 
-        if (parameters['startDate'] !== undefined) {
-            queryParameters['startDate'] = parameters['startDate'];
-        }
-
-        if (parameters['endDate'] !== undefined) {
-            queryParameters['endDate'] = parameters['endDate'];
-        }
-
-        if (parameters['pageNum'] !== undefined) {
-            queryParameters['pageNum'] = parameters['pageNum'];
-        }
-
-        if (parameters['pageSize'] !== undefined) {
-            queryParameters['pageSize'] = parameters['pageSize'];
+        if (parameters['sessionToken'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: sessionToken'));
+            return deferred.promise;
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
         logger(this, 'Parameter.body: ', body);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+
+        return deferred.promise;
+    };
+    /**
+     * 查询全局设备数据
+     * @method
+     * @name APIClient#findDeviceDatasUsingPOST
+     * @param {object} parameters - method options and parameters
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
+     * @param {string} parameters.sessionToken - session-token
+     */
+    APIClient.prototype.findDeviceDatasUsingPOST = function (parameters) {
+        logger(this, '-------------findDeviceDatasUsingPOST---------------');
+        if (parameters === undefined) {
+            parameters = {};
+        }
+        var deferred = Q.defer();
+        var path = '/v1.0/devices/queryDatas';
+        var body = {},
+            queryParameters = {},
+            headers = {},
+            form = {};
+
+        headers['Accept'] = ['*/*'];
+        headers['Content-Type'] = ['application/json'];
+
+        if (parameters['mongoDataRequest'] !== undefined) {
+            body = parameters['mongoDataRequest'];
+        }
+
+        if (parameters['mongoDataRequest'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: mongoDataRequest'));
+            return deferred.promise;
+        }
+
+        if (parameters['sessionToken'] !== undefined) {
+            headers['session-token'] = parameters['sessionToken'];
+        }
+
+        if (parameters['sessionToken'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: sessionToken'));
+            return deferred.promise;
+        }
+
+        queryParameters = mergeQueryParams(parameters, queryParameters);
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
+        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+
+        return deferred.promise;
+    };
+    /**
+     * 查询统计数据
+     * @method
+     * @name APIClient#findStatisticsDatasUsingPOST
+     * @param {object} parameters - method options and parameters
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
+     * @param {string} parameters.sessionToken - session-token
+     */
+    APIClient.prototype.findStatisticsDatasUsingPOST = function (parameters) {
+        logger(this, '-------------findStatisticsDatasUsingPOST---------------');
+        if (parameters === undefined) {
+            parameters = {};
+        }
+        var deferred = Q.defer();
+        var path = '/v1.0/devices/queryStats';
+        var body = {},
+            queryParameters = {},
+            headers = {},
+            form = {};
+
+        headers['Accept'] = ['*/*'];
+        headers['Content-Type'] = ['application/json'];
+
+        if (parameters['mongoDataRequest'] !== undefined) {
+            body = parameters['mongoDataRequest'];
+        }
+
+        if (parameters['mongoDataRequest'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: mongoDataRequest'));
+            return deferred.promise;
+        }
+
+        if (parameters['sessionToken'] !== undefined) {
+            headers['session-token'] = parameters['sessionToken'];
+        }
+
+        if (parameters['sessionToken'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: sessionToken'));
+            return deferred.promise;
+        }
+
+        queryParameters = mergeQueryParams(parameters, queryParameters);
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
+        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
     };
@@ -1798,7 +1701,7 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 查询当前分享出去的设备列表
+     * 查询分享出去的设备列表
      * @method
      * @name APIClient#getDeviceShareOthersUsingGET
      * @param {object} parameters - method options and parameters
@@ -2026,89 +1929,6 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 查询统计数据
-     * @method
-     * @name APIClient#findStatisticsDatasUsingGET
-     * @param {object} parameters - method options and parameters
-     * @param {string} parameters.sessionToken - session-token
-     * @param {string} parameters.statDataName - 统计数据名
-     * @param {string} parameters.filters - 条件限制
-     * @param {string} parameters.limit - 数量限制
-     * @param {string} parameters.startDate - 开始时间限制
-     * @param {string} parameters.endDate - 结束时间限制
-     */
-    APIClient.prototype.findStatisticsDatasUsingGET = function (parameters) {
-        logger(this, '-------------findStatisticsDatasUsingGET---------------');
-        if (parameters === undefined) {
-            parameters = {};
-        }
-        var deferred = Q.defer();
-        var path = '/v1.0/devices/stats';
-        var body = {},
-            queryParameters = {},
-            headers = {},
-            form = {};
-
-        headers['Accept'] = ['*/*'];
-        headers['Content-Type'] = ['application/json'];
-
-        if (parameters['sessionToken'] !== undefined) {
-            headers['session-token'] = parameters['sessionToken'];
-        }
-
-        if (parameters['sessionToken'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: sessionToken'));
-            return deferred.promise;
-        }
-
-        if (parameters['statDataName'] !== undefined) {
-            queryParameters['statDataName'] = parameters['statDataName'];
-        }
-
-        if (parameters['statDataName'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: statDataName'));
-            return deferred.promise;
-        }
-
-        if (parameters['filters'] !== undefined) {
-            queryParameters['filters'] = parameters['filters'];
-        }
-
-        if (parameters['limit'] !== undefined) {
-            queryParameters['limit'] = parameters['limit'];
-        }
-
-        if (parameters['limit'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: limit'));
-            return deferred.promise;
-        }
-
-        if (parameters['startDate'] !== undefined) {
-            queryParameters['startDate'] = parameters['startDate'];
-        }
-
-        if (parameters['startDate'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: startDate'));
-            return deferred.promise;
-        }
-
-        if (parameters['endDate'] !== undefined) {
-            queryParameters['endDate'] = parameters['endDate'];
-        }
-
-        if (parameters['endDate'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: endDate'));
-            return deferred.promise;
-        }
-
-        queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
-        logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
-
-        return deferred.promise;
-    };
-    /**
      * 删除设备
      * @method
      * @name APIClient#deleteDevicesUsingDELETE
@@ -2151,54 +1971,6 @@ var APIClient = (function () {
         logger(this, 'Parameter.body: ', body);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
-
-        return deferred.promise;
-    };
-    /**
-     * 查询外部数据
-     * @method
-     * @name APIClient#findExternalDataUsingGET
-     * @param {object} parameters - method options and parameters
-     * @param {string} parameters.sessionToken - session-token
-     * @param {string} parameters.key - 外部数据key
-     */
-    APIClient.prototype.findExternalDataUsingGET = function (parameters) {
-        logger(this, '-------------findExternalDataUsingGET---------------');
-        if (parameters === undefined) {
-            parameters = {};
-        }
-        var deferred = Q.defer();
-        var path = '/v1.0/externalData';
-        var body = {},
-            queryParameters = {},
-            headers = {},
-            form = {};
-
-        headers['Accept'] = ['*/*'];
-        headers['Content-Type'] = ['application/json'];
-
-        if (parameters['sessionToken'] !== undefined) {
-            headers['session-token'] = parameters['sessionToken'];
-        }
-
-        if (parameters['sessionToken'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: sessionToken'));
-            return deferred.promise;
-        }
-
-        if (parameters['key'] !== undefined) {
-            queryParameters['key'] = parameters['key'];
-        }
-
-        if (parameters['key'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: key'));
-            return deferred.promise;
-        }
-
-        queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
-        logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
     };
@@ -2348,6 +2120,62 @@ var APIClient = (function () {
         logger(this, 'Parameter.body: ', body);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
         this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+
+        return deferred.promise;
+    };
+    /**
+     * 根据id查询某一条外部数据
+     * @method
+     * @name APIClient#findExternalDataByIdUsingGET
+     * @param {object} parameters - method options and parameters
+     * @param {string} parameters.id - id
+     * @param {string} parameters.sessionToken - session-token
+     * @param {string} parameters.externalDataName - 外部数据名
+     */
+    APIClient.prototype.findExternalDataByIdUsingGET = function (parameters) {
+        logger(this, '-------------findExternalDataByIdUsingGET---------------');
+        if (parameters === undefined) {
+            parameters = {};
+        }
+        var deferred = Q.defer();
+        var path = '/v1.0/externalData/{id}';
+        var body = {},
+            queryParameters = {},
+            headers = {},
+            form = {};
+
+        headers['Accept'] = ['*/*'];
+        headers['Content-Type'] = ['application/json'];
+
+        path = path.replace('{id}', parameters['id']);
+
+        if (parameters['id'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: id'));
+            return deferred.promise;
+        }
+
+        if (parameters['sessionToken'] !== undefined) {
+            headers['session-token'] = parameters['sessionToken'];
+        }
+
+        if (parameters['sessionToken'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: sessionToken'));
+            return deferred.promise;
+        }
+
+        if (parameters['externalDataName'] !== undefined) {
+            queryParameters['externalDataName'] = parameters['externalDataName'];
+        }
+
+        if (parameters['externalDataName'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: externalDataName'));
+            return deferred.promise;
+        }
+
+        queryParameters = mergeQueryParams(parameters, queryParameters);
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
+        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
 
         return deferred.promise;
     };
@@ -2581,6 +2409,54 @@ var APIClient = (function () {
 
         if (parameters['appToken'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: appToken'));
+            return deferred.promise;
+        }
+
+        queryParameters = mergeQueryParams(parameters, queryParameters);
+        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
+        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+
+        return deferred.promise;
+    };
+    /**
+     * 查询外部数据
+     * @method
+     * @name APIClient#findExternalDataUsingPOST
+     * @param {object} parameters - method options and parameters
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
+     * @param {string} parameters.sessionToken - session-token
+     */
+    APIClient.prototype.findExternalDataUsingPOST = function (parameters) {
+        logger(this, '-------------findExternalDataUsingPOST---------------');
+        if (parameters === undefined) {
+            parameters = {};
+        }
+        var deferred = Q.defer();
+        var path = '/v1.0/queryExternalData';
+        var body = {},
+            queryParameters = {},
+            headers = {},
+            form = {};
+
+        headers['Accept'] = ['*/*'];
+        headers['Content-Type'] = ['application/json'];
+
+        if (parameters['mongoDataRequest'] !== undefined) {
+            body = parameters['mongoDataRequest'];
+        }
+
+        if (parameters['mongoDataRequest'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: mongoDataRequest'));
+            return deferred.promise;
+        }
+
+        if (parameters['sessionToken'] !== undefined) {
+            headers['session-token'] = parameters['sessionToken'];
+        }
+
+        if (parameters['sessionToken'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: sessionToken'));
             return deferred.promise;
         }
 
@@ -3285,7 +3161,7 @@ var APIClient = (function () {
             parameters = {};
         }
         var deferred = Q.defer();
-        var path = '/v1.0/users/{userId}/reSetPassword';
+        var path = '/v1.0/users/{userId}/resetPassword';
         var body = {},
             queryParameters = {},
             headers = {},

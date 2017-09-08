@@ -5,11 +5,10 @@
         "version":"V1.0",
         "title":"轻应用Baas平台API",
         "contact":{
-
         }
     },
-    "host":"",
-    "basePath":"",
+    "host":"baas.heclouds.com",
+    "basePath":"/api",
     "tags":[
         {
             "name":"Ⅶ、数据查询相关API类",
@@ -57,54 +56,6 @@
         }
     ],
     "paths":{
-        "/v1.0/deleteExternalData":{
-            "delete":{
-                "tags":[
-                    "Ⅶ、数据查询相关API类"
-                ],
-                "summary":"根据sql删除外部数据",
-                "description":"根据sql删除外部数据",
-                "operationId":"deleteExternalDataBySQLUsingDELETE",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "in":"body",
-                        "name":"mongoDataRequest",
-                        "description":"mongoDataRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/MongoDataRequest"
-                        }
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "204":{
-                        "description":"No Content"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    }
-                }
-            }
-        },
         "/v1.0/devices":{
             "get":{
                 "tags":[
@@ -252,7 +203,165 @@
                 }
             }
         },
+        "/v1.0/devices/alarms":{
+            "get":{
+                "tags":[
+                    "Ⅶ、数据查询相关API类"
+                ],
+                "summary":"查询告警数据",
+                "description":"查询告警数据",
+                "operationId":"findDeviceAlarmUsingGET",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"alarmName",
+                        "in":"query",
+                        "description":"告警数据名",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceIds",
+                        "in":"query",
+                        "description":"设备id",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"filters",
+                        "in":"query",
+                        "description":"过滤条件",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"limit",
+                        "in":"query",
+                        "description":"数量限制",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"startDate",
+                        "in":"query",
+                        "description":"开始时间",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"endDate",
+                        "in":"query",
+                        "description":"结束时间",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "type":"array",
+                            "items":{
+                                "$ref":"#/definitions/DeviceAlarm"
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            }
+        },
         "/v1.0/devices/archives":{
+            "get":{
+                "tags":[
+                    "Ⅲ、设备档案相关API类"
+                ],
+                "summary":"查询设备档案列表",
+                "description":"查询设备档案列表",
+                "operationId":"findArchivesUsingGET",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"archiveName",
+                        "in":"query",
+                        "description":"设备档案类型",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceId",
+                        "in":"query",
+                        "description":"设备ID",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceOwner",
+                        "in":"query",
+                        "description":"设备拥有人loginName",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"limit",
+                        "in":"query",
+                        "description":"最大查询数据量",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "type":"array",
+                            "items":{
+                                "$ref":"#/definitions/DeviceArchiveResponse"
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            },
             "post":{
                 "tags":[
                     "Ⅲ、设备档案相关API类"
@@ -647,6 +756,93 @@
                 }
             }
         },
+        "/v1.0/devices/datas":{
+            "get":{
+                "tags":[
+                    "Ⅶ、数据查询相关API类"
+                ],
+                "summary":"查询全局设备数据",
+                "description":"查询全局设备数据",
+                "operationId":"findDeviceDatasUsingGET",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceDataName",
+                        "in":"query",
+                        "description":"设备数据名",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceIds",
+                        "in":"query",
+                        "description":"设备id",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"filters",
+                        "in":"query",
+                        "description":"过滤条件",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"limit",
+                        "in":"query",
+                        "description":"数量限制",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"startDate",
+                        "in":"query",
+                        "description":"开始时间",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"endDate",
+                        "in":"query",
+                        "description":"结束时间",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "type":"array",
+                            "items":{
+                                "$ref":"#/definitions/DeviceData"
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            }
+        },
         "/v1.0/devices/datas/{deviceId}":{
             "get":{
                 "tags":[
@@ -735,6 +931,95 @@
             }
         },
         "/v1.0/devices/delegations":{
+            "get":{
+                "tags":[
+                    "Ⅴ、设备转授管理API类"
+                ],
+                "summary":"查询设备转授列表",
+                "description":"查询设备转授列表",
+                "operationId":"getDeviceDelegationsListUsingGET",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceId",
+                        "in":"query",
+                        "description":"设备ID",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"fromUser",
+                        "in":"query",
+                        "description":"转授人",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"toUser",
+                        "in":"query",
+                        "description":"被转授人",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"startDate",
+                        "in":"query",
+                        "description":"开始日期",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"endDate",
+                        "in":"query",
+                        "description":"截止日期",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"pageNum",
+                        "in":"query",
+                        "description":"页数",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"pageSize",
+                        "in":"query",
+                        "description":"每页条数",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/PageInfoOfDeviceDelegations"
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            },
             "post":{
                 "tags":[
                     "Ⅴ、设备转授管理API类"
@@ -876,7 +1161,7 @@
                 "tags":[
                     "Ⅴ、设备转授管理API类"
                 ],
-                "summary":"查询转授给自己的设备列表",
+                "summary":"查询转授自己的设备列表",
                 "operationId":"getDeviceDelegateSelfUsingGET",
                 "consumes":[
                     "application/json"
@@ -1024,54 +1309,6 @@
                         "required":true,
                         "type":"integer",
                         "format":"int32"
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "204":{
-                        "description":"No Content"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    }
-                }
-            }
-        },
-        "/v1.0/devices/deleteArchives":{
-            "delete":{
-                "tags":[
-                    "Ⅲ、设备档案相关API类"
-                ],
-                "summary":"根据sql删除设备档案",
-                "description":"根据sql删除设备档案",
-                "operationId":"deleteArchivesBySQLUsingDELETE",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "in":"body",
-                        "name":"mongoDataRequest",
-                        "description":"mongoDataRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/MongoDataRequest"
-                        }
                     },
                     {
                         "name":"session-token",
@@ -1459,235 +1696,96 @@
                 }
             }
         },
-        "/v1.0/devices/queryAlarms":{
-            "post":{
-                "tags":[
-                    "Ⅶ、数据查询相关API类"
-                ],
-                "summary":"查询告警数据",
-                "description":"查询告警数据",
-                "operationId":"findDeviceAlarmUsingPOST",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "in":"body",
-                        "name":"mongoDataRequest",
-                        "description":"mongoDataRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/MongoDataRequest"
-                        }
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK",
-                        "schema":{
-                            "type":"array",
-                            "items":{
-                                "$ref":"#/definitions/JSONObject"
-                            }
-                        }
-                    },
-                    "201":{
-                        "description":"Created"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    },
-                    "404":{
-                        "description":"Not Found"
-                    }
-                }
-            }
-        },
-        "/v1.0/devices/queryArchives":{
-            "post":{
-                "tags":[
-                    "Ⅲ、设备档案相关API类"
-                ],
-                "summary":"查询设备档案列表",
-                "description":"查询设备档案列表",
-                "operationId":"findArchivesUsingPOST",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "in":"body",
-                        "name":"mongoDataRequest",
-                        "description":"mongoDataRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/MongoDataRequest"
-                        }
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK",
-                        "schema":{
-                            "type":"array",
-                            "items":{
-                                "$ref":"#/definitions/JSONObject"
-                            }
-                        }
-                    },
-                    "201":{
-                        "description":"Created"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    },
-                    "404":{
-                        "description":"Not Found"
-                    }
-                }
-            }
-        },
-        "/v1.0/devices/queryDatas":{
-            "post":{
-                "tags":[
-                    "Ⅶ、数据查询相关API类"
-                ],
-                "summary":"查询全局设备数据",
-                "description":"查询全局设备数据",
-                "operationId":"findDeviceDatasUsingPOST",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "in":"body",
-                        "name":"mongoDataRequest",
-                        "description":"mongoDataRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/MongoDataRequest"
-                        }
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK",
-                        "schema":{
-                            "type":"array",
-                            "items":{
-                                "$ref":"#/definitions/JSONObject"
-                            }
-                        }
-                    },
-                    "201":{
-                        "description":"Created"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    },
-                    "404":{
-                        "description":"Not Found"
-                    }
-                }
-            }
-        },
-        "/v1.0/devices/queryStats":{
-            "post":{
-                "tags":[
-                    "Ⅶ、数据查询相关API类"
-                ],
-                "summary":"查询统计数据",
-                "description":"查询统计数据",
-                "operationId":"findStatisticsDatasUsingPOST",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "in":"body",
-                        "name":"mongoDataRequest",
-                        "description":"mongoDataRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/MongoDataRequest"
-                        }
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK",
-                        "schema":{
-                            "type":"array",
-                            "items":{
-                                "$ref":"#/definitions/JSONObject"
-                            }
-                        }
-                    },
-                    "201":{
-                        "description":"Created"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    },
-                    "404":{
-                        "description":"Not Found"
-                    }
-                }
-            }
-        },
         "/v1.0/devices/shares":{
+            "get":{
+                "tags":[
+                    "Ⅳ、设备分享API类"
+                ],
+                "summary":"查询设备分享信息列表",
+                "description":"查询设备分享信息列表",
+                "operationId":"getDeviceSharesListUsingGET",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceId",
+                        "in":"query",
+                        "description":"设备ID",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"fromUser",
+                        "in":"query",
+                        "description":"分享人",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"toUser",
+                        "in":"query",
+                        "description":"被分享人",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"startDate",
+                        "in":"query",
+                        "description":"开始时间",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"endDate",
+                        "in":"query",
+                        "description":"结束时间",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"pageNum",
+                        "in":"query",
+                        "description":"页数",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"pageSize",
+                        "in":"query",
+                        "description":"每页条数",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/PageInfoOfDeviceShares"
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            },
             "post":{
                 "tags":[
                     "Ⅳ、设备分享API类"
@@ -1746,7 +1844,7 @@
                 "tags":[
                     "Ⅳ、设备分享API类"
                 ],
-                "summary":"查询分享出去的设备列表",
+                "summary":"查询当前分享出去的设备列表",
                 "operationId":"getDeviceShareOthersUsingGET",
                 "consumes":[
                     "application/json"
@@ -2002,6 +2100,86 @@
                 }
             }
         },
+        "/v1.0/devices/stats":{
+            "get":{
+                "tags":[
+                    "Ⅶ、数据查询相关API类"
+                ],
+                "summary":"查询统计数据",
+                "description":"查询统计数据",
+                "operationId":"findStatisticsDatasUsingGET",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"statDataName",
+                        "in":"query",
+                        "description":"统计数据名",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"filters",
+                        "in":"query",
+                        "description":"条件限制",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"limit",
+                        "in":"query",
+                        "description":"数量限制",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"startDate",
+                        "in":"query",
+                        "description":"开始时间限制",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"endDate",
+                        "in":"query",
+                        "description":"结束时间限制",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "type":"array",
+                            "items":{
+                                "$ref":"#/definitions/StatisticsData"
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            }
+        },
         "/v1.0/devices/{deviceId}":{
             "delete":{
                 "tags":[
@@ -2049,6 +2227,56 @@
             }
         },
         "/v1.0/externalData":{
+            "get":{
+                "tags":[
+                    "Ⅶ、数据查询相关API类"
+                ],
+                "summary":"查询外部数据",
+                "description":"查询外部数据",
+                "operationId":"findExternalDataUsingGET",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"key",
+                        "in":"query",
+                        "description":"外部数据key",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "type":"array",
+                            "items":{
+                                "$ref":"#/definitions/ExternalData"
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            },
             "post":{
                 "tags":[
                     "Ⅶ、数据查询相关API类"
@@ -2082,10 +2310,7 @@
                 ],
                 "responses":{
                     "200":{
-                        "description":"OK",
-                        "schema":{
-                            "$ref":"#/definitions/ExternalDataIdResponse"
-                        }
+                        "description":"OK"
                     },
                     "201":{
                         "description":"Created"
@@ -2198,65 +2423,6 @@
                     },
                     "403":{
                         "description":"Forbidden"
-                    }
-                }
-            }
-        },
-        "/v1.0/externalData/{id}":{
-            "get":{
-                "tags":[
-                    "Ⅶ、数据查询相关API类"
-                ],
-                "summary":"根据id查询某一条外部数据",
-                "description":"根据id查询某一条外部数据",
-                "operationId":"findExternalDataByIdUsingGET",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "name":"id",
-                        "in":"path",
-                        "description":"id",
-                        "required":true,
-                        "type":"string"
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    },
-                    {
-                        "name":"externalDataName",
-                        "in":"query",
-                        "description":"外部数据名",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK",
-                        "schema":{
-                            "type":"object",
-                            "additionalProperties":{
-                                "type":"object"
-                            }
-                        }
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    },
-                    "404":{
-                        "description":"Not Found"
                     }
                 }
             }
@@ -2523,63 +2689,6 @@
                 "responses":{
                     "200":{
                         "description":"OK"
-                    },
-                    "201":{
-                        "description":"Created"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    },
-                    "404":{
-                        "description":"Not Found"
-                    }
-                }
-            }
-        },
-        "/v1.0/queryExternalData":{
-            "post":{
-                "tags":[
-                    "Ⅶ、数据查询相关API类"
-                ],
-                "summary":"查询外部数据",
-                "description":"查询外部数据",
-                "operationId":"findExternalDataUsingPOST",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "in":"body",
-                        "name":"mongoDataRequest",
-                        "description":"mongoDataRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/MongoDataRequest"
-                        }
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK",
-                        "schema":{
-                            "type":"array",
-                            "items":{
-                                "$ref":"#/definitions/JSONObject"
-                            }
-                        }
                     },
                     "201":{
                         "description":"Created"
@@ -3348,7 +3457,7 @@
                 }
             }
         },
-        "/v1.0/users/{userId}/resetPassword":{
+        "/v1.0/users/{userId}/reSetPassword":{
             "put":{
                 "tags":[
                     "Ⅰ、用户相关API类"
@@ -3400,6 +3509,560 @@
         }
     },
     "definitions":{
+        "UserDTO":{
+            "type":"object",
+            "properties":{
+                "createDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "email":{
+                    "type":"string"
+                },
+                "extend":{
+                    "type":"string"
+                },
+                "lastLoginTime":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "loginName":{
+                    "type":"string"
+                },
+                "parentId":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "password":{
+                    "type":"string"
+                },
+                "phone":{
+                    "type":"string"
+                },
+                "roleId":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "roleName":{
+                    "type":"string"
+                },
+                "status":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "updateDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "userId":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "userName":{
+                    "type":"string"
+                }
+            }
+        },
+        "Devices":{
+            "type":"object",
+            "properties":{
+                "apiKey":{
+                    "type":"string"
+                },
+                "deviceGroupId":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "deviceId":{
+                    "type":"string"
+                },
+                "deviceName":{
+                    "type":"string"
+                },
+                "deviceOwner":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "deviceStatus":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "extension":{
+                    "type":"string"
+                }
+            }
+        },
+        "SmsIdResponse":{
+            "type":"object",
+            "properties":{
+                "smsId":{
+                    "type":"string",
+                    "description":"短信唯一标识码"
+                }
+            },
+            "description":"发送短信响应"
+        },
+        "CustomPermission":{
+            "type":"object",
+            "properties":{
+                "customPermissionDesc":{
+                    "type":"string"
+                },
+                "customPermissionId":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "customPermissionName":{
+                    "type":"string"
+                }
+            }
+        },
+        "PageInfoOfDeviceDelegations":{
+            "type":"object",
+            "properties":{
+                "endRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/DeviceDelegations"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
+                }
+            }
+        },
+        "AddExternalData":{
+            "type":"object",
+            "properties":{
+                "data":{
+                    "type":"object",
+                    "description":"数据"
+                },
+                "externalDataName":{
+                    "type":"string",
+                    "description":"外部数据名"
+                }
+            },
+            "description":"添加外部数据请求"
+        },
+        "DeviceData":{
+            "type":"object",
+            "properties":{
+                "data":{
+                    "type":"string",
+                    "description":"设备数据内容"
+                },
+                "deviceId":{
+                    "type":"string",
+                    "description":"设备Id"
+                },
+                "timestamp":{
+                    "type":"integer",
+                    "format":"int64",
+                    "description":"时间戳"
+                }
+            },
+            "description":"设备数据信息"
+        },
+        "DeviceLogs":{
+            "type":"object",
+            "properties":{
+                "createDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "desc":{
+                    "type":"string"
+                },
+                "deviceId":{
+                    "type":"string"
+                },
+                "deviceName":{
+                    "type":"string"
+                },
+                "logId":{
+                    "type":"integer",
+                    "format":"int64"
+                },
+                "logType":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "operator":{
+                    "type":"integer",
+                    "format":"int32"
+                }
+            }
+        },
+        "ArchiveIdResponse":{
+            "type":"object",
+            "properties":{
+                "archiveId":{
+                    "type":"string",
+                    "description":"档案Id"
+                }
+            },
+            "description":"档案ID响应"
+        },
+        "ExternalData":{
+            "type":"object",
+            "properties":{
+                "data":{
+                    "type":"object",
+                    "description":"外部数据内容"
+                },
+                "id":{
+                    "type":"string"
+                },
+                "key":{
+                    "type":"string",
+                    "description":"外部数据分类key"
+                }
+            },
+            "description":"外部数据信息"
+        },
+        "AddUserRequest":{
+            "type":"object",
+            "properties":{
+                "email":{
+                    "type":"string",
+                    "description":"邮箱地址"
+                },
+                "extension":{
+                    "type":"object",
+                    "description":"用户扩展数据"
+                },
+                "loginName":{
+                    "type":"string",
+                    "description":"登录名"
+                },
+                "phone":{
+                    "type":"string",
+                    "description":"手机号码"
+                },
+                "roleId":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"角色Id"
+                },
+                "userName":{
+                    "type":"string",
+                    "description":"用户名"
+                }
+            },
+            "description":"添加用户请求"
+        },
+        "AddDevice":{
+            "type":"object",
+            "properties":{
+                "apiKey":{
+                    "type":"string",
+                    "description":"设备的apiKey"
+                },
+                "deviceGroupId":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"设备分组Id"
+                },
+                "deviceId":{
+                    "type":"string",
+                    "description":"设备ID"
+                },
+                "deviceName":{
+                    "type":"string",
+                    "description":"设备名称"
+                },
+                "extension":{
+                    "type":"object",
+                    "description":"设备扩展数据"
+                }
+            },
+            "description":"添加设备请求"
+        },
+        "UpdateExternalData":{
+            "type":"object",
+            "properties":{
+                "data":{
+                    "type":"object",
+                    "description":"修改的数据"
+                },
+                "externalDataName":{
+                    "type":"string",
+                    "description":"外部数据名"
+                },
+                "recordId":{
+                    "type":"string",
+                    "description":"外部数据记录id"
+                }
+            },
+            "description":"修改外部数据请求"
+        },
+        "DeviceAlarm":{
+            "type":"object",
+            "properties":{
+                "deviceId":{
+                    "type":"string",
+                    "description":"设备Id"
+                },
+                "dimension":{
+                    "type":"string",
+                    "description":"维度"
+                },
+                "input":{
+                    "type":"object",
+                    "description":"输入数据"
+                },
+                "timestamp":{
+                    "type":"integer",
+                    "format":"int64",
+                    "description":"时间戳"
+                },
+                "warn":{
+                    "type":"string",
+                    "description":"告警信息"
+                }
+            },
+            "description":"设备告警数据"
+        },
+        "DelegateIdResponse":{
+            "type":"object",
+            "properties":{
+                "delegateId":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"转授Id"
+                }
+            },
+            "description":"添加转授响应"
+        },
+        "CommandStatus":{
+            "type":"object",
+            "properties":{
+                "cmdUuid":{
+                    "type":"string"
+                },
+                "commandContent":{
+                    "type":"string"
+                },
+                "commandId":{
+                    "type":"integer",
+                    "format":"int64"
+                },
+                "commandName":{
+                    "type":"string"
+                },
+                "createDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "deviceId":{
+                    "type":"string"
+                },
+                "status":{
+                    "type":"integer",
+                    "format":"int32"
+                }
+            }
+        },
+        "DeviceImport":{
+            "type":"object",
+            "properties":{
+                "devices":{
+                    "type":"array",
+                    "description":"批量导入的设备信息列表",
+                    "items":{
+                        "$ref":"#/definitions/AddDevice"
+                    }
+                }
+            },
+            "description":"批量导入设备请求"
+        },
+        "UpdateUserRequest":{
+            "type":"object",
+            "properties":{
+                "email":{
+                    "type":"string",
+                    "description":"邮箱地址"
+                },
+                "extension":{
+                    "type":"object",
+                    "description":"用户扩展信息"
+                },
+                "phone":{
+                    "type":"string",
+                    "description":"手机号"
+                },
+                "userName":{
+                    "type":"string",
+                    "description":"用户名"
+                }
+            },
+            "description":"修改用户信息请求"
+        },
+        "PageInfoOfDeviceDelegationsDTO":{
+            "type":"object",
+            "properties":{
+                "endRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/DeviceDelegationsDTO"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
+                }
+            }
+        },
         "AddDeviceDelegations":{
             "type":"object",
             "properties":{
@@ -3505,60 +4168,6 @@
                 }
             }
         },
-        "UserDTO":{
-            "type":"object",
-            "properties":{
-                "createDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "email":{
-                    "type":"string"
-                },
-                "extend":{
-                    "type":"string"
-                },
-                "lastLoginTime":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "loginName":{
-                    "type":"string"
-                },
-                "parentId":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "password":{
-                    "type":"string"
-                },
-                "phone":{
-                    "type":"string"
-                },
-                "roleId":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "roleName":{
-                    "type":"string"
-                },
-                "status":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "updateDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "userId":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "userName":{
-                    "type":"string"
-                }
-            }
-        },
         "UpdateDevice":{
             "type":"object",
             "properties":{
@@ -3596,35 +4205,6 @@
             },
             "description":"验证邮箱验证码请求"
         },
-        "Devices":{
-            "type":"object",
-            "properties":{
-                "apiKey":{
-                    "type":"string"
-                },
-                "deviceGroupId":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "deviceId":{
-                    "type":"string"
-                },
-                "deviceName":{
-                    "type":"string"
-                },
-                "deviceOwner":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "deviceStatus":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "extension":{
-                    "type":"string"
-                }
-            }
-        },
         "DeviceShare":{
             "type":"object",
             "properties":{
@@ -3642,16 +4222,6 @@
                 }
             },
             "description":"分享的权限"
-        },
-        "SmsIdResponse":{
-            "type":"object",
-            "properties":{
-                "smsId":{
-                    "type":"string",
-                    "description":"短信唯一标识码"
-                }
-            },
-            "description":"发送短信响应"
         },
         "PageInfoOfDeviceLogs":{
             "type":"object",
@@ -3828,21 +4398,6 @@
                 "total":{
                     "type":"integer",
                     "format":"int64"
-                }
-            }
-        },
-        "CustomPermission":{
-            "type":"object",
-            "properties":{
-                "customPermissionDesc":{
-                    "type":"string"
-                },
-                "customPermissionId":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "customPermissionName":{
-                    "type":"string"
                 }
             }
         },
@@ -4103,45 +4658,6 @@
             },
             "description":"批量导入设备响应"
         },
-        "ExternalDataIdResponse":{
-            "type":"object",
-            "properties":{
-                "externalDataId":{
-                    "type":"string",
-                    "description":"外部数据Id"
-                }
-            },
-            "description":"外部数据ID响应"
-        },
-        "AddExternalData":{
-            "type":"object",
-            "properties":{
-                "data":{
-                    "type":"object",
-                    "description":"数据"
-                },
-                "externalDataName":{
-                    "type":"string",
-                    "description":"外部数据名"
-                }
-            },
-            "description":"添加外部数据请求"
-        },
-        "DeviceData":{
-            "type":"object",
-            "properties":{
-                "data":{
-                    "type":"string"
-                },
-                "deviceId":{
-                    "type":"string"
-                },
-                "timestamp":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
-        },
         "PageInfoOfDevices":{
             "type":"object",
             "properties":{
@@ -4231,36 +4747,6 @@
                 }
             }
         },
-        "DeviceLogs":{
-            "type":"object",
-            "properties":{
-                "createDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "desc":{
-                    "type":"string"
-                },
-                "deviceId":{
-                    "type":"string"
-                },
-                "deviceName":{
-                    "type":"string"
-                },
-                "logId":{
-                    "type":"integer",
-                    "format":"int64"
-                },
-                "logType":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "operator":{
-                    "type":"integer",
-                    "format":"int32"
-                }
-            }
-        },
         "AddDeviceShares":{
             "type":"object",
             "properties":{
@@ -4281,47 +4767,6 @@
                 }
             },
             "description":"添加设备分享信息请求"
-        },
-        "ArchiveIdResponse":{
-            "type":"object",
-            "properties":{
-                "archiveId":{
-                    "type":"string",
-                    "description":"档案Id"
-                }
-            },
-            "description":"档案ID响应"
-        },
-        "AddUserRequest":{
-            "type":"object",
-            "properties":{
-                "email":{
-                    "type":"string",
-                    "description":"邮箱地址"
-                },
-                "extension":{
-                    "type":"object",
-                    "description":"用户扩展数据"
-                },
-                "loginName":{
-                    "type":"string",
-                    "description":"登录名"
-                },
-                "phone":{
-                    "type":"string",
-                    "description":"手机号码"
-                },
-                "roleId":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"角色Id"
-                },
-                "userName":{
-                    "type":"string",
-                    "description":"用户名"
-                }
-            },
-            "description":"添加用户请求"
         },
         "Password":{
             "type":"object",
@@ -4458,46 +4903,6 @@
                 }
             }
         },
-        "AddDevice":{
-            "type":"object",
-            "properties":{
-                "apiKey":{
-                    "type":"string",
-                    "description":"设备的apiKey"
-                },
-                "deviceGroupId":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"设备分组Id"
-                },
-                "deviceId":{
-                    "type":"string",
-                    "description":"设备ID"
-                },
-                "deviceName":{
-                    "type":"string",
-                    "description":"设备名称"
-                },
-                "deviceOwner":{
-                    "type":"string",
-                    "description":"设备拥有人"
-                },
-                "extension":{
-                    "type":"object",
-                    "description":"设备扩展数据"
-                },
-                "isCreateDevice":{
-                    "type":"boolean",
-                    "example":false,
-                    "description":"是否在OneNET上创建设备"
-                },
-                "masterKey":{
-                    "type":"string",
-                    "description":"OneNet产品masterKey"
-                }
-            },
-            "description":"添加设备请求"
-        },
         "RegisterUserRequest":{
             "type":"object",
             "properties":{
@@ -4533,23 +4938,16 @@
             },
             "description":"注册用户请求"
         },
-        "UpdateExternalData":{
+        "Data":{
             "type":"object",
             "properties":{
-                "data":{
-                    "type":"object",
-                    "description":"修改的数据"
+                "dimension":{
+                    "type":"string"
                 },
-                "externalDataName":{
-                    "type":"string",
-                    "description":"外部数据名"
-                },
-                "recordId":{
-                    "type":"string",
-                    "description":"外部数据记录id"
+                "value":{
+                    "type":"object"
                 }
-            },
-            "description":"修改外部数据请求"
+            }
         },
         "ShareIdResponse":{
             "type":"object",
@@ -4572,18 +4970,6 @@
                 }
             },
             "description":"注册和增加用户响应"
-        },
-        "MongoDataRequest":{
-            "type":"object",
-            "properties":{
-                "params":{
-                    "type":"object"
-                },
-                "sqlTemplateId":{
-                    "type":"integer",
-                    "format":"int32"
-                }
-            }
         },
         "DeviceArchiveResponse":{
             "type":"object",
@@ -4612,12 +4998,6 @@
                 }
             },
             "description":"发送命令响应"
-        },
-        "JSONObject":{
-            "type":"object",
-            "additionalProperties":{
-                "type":"object"
-            }
         },
         "RoleNameListResponse":{
             "type":"object",
@@ -4652,46 +5032,6 @@
             },
             "description":"添加设备档案请求"
         },
-        "DelegateIdResponse":{
-            "type":"object",
-            "properties":{
-                "delegateId":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"转授Id"
-                }
-            },
-            "description":"添加转授响应"
-        },
-        "CommandStatus":{
-            "type":"object",
-            "properties":{
-                "cmdUuid":{
-                    "type":"string"
-                },
-                "commandContent":{
-                    "type":"string"
-                },
-                "commandId":{
-                    "type":"integer",
-                    "format":"int64"
-                },
-                "commandName":{
-                    "type":"string"
-                },
-                "createDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "deviceId":{
-                    "type":"string"
-                },
-                "status":{
-                    "type":"integer",
-                    "format":"int32"
-                }
-            }
-        },
         "SmsVerificationRequest":{
             "type":"object",
             "properties":{
@@ -4710,129 +5050,23 @@
             },
             "description":"验证短信验证码请求"
         },
-        "DeviceImport":{
+        "StatisticsData":{
             "type":"object",
             "properties":{
-                "devices":{
+                "datas":{
                     "type":"array",
-                    "description":"批量导入的设备信息列表",
+                    "description":"统计数据",
                     "items":{
-                        "$ref":"#/definitions/AddDevice"
+                        "$ref":"#/definitions/Data"
                     }
+                },
+                "timestamp":{
+                    "type":"integer",
+                    "format":"int64",
+                    "description":"时间戳"
                 }
             },
-            "description":"批量导入设备请求"
-        },
-        "UpdateUserRequest":{
-            "type":"object",
-            "properties":{
-                "email":{
-                    "type":"string",
-                    "description":"邮箱地址"
-                },
-                "extension":{
-                    "type":"object",
-                    "description":"用户扩展信息"
-                },
-                "phone":{
-                    "type":"string",
-                    "description":"手机号"
-                },
-                "userName":{
-                    "type":"string",
-                    "description":"用户名"
-                }
-            },
-            "description":"修改用户信息请求"
-        },
-        "PageInfoOfDeviceDelegationsDTO":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/DeviceDelegationsDTO"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
+            "description":"设备统计数据信息"
         }
     }
 }
