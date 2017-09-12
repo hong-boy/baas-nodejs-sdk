@@ -4,7 +4,7 @@ const APIClient = require('../../index.js');
 let sessionToken = null;
 
 const CONFIG_ENV_TEST = {
-    debug: true,
+    debug: false,
     domain: 'http://172.19.3.138:6549',
     accessId: 'PZwI2qTh',
     accessKey: '7896620c92b54d93a21bdea5b5aff2f2',
@@ -24,7 +24,7 @@ async function getSessionToken() {
     try {
         let ret = await client.loginUsingGET(CONFIG_ENV_TEST.user);
         sessionToken = ret.response.headers['session-token'];
-        console.log('/v1.0/login 用户登录', sessionToken, ret.body);
+        console.log('用户登录', sessionToken, ret.body);
         return sessionToken;
     } catch (e) {
         processError(e);
@@ -32,34 +32,36 @@ async function getSessionToken() {
 }
 
 function processError(ret, msg) {
-    let resp = ret.response;
-    if (resp.statusCode == 200) {
-        return;
+    if (ret.status) {
+        return `Status:${ret.status} | ${ret.statusMessage} | ${msg}`;
+    } else {
+        return `Error:${ret} | ${msg}`
     }
-    return `Status:${resp.statusCode} | ${resp.statusMessage} | ${msg}`;
 }
 
 describe('dist/APIClient.js', function () {
-    describe('用户相关API', function () {
+    describe('设备相关API', function () {
         beforeEach(async function () {
             this.sessionToken = await getSessionToken();
         });
 
         it('/v1.0/devices 查询设备', function (done) {
             let promise = client.getDevicesListUsingGET({
-                sessionToken: this.sessionToken,
-                deviceName: 0,
+                // sessionToken: this.sessionToken,
+                sessionToken: '93b771e7-7e8e-4cfb-8f09-105d1a1468e6',
+                // deviceName: '',
                 deviceOwner: '',
                 pageNum: 1,
                 pageSize: 10
             });
             promise.then(function (ret) {
                 assert.ok(ret, processError(ret || {}, '查询设备失败'));
+                console.log(ret);
                 done();
             }).catch(function (e) {
-                //console.log(e);
+                console.error(processError(e));
                 done();
-            })
+            });
         });
 
         //it('/v1.0/devices 导入单个设备', function (done) {

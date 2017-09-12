@@ -65,6 +65,10 @@ var APIClient = (function () {
      * @param req
      */
     function wrap4SignatureKey(method, params, accessKey, accessId, req) {
+        if (!Object.keys(params).length) {
+            logger(this, 'No parameters given', params);
+            return;
+        }
         delete params['sessionToken'];
         var authCode = genAuthCode.call(this, method, accessKey, accessId, undefined, params, undefined);
         logger(this, 'authCode: ', authCode);
@@ -102,7 +106,7 @@ var APIClient = (function () {
             var paramsKey = paramsKeyArr[i];
             var value = params[paramsKey];
             value = lodash.isArray(value) || lodash.isPlainObject(value) ? JSON.stringify(value) : value;
-            if (value || lodash.isNumber(value) || lodash.isBoolean(value)) {
+            if (value || lodash.isNumber(value)) {
                 arr.push([paramsKey, encodeURIComponent(value)].join('='));
             }
         }
@@ -130,16 +134,25 @@ var APIClient = (function () {
      * HTTP Request
      * @method
      * @name APIClient#request
-     * @param {string} method - http method
-     * @param {string} url - url to do request
-     * @param {object} parameters
-     * @param {object} body - body parameters / object
-     * @param {object} headers - header parameters
-     * @param {object} queryParameters - querystring parameters
-     * @param {object} form - form data object
+     * @param {object} options
+     * @param {string} options.method - http method
+     * @param {string} options.url - url to do request
+     * @param {object} options.parameters
+     * @param {object} options.body - body parameters / object
+     * @param {object} options.headers - header parameters
+     * @param {object} options.queryParameters - querystring parameters
+     * @param {object} options.form - form data object
      * @param {object} deferred - promise object
      */
-    APIClient.prototype.request = function (method, url, parameters, body, headers, queryParameters, form, deferred) {
+    APIClient.prototype.request = function (options, deferred) {
+        var method = options.method,
+            url = options.url,
+            parameters = options.parameters,
+            pathParameter = options.pathParameter,
+            body = options.body,
+            headers = options.headers,
+            queryParameters = options.queryParameters,
+            form = options.form;
         var req = {
             method: method,
             uri: this.domain + url,
@@ -148,7 +161,7 @@ var APIClient = (function () {
             body: body
         };
 
-        wrap4SignatureKey.call(this, method, lodash.assign({}, body, queryParameters), this.accessKey, this.accessId, req);
+        wrap4SignatureKey.call(this, method, lodash.assign({}, pathParameter, queryParameters), this.accessKey, this.accessId, req);
 
         if (this.ca) {
             req.ca = this.ca;
@@ -160,31 +173,34 @@ var APIClient = (function () {
         if (typeof(body) === 'object' && !(body instanceof Buffer)) {
             req.json = true;
         }
+        logger(this, 'Request: ', JSON.stringify(req));
         request(req, function (error, response, body) {
+            logger(this, 'Response: statusCode=%s | statusMessage=%s | body=%s',
+                response.statusCode, response.statusMessage, JSON.stringify(body));
             if (error) {
                 deferred.reject(error);
+                return;
+            }
+            if (/^application\/(.*\\+)?json/.test(response.headers['content-type'])) {
+                try {
+                    body = JSON.parse(body);
+                } catch (e) {
+                }
+            }
+            if (response.statusCode >= 200 && response.statusCode <= 299) {
+                deferred.resolve({
+                    status: response.statusCode,
+                    statusMessage: response.statusMessage,
+                    response: response,
+                    body: body
+                });
             } else {
-                if (/^application\/(.*\\+)?json/.test(response.headers['content-type'])) {
-                    try {
-                        body = JSON.parse(body);
-                    } catch (e) {
-                    }
-                }
-                if (response.statusCode === 204) {
-                    deferred.resolve({
-                        response: response
-                    });
-                } else if (response.statusCode >= 200 && response.statusCode <= 299) {
-                    deferred.resolve({
-                        response: response,
-                        body: body
-                    });
-                } else {
-                    deferred.reject({
-                        response: response,
-                        body: body
-                    });
-                }
+                deferred.reject({
+                    status: response.statusCode,
+                    statusMessage: response.statusMessage,
+                    response: response,
+                    body: body
+                });
             }
         });
     };
@@ -207,7 +223,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -231,9 +248,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'DELETE',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -262,7 +288,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -309,9 +336,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -333,7 +369,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -357,9 +394,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -381,7 +427,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -405,9 +452,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -429,7 +485,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -453,9 +510,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -479,7 +545,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -506,9 +573,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'DELETE',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -530,12 +606,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{archiveId}', parameters['archiveId']);
+        pathParameters['archiveId'] = parameters['archiveId'];
 
         if (parameters['archiveId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: archiveId'));
@@ -552,9 +630,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -581,7 +668,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -620,9 +708,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -644,7 +741,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -668,9 +766,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -692,12 +799,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{cmd_uuid}', parameters['cmdUuid']);
+        pathParameters['cmdUuid'] = parameters['cmdUuid'];
 
         if (parameters['cmdUuid'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: cmdUuid'));
@@ -714,9 +823,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -743,12 +861,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{deviceId}', parameters['deviceId']);
+        pathParameters['deviceId'] = parameters['deviceId'];
 
         if (parameters['deviceId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: deviceId'));
@@ -805,9 +925,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -829,7 +958,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -853,9 +983,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -882,7 +1021,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -921,9 +1061,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -950,7 +1099,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -989,9 +1139,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1013,12 +1172,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{delegateId}', parameters['delegateId']);
+        pathParameters['delegateId'] = parameters['delegateId'];
 
         if (parameters['delegateId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: delegateId'));
@@ -1035,9 +1196,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1059,12 +1229,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{delegateId}', parameters['delegateId']);
+        pathParameters['delegateId'] = parameters['delegateId'];
 
         if (parameters['delegateId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: delegateId'));
@@ -1081,9 +1253,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'DELETE',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1105,7 +1286,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1129,9 +1311,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'DELETE',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1153,12 +1344,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{deviceId}', parameters['deviceId']);
+        pathParameters['deviceId'] = parameters['deviceId'];
 
         if (parameters['deviceId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: deviceId'));
@@ -1175,9 +1368,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1199,12 +1401,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{deviceId}', parameters['deviceId']);
+        pathParameters['deviceId'] = parameters['deviceId'];
 
         if (parameters['deviceId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: deviceId'));
@@ -1221,9 +1425,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1245,7 +1458,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1269,9 +1483,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1293,12 +1516,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{deviceId}', parameters['deviceId']);
+        pathParameters['deviceId'] = parameters['deviceId'];
 
         if (parameters['deviceId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: deviceId'));
@@ -1315,9 +1540,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1340,12 +1574,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{deviceId}', parameters['deviceId']);
+        pathParameters['deviceId'] = parameters['deviceId'];
 
         if (parameters['deviceId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: deviceId'));
@@ -1371,9 +1607,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1403,7 +1648,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1454,9 +1700,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1478,7 +1733,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1502,9 +1758,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1526,7 +1791,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1550,9 +1816,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1574,7 +1849,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1598,9 +1874,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1622,7 +1907,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1646,9 +1932,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1670,7 +1965,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1694,9 +1990,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1723,7 +2028,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1762,9 +2068,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1791,7 +2106,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -1830,9 +2146,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1854,12 +2179,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{shareId}', parameters['shareId']);
+        pathParameters['shareId'] = parameters['shareId'];
 
         if (parameters['shareId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: shareId'));
@@ -1876,9 +2203,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1900,12 +2236,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{shareId}', parameters['shareId']);
+        pathParameters['shareId'] = parameters['shareId'];
 
         if (parameters['shareId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: shareId'));
@@ -1922,9 +2260,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'DELETE',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1946,12 +2293,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{deviceId}', parameters['deviceId']);
+        pathParameters['deviceId'] = parameters['deviceId'];
 
         if (parameters['deviceId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: deviceId'));
@@ -1968,9 +2317,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'DELETE',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -1992,7 +2350,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2016,9 +2375,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2040,7 +2408,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2064,9 +2433,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2089,7 +2467,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2117,9 +2496,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'DELETE',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2142,12 +2530,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{id}', parameters['id']);
+        pathParameters['id'] = parameters['id'];
 
         if (parameters['id'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: id'));
@@ -2173,9 +2563,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2200,7 +2599,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2231,9 +2631,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2254,7 +2663,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2269,9 +2679,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2294,7 +2713,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2312,9 +2732,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2337,7 +2766,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2365,9 +2795,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2389,7 +2828,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2413,9 +2853,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2437,7 +2886,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2461,9 +2911,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2485,7 +2944,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2509,9 +2969,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2532,7 +3001,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2547,9 +3017,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2570,7 +3049,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2585,9 +3065,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2610,7 +3099,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2638,9 +3128,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2662,7 +3161,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2686,9 +3186,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2714,7 +3223,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2749,9 +3259,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2773,7 +3292,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2797,9 +3317,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('POST', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'POST',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2822,7 +3351,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2837,6 +3367,7 @@ var APIClient = (function () {
         }
 
         path = path.replace('{userId}', parameters['userId']);
+        pathParameters['userId'] = parameters['userId'];
 
         if (parameters['userId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: userId'));
@@ -2853,9 +3384,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2877,12 +3417,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{userId}', parameters['userId']);
+        pathParameters['userId'] = parameters['userId'];
 
         if (parameters['userId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: userId'));
@@ -2899,9 +3441,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('DELETE', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'DELETE',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2923,7 +3474,8 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
@@ -2947,9 +3499,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -2971,12 +3532,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{userId}', parameters['userId']);
+        pathParameters['userId'] = parameters['userId'];
 
         if (parameters['userId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: userId'));
@@ -2993,9 +3556,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -3019,12 +3591,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{userId}', parameters['userId']);
+        pathParameters['userId'] = parameters['userId'];
 
         if (parameters['userId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: userId'));
@@ -3049,9 +3623,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('GET', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -3073,12 +3656,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{userId}', parameters['userId']);
+        pathParameters['userId'] = parameters['userId'];
 
         if (parameters['userId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: userId'));
@@ -3095,9 +3680,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -3119,12 +3713,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{userId}', parameters['userId']);
+        pathParameters['userId'] = parameters['userId'];
 
         if (parameters['userId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: userId'));
@@ -3141,9 +3737,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };
@@ -3165,12 +3770,14 @@ var APIClient = (function () {
         var body = {},
             queryParameters = {},
             headers = {},
-            form = {};
+            form = {},
+            pathParameters = {};
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
         path = path.replace('{userId}', parameters['userId']);
+        pathParameters['userId'] = parameters['userId'];
 
         if (parameters['userId'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: userId'));
@@ -3187,9 +3794,18 @@ var APIClient = (function () {
         }
 
         queryParameters = mergeQueryParams(parameters, queryParameters);
-        logger(this, 'Parameter.body: ', body);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
         logger(this, 'Parameter.queryParamters: ', queryParameters);
-        this.request('PUT', path, parameters, body, headers, queryParameters, form, deferred);
+        this.request({
+            method: 'PUT',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
 
         return deferred.promise;
     };

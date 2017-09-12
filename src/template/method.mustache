@@ -14,7 +14,7 @@ parameters = {};
 }
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} deferred = {{#isNode}}Q{{/isNode}}{{^isNode}}$q{{/isNode}}.defer();
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} path = '{{&path}}';
-{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} body = {}, queryParameters = {}, headers = {}, form = {};
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} body = {}, queryParameters = {}, headers = {}, form = {}, pathParameters = {};
 
 {{#isSecure}}
     headers = this.setAuthHeaders(headers);
@@ -51,6 +51,7 @@ parameters = {};
 
     {{#isPathParameter}}
         path = path.replace('{{=<% %>=}}{<%&name%>}<%={{ }}=%>', parameters['{{&camelCaseName}}']);
+        pathParameters['{{&camelCaseName}}'] = parameters['{{&camelCaseName}}'];
     {{/isPathParameter}}
 
     {{#isHeaderParameter}}
@@ -90,9 +91,18 @@ parameters = {};
 
 {{/parameters}}
 queryParameters = mergeQueryParams(parameters, queryParameters);
-logger(this, 'Parameter.body: ', body);
+logger(this, 'Parameter.pathParameters: ', pathParameters);
 logger(this, 'Parameter.queryParamters: ', queryParameters);
-this.request('{{method}}', path, parameters, body, headers, queryParameters, form, deferred);
+this.request({
+method:'{{method}}',
+url:path,
+pathParameters:pathParameters,
+parameters:parameters,
+body:body,
+headers:headers,
+queryParameters:queryParameters,
+form:form
+}, deferred);
 
 return deferred.promise;
 };

@@ -65,6 +65,10 @@ console.log.apply(console, Array.prototype.slice.call(arguments, 1));
 * @param req
 */
 function wrap4SignatureKey(method, params, accessKey, accessId, req){
+if(!Object.keys(params).length){
+logger(this, 'No parameters given', params);
+return;
+}
 delete params['sessionToken'];
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} authCode = genAuthCode.call(this, method, accessKey, accessId, undefined, params, undefined);
 logger(this, 'authCode: ', authCode);
@@ -140,16 +144,25 @@ return queryParameters;
 * HTTP Request
 * @method
 * @name {{&className}}#request
-* @param {string} method - http method
-* @param {string} url - url to do request
-* @param {object} parameters
-* @param {object} body - body parameters / object
-* @param {object} headers - header parameters
-* @param {object} queryParameters - querystring parameters
-* @param {object} form - form data object
+* @param {object} options
+* @param {string} options.method - http method
+* @param {string} options.url - url to do request
+* @param {object} options.parameters
+* @param {object} options.body - body parameters / object
+* @param {object} options.headers - header parameters
+* @param {object} options.queryParameters - querystring parameters
+* @param {object} options.form - form data object
 * @param {object} deferred - promise object
 */
-{{&className}}.prototype.request = function(method, url, parameters, body, headers, queryParameters, form, deferred){
+{{&className}}.prototype.request = function(options, deferred){
+{{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} method = options.method,
+url = options.url,
+parameters = options.parameters,
+pathParameter = options.pathParameter,
+body = options.body,
+headers = options.headers,
+queryParameters = options.queryParameters,
+form = options.form;
 {{#isES6}}let{{/isES6}}{{^isES6}}var{{/isES6}} req = {
 method: method,
 uri: this.domain + url,
@@ -158,7 +171,7 @@ headers: headers,
 body: body
 };
 
-wrap4SignatureKey.call(this, method, lodash.assign({}, body, queryParameters), this.accessKey, this.accessId, req);
+wrap4SignatureKey.call(this, method, lodash.assign({}, pathParameter, queryParameters), this.accessKey, this.accessId, req);
 
 if(this.ca){
 req.ca = this.ca;
@@ -170,22 +183,33 @@ req.form = form;
 if(typeof(body) === 'object' && !(body instanceof Buffer)) {
 req.json = true;
 }
+logger(this, 'Request: ', JSON.stringify(req));
 request(req, function(error, response, body){
+logger(this, 'Response: statusCode=%s | statusMessage=%s | body=%s',
+response.statusCode, response.statusMessage, JSON.stringify(body));
 if(error) {
 deferred.reject(error);
-} else {
+return;
+}
 if(/^application\/(.*\\+)?json/.test(response.headers['content-type'])) {
 try {
 body = JSON.parse(body);
 } catch(e) {}
 }
-if(response.statusCode === 204) {
-deferred.resolve({ response: response });
-} else if(response.statusCode >= 200 && response.statusCode <= 299) {
-deferred.resolve({ response: response, body: body });
+if(response.statusCode >= 200 && response.statusCode <= 299) {
+deferred.resolve({
+status:response.statusCode,
+statusMessage: response.statusMessage,
+response: response,
+body: body
+});
 } else {
-deferred.reject({ response: response, body: body });
-}
+deferred.reject({
+status:response.statusCode,
+statusMessage: response.statusMessage,
+response: response,
+body: body
+});
 }
 });
 };
