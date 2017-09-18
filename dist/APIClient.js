@@ -67,7 +67,6 @@ var APIClient = (function () {
     function wrap4SignatureKey(method, params, accessKey, accessId, req) {
         if (!Object.keys(params).length) {
             logger(this, 'No parameters given', params);
-            return;
         }
         delete params['sessionToken'];
         var authCode = genAuthCode.call(this, method, accessKey, accessId, undefined, params, undefined);
@@ -175,12 +174,13 @@ var APIClient = (function () {
         }
         logger(this, 'Request: ', JSON.stringify(req));
         request(req, function (error, response, body) {
-            logger(this, 'Response: statusCode=%s | statusMessage=%s | body=%s',
-                response.statusCode, response.statusMessage, JSON.stringify(body));
             if (error) {
+                logger(this, 'error: ', error.message);
                 deferred.reject(error);
                 return;
             }
+            logger(this, 'Response: statusCode=%s | statusMessage=%s | body=%s',
+                response.statusCode, response.statusMessage, JSON.stringify(body));
             if (/^application\/(.*\\+)?json/.test(response.headers['content-type'])) {
                 try {
                     body = JSON.parse(body);
