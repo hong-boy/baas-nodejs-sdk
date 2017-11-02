@@ -263,6 +263,7 @@ tr > th:last-child{ border-right:1px solid #ddd; }
     margin-top:0;
     padding-top:0;
 }
+
 .params td.description > p:last-child,
 .props td.description > p:last-child{
     margin-bottom:0;

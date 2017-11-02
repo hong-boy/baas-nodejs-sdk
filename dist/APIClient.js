@@ -762,7 +762,7 @@ var APIClient = (function () {
      * @method
      * @name APIClient#assignDevicesUsingPUT
      * @param {object} parameters - method options and parameters
-     * @param {} parameters.assignDeviceRequest - assignDeviceRequest
+     * @param {} parameters.assignDevice - assignDevice
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.assignDevicesUsingPUT = function (parameters) {
@@ -781,12 +781,12 @@ var APIClient = (function () {
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
-        if (parameters['assignDeviceRequest'] !== undefined) {
-            body = parameters['assignDeviceRequest'];
+        if (parameters['assignDevice'] !== undefined) {
+            body = parameters['assignDevice'];
         }
 
-        if (parameters['assignDeviceRequest'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: assignDeviceRequest'));
+        if (parameters['assignDevice'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: assignDevice'));
             return deferred.promise;
         }
 
@@ -3499,11 +3499,12 @@ var APIClient = (function () {
      * @method
      * @name APIClient#getTemplatesUsingGET
      * @param {object} parameters - method options and parameters
+     * @param {string} parameters.sqlDataTypes - sqlDataTypes
+     * @param {string} parameters.sqlDataType - 模板数据类型
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.sqlTemplateName - sql模板名
      * @param {string} parameters.sqlType - 模板sql类型
      * @param {string} parameters.sqlTemplateType - 模板类型
-     * @param {string} parameters.sqlDataType - 模板数据类型
      * @param {string} parameters.pageNum - 当前页
      * @param {string} parameters.pageSize - 每页多少条
      */
@@ -3522,6 +3523,14 @@ var APIClient = (function () {
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
+
+        if (parameters['sqlDataTypes'] !== undefined) {
+            queryParameters['sqlDataTypes'] = parameters['sqlDataTypes'];
+        }
+
+        if (parameters['sqlDataType'] !== undefined) {
+            queryParameters['sqlDataType'] = parameters['sqlDataType'];
+        }
 
         if (parameters['sessionToken'] !== undefined) {
             headers['session-token'] = parameters['sessionToken'];
@@ -3542,10 +3551,6 @@ var APIClient = (function () {
 
         if (parameters['sqlTemplateType'] !== undefined) {
             queryParameters['sqlTemplateType'] = parameters['sqlTemplateType'];
-        }
-
-        if (parameters['sqlDataType'] !== undefined) {
-            queryParameters['sqlDataType'] = parameters['sqlDataType'];
         }
 
         if (parameters['pageNum'] !== undefined) {

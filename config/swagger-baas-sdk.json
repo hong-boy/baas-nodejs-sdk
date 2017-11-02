@@ -583,11 +583,11 @@
                 "parameters":[
                     {
                         "in":"body",
-                        "name":"assignDeviceRequest",
-                        "description":"assignDeviceRequest",
+                        "name":"assignDevice",
+                        "description":"assignDevice",
                         "required":true,
                         "schema":{
-                            "$ref":"#/definitions/AssignDeviceRequest"
+                            "$ref":"#/definitions/AssignDevice"
                         }
                     },
                     {
@@ -3155,6 +3155,20 @@
                 ],
                 "parameters":[
                     {
+                        "name":"sqlDataTypes",
+                        "in":"query",
+                        "description":"sqlDataTypes",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"sqlDataType",
+                        "in":"query",
+                        "description":"模板数据类型",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
                         "name":"session-token",
                         "in":"header",
                         "description":"session-token",
@@ -3179,13 +3193,6 @@
                         "name":"sqlTemplateType",
                         "in":"query",
                         "description":"模板类型",
-                        "required":false,
-                        "type":"string"
-                    },
-                    {
-                        "name":"sqlDataType",
-                        "in":"query",
-                        "description":"模板数据类型",
                         "required":false,
                         "type":"string"
                     },
@@ -4939,22 +4946,6 @@
             },
             "description":"分享的权限"
         },
-        "AssignDeviceRequest":{
-            "type":"object",
-            "properties":{
-                "deviceIds":{
-                    "type":"array",
-                    "description":"要分享的设备id列表",
-                    "items":{
-                        "type":"string"
-                    }
-                },
-                "toUser":{
-                    "type":"string",
-                    "description":"被分配人loginName"
-                }
-            }
-        },
         "PageInfoOfDeviceLogs":{
             "type":"object",
             "properties":{
@@ -5774,6 +5765,22 @@
                     "type":"integer",
                     "format":"int32",
                     "description":"模版sql类型"
+                }
+            }
+        },
+        "AssignDevice":{
+            "type":"object",
+            "properties":{
+                "deviceIds":{
+                    "type":"array",
+                    "description":"要分享的设备id列表",
+                    "items":{
+                        "type":"string"
+                    }
+                },
+                "toUser":{
+                    "type":"string",
+                    "description":"被分配人loginName"
                 }
             }
         },
