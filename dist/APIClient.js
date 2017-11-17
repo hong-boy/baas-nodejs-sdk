@@ -210,7 +210,7 @@ var APIClient = (function () {
      * @method
      * @name APIClient#deleteExternalDataBySQLUsingDELETE
      * @param {object} parameters - method options and parameters
-     * @param {} parameters.mongoDataRequest - MongoDataRequest
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.deleteExternalDataBySQLUsingDELETE = function (parameters) {
@@ -410,7 +410,7 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 查询设备档案
+     * 查询单个设备档案
      * @method
      * @name APIClient#findSingleArchiveUsingGET
      * @param {object} parameters - method options and parameters
@@ -1155,6 +1155,7 @@ var APIClient = (function () {
      * @name APIClient#getDeviceDelegateOthersUsingGET
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
+     * @param {string} parameters.deviceId - 设备ID
      * @param {string} parameters.loginName - 被转授人loginName
      * @param {string} parameters.userName - 被转授人userName
      * @param {string} parameters.startDate - 开始日期
@@ -1185,6 +1186,10 @@ var APIClient = (function () {
         if (parameters['sessionToken'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: sessionToken'));
             return deferred.promise;
+        }
+
+        if (parameters['deviceId'] !== undefined) {
+            queryParameters['deviceId'] = parameters['deviceId'];
         }
 
         if (parameters['loginName'] !== undefined) {
@@ -1233,6 +1238,7 @@ var APIClient = (function () {
      * @name APIClient#getDeviceDelegateSelfUsingGET
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
+     * @param {string} parameters.deviceId - 设备ID
      * @param {string} parameters.loginName - 转授人loginName
      * @param {string} parameters.userName - 转授人userName
      * @param {string} parameters.startDate - 开始日期
@@ -1263,6 +1269,10 @@ var APIClient = (function () {
         if (parameters['sessionToken'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: sessionToken'));
             return deferred.promise;
+        }
+
+        if (parameters['deviceId'] !== undefined) {
+            queryParameters['deviceId'] = parameters['deviceId'];
         }
 
         if (parameters['loginName'] !== undefined) {
@@ -2099,7 +2109,7 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 查询设备分享信息列表
+     * 查询设备分享信息列表(仅超管可用)
      * @method
      * @name APIClient#getDeviceSharesListUsingGET
      * @param {object} parameters - method options and parameters
@@ -2245,6 +2255,7 @@ var APIClient = (function () {
      * @name APIClient#getDeviceShareOthersUsingGET
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
+     * @param {string} parameters.deviceId - 设备id
      * @param {string} parameters.loginName - 被分享者登录名
      * @param {string} parameters.userName - 被分享者用户名
      * @param {string} parameters.startDate - 开始时间
@@ -2275,6 +2286,10 @@ var APIClient = (function () {
         if (parameters['sessionToken'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: sessionToken'));
             return deferred.promise;
+        }
+
+        if (parameters['deviceId'] !== undefined) {
+            queryParameters['deviceId'] = parameters['deviceId'];
         }
 
         if (parameters['loginName'] !== undefined) {
@@ -2323,6 +2338,7 @@ var APIClient = (function () {
      * @name APIClient#getDeviceShareSelfUsingGET
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
+     * @param {string} parameters.deviceId - 设备id
      * @param {string} parameters.loginName - 分享者登录名
      * @param {string} parameters.userName - 分享者用户名
      * @param {string} parameters.startDate - 开始时间
@@ -2353,6 +2369,10 @@ var APIClient = (function () {
         if (parameters['sessionToken'] === undefined) {
             deferred.reject(new Error('Missing required  parameter: sessionToken'));
             return deferred.promise;
+        }
+
+        if (parameters['deviceId'] !== undefined) {
+            queryParameters['deviceId'] = parameters['deviceId'];
         }
 
         if (parameters['loginName'] !== undefined) {
@@ -3499,12 +3519,12 @@ var APIClient = (function () {
      * @method
      * @name APIClient#getTemplatesUsingGET
      * @param {object} parameters - method options and parameters
-     * @param {string} parameters.sqlDataTypes - sqlDataTypes
-     * @param {string} parameters.sqlDataType - 模板数据类型
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.sqlTemplateName - sql模板名
-     * @param {string} parameters.sqlType - 模板sql类型
-     * @param {string} parameters.sqlTemplateType - 模板类型
+     * @param {string} parameters.sqlType - 模板sql类型:（0：查询；1：新增；2：修改；3：删除）
+     * @param {string} parameters.sqlTemplateType - 模板类型（1：默认模板；2：自定义模板）
+     * @param {string} parameters.sqlTemplateName - 模板名（模糊查询）
+     * @param {string} parameters.sqlDataTypes - 模板数据类型，多个用逗号隔开(2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；8：档案和转换数据；9：统计数据、告警数据和外部数据)
      * @param {string} parameters.pageNum - 当前页
      * @param {string} parameters.pageSize - 每页多少条
      */
@@ -3523,14 +3543,6 @@ var APIClient = (function () {
 
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
-
-        if (parameters['sqlDataTypes'] !== undefined) {
-            queryParameters['sqlDataTypes'] = parameters['sqlDataTypes'];
-        }
-
-        if (parameters['sqlDataType'] !== undefined) {
-            queryParameters['sqlDataType'] = parameters['sqlDataType'];
-        }
 
         if (parameters['sessionToken'] !== undefined) {
             headers['session-token'] = parameters['sessionToken'];
@@ -3551,6 +3563,14 @@ var APIClient = (function () {
 
         if (parameters['sqlTemplateType'] !== undefined) {
             queryParameters['sqlTemplateType'] = parameters['sqlTemplateType'];
+        }
+
+        if (parameters['sqlTemplateName'] !== undefined) {
+            queryParameters['sqlTemplateName'] = parameters['sqlTemplateName'];
+        }
+
+        if (parameters['sqlDataTypes'] !== undefined) {
+            queryParameters['sqlDataTypes'] = parameters['sqlDataTypes'];
         }
 
         if (parameters['pageNum'] !== undefined) {
@@ -3817,7 +3837,7 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 修改外部数据
+     * 根据sql修改外部数据
      * @method
      * @name APIClient#updateExternalDataUsingPUT
      * @param {object} parameters - method options and parameters

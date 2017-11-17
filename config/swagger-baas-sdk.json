@@ -76,8 +76,8 @@
                 "parameters":[
                     {
                         "in":"body",
-                        "name":"MongoDataRequest",
-                        "description":"MongoDataRequest",
+                        "name":"mongoDataRequest",
+                        "description":"mongoDataRequest",
                         "required":true,
                         "schema":{
                             "$ref":"#/definitions/MongoDataRequest"
@@ -259,8 +259,8 @@
                 "tags":[
                     "Ⅲ、设备档案相关API类"
                 ],
-                "summary":"查询设备档案",
-                "description":"查询设备档案",
+                "summary":"查询单个设备档案",
+                "description":"查询单个设备档案",
                 "operationId":"findSingleArchiveUsingGET",
                 "consumes":[
                     "application/json"
@@ -967,6 +967,13 @@
                         "type":"string"
                     },
                     {
+                        "name":"deviceId",
+                        "in":"query",
+                        "description":"设备ID",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
                         "name":"loginName",
                         "in":"query",
                         "description":"被转授人loginName",
@@ -1047,6 +1054,13 @@
                         "in":"header",
                         "description":"session-token",
                         "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceId",
+                        "in":"query",
+                        "description":"设备ID",
+                        "required":false,
                         "type":"string"
                     },
                     {
@@ -1849,8 +1863,8 @@
                 "tags":[
                     "Ⅳ、设备分享API类"
                 ],
-                "summary":"查询设备分享信息列表",
-                "description":"查询设备分享信息列表",
+                "summary":"查询设备分享信息列表(仅超管可用)",
+                "description":"查询设备分享信息列表(仅超管可用)",
                 "operationId":"getDeviceSharesListUsingGET",
                 "consumes":[
                     "application/json"
@@ -2009,6 +2023,13 @@
                         "type":"string"
                     },
                     {
+                        "name":"deviceId",
+                        "in":"query",
+                        "description":"设备id",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
                         "name":"loginName",
                         "in":"query",
                         "description":"被分享者登录名",
@@ -2089,6 +2110,13 @@
                         "in":"header",
                         "description":"session-token",
                         "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"deviceId",
+                        "in":"query",
+                        "description":"设备id",
+                        "required":false,
                         "type":"string"
                     },
                     {
@@ -3155,20 +3183,6 @@
                 ],
                 "parameters":[
                     {
-                        "name":"sqlDataTypes",
-                        "in":"query",
-                        "description":"sqlDataTypes",
-                        "required":false,
-                        "type":"string"
-                    },
-                    {
-                        "name":"sqlDataType",
-                        "in":"query",
-                        "description":"模板数据类型",
-                        "required":false,
-                        "type":"string"
-                    },
-                    {
                         "name":"session-token",
                         "in":"header",
                         "description":"session-token",
@@ -3185,14 +3199,28 @@
                     {
                         "name":"sqlType",
                         "in":"query",
-                        "description":"模板sql类型",
+                        "description":"模板sql类型:（0：查询；1：新增；2：修改；3：删除）",
                         "required":false,
                         "type":"string"
                     },
                     {
                         "name":"sqlTemplateType",
                         "in":"query",
-                        "description":"模板类型",
+                        "description":"模板类型（1：默认模板；2：自定义模板）",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"sqlTemplateName",
+                        "in":"query",
+                        "description":"模板名（模糊查询）",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"sqlDataTypes",
+                        "in":"query",
+                        "description":"模板数据类型，多个用逗号隔开(2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；8：档案和转换数据；9：统计数据、告警数据和外部数据)",
                         "required":false,
                         "type":"string"
                     },
@@ -3440,8 +3468,8 @@
                 "tags":[
                     "Ⅶ、数据查询相关API类"
                 ],
-                "summary":"修改外部数据",
-                "description":"修改外部数据",
+                "summary":"根据sql修改外部数据",
+                "description":"根据sql修改外部数据",
                 "operationId":"updateExternalDataUsingPUT",
                 "consumes":[
                     "application/json"
@@ -4448,7 +4476,7 @@
                 "sqlDataType":{
                     "type":"integer",
                     "format":"int32",
-                    "description":"模板数据类型"
+                    "description":"模板数据类型(2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；8：档案和转换数据；9：统计数据、告警数据和外部数据)"
                 },
                 "sqlTemplateContent":{
                     "type":"string",
@@ -4462,15 +4490,10 @@
                     "type":"string",
                     "description":"模版参数"
                 },
-                "sqlTemplateType":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"模版类型"
-                },
                 "sqlType":{
                     "type":"integer",
                     "format":"int32",
-                    "description":"模版sql类型"
+                    "description":"模版sql类型（0：查询；1：新增；2：修改；3：删除）"
                 }
             }
         },
@@ -4800,10 +4823,6 @@
         "UpdateArchive":{
             "type":"object",
             "properties":{
-                "archiveId":{
-                    "type":"string",
-                    "description":"档案ID"
-                },
                 "archiveName":{
                     "type":"string",
                     "description":"档案类型"
@@ -4811,6 +4830,10 @@
                 "data":{
                     "type":"object",
                     "description":"档案数据"
+                },
+                "recordId":{
+                    "type":"string",
+                    "description":"档案ID"
                 }
             },
             "description":"修改设备档案请求"
@@ -5742,7 +5765,7 @@
                 "sqlDataType":{
                     "type":"integer",
                     "format":"int32",
-                    "description":"模板数据类型"
+                    "description":"模板数据类型(2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；8：档案和转换数据；9：统计数据、告警数据和外部数据)"
                 },
                 "sqlTemplateContent":{
                     "type":"string",
@@ -5756,15 +5779,10 @@
                     "type":"string",
                     "description":"模版参数"
                 },
-                "sqlTemplateType":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"模版类型"
-                },
                 "sqlType":{
                     "type":"integer",
                     "format":"int32",
-                    "description":"模版sql类型"
+                    "description":"模版sql类型（0：查询；1：新增；2：修改；3：删除）"
                 }
             }
         },

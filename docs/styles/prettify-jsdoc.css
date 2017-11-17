@@ -89,12 +89,14 @@
     font-weight:bold;
     font-style:normal;
 }
+
 /* a variable name */
 .var{
     color:#000000;
     font-weight:normal;
     font-style:normal;
 }
+
 /* a function name */
 .fun{
     color:#000000;
