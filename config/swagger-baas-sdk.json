@@ -539,14 +539,14 @@
                         "name":"archiveName",
                         "in":"query",
                         "description":"档案类型",
-                        "required":false,
+                        "required":true,
                         "type":"string"
                     },
                     {
                         "name":"deviceId",
                         "in":"query",
                         "description":"设备ID",
-                        "required":false,
+                        "required":true,
                         "type":"string"
                     }
                 ],
@@ -2913,6 +2913,63 @@
                 }
             }
         },
+        "/v1.0/queryStatTaskData":{
+            "post":{
+                "tags":[
+                    "Ⅶ、数据查询相关API类"
+                ],
+                "summary":"查询离线统计数据",
+                "description":"查询离线统计数据",
+                "operationId":"findStatTaskDataUsingPOST",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "in":"body",
+                        "name":"findMongoDataRequest",
+                        "description":"findMongoDataRequest",
+                        "required":true,
+                        "schema":{
+                            "$ref":"#/definitions/FindMongoDataRequest"
+                        }
+                    },
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "type":"array",
+                            "items":{
+                                "$ref":"#/definitions/JSONObject"
+                            }
+                        }
+                    },
+                    "201":{
+                        "description":"Created"
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            }
+        },
         "/v1.0/register":{
             "post":{
                 "tags":[
@@ -3256,59 +3313,6 @@
                         "description":"Not Found"
                     }
                 }
-            },
-            "post":{
-                "tags":[
-                    "Ⅻ、sql模版API类"
-                ],
-                "summary":"新增sql模版",
-                "description":"新增sql模版",
-                "operationId":"addTemplatesUsingPOST",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "in":"body",
-                        "name":"addSqlTemplateRequest",
-                        "description":"addSqlTemplateRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/AddSqlTemplateRequest"
-                        }
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK",
-                        "schema":{
-                            "type":"integer",
-                            "format":"int32"
-                        }
-                    },
-                    "201":{
-                        "description":"Created"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    },
-                    "404":{
-                        "description":"Not Found"
-                    }
-                }
             }
         },
         "/v1.0/sqlTemplates/{sqlTemplateId}":{
@@ -3357,108 +3361,6 @@
                     },
                     "404":{
                         "description":"Not Found"
-                    }
-                }
-            },
-            "put":{
-                "tags":[
-                    "Ⅻ、sql模版API类"
-                ],
-                "summary":"修改sql模版",
-                "description":"修改sql模版",
-                "operationId":"updateTemplatesUsingPUT",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "name":"sqlTemplateId",
-                        "in":"path",
-                        "description":"sqlTemplateId",
-                        "required":true,
-                        "type":"integer",
-                        "format":"int32"
-                    },
-                    {
-                        "in":"body",
-                        "name":"updateSqlTemplateRequest",
-                        "description":"updateSqlTemplateRequest",
-                        "required":true,
-                        "schema":{
-                            "$ref":"#/definitions/UpdateSqlTemplateRequest"
-                        }
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK"
-                    },
-                    "201":{
-                        "description":"Created"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "403":{
-                        "description":"Forbidden"
-                    },
-                    "404":{
-                        "description":"Not Found"
-                    }
-                }
-            },
-            "delete":{
-                "tags":[
-                    "Ⅻ、sql模版API类"
-                ],
-                "summary":"删除sql模版",
-                "description":"删除sql模版",
-                "operationId":"deleteTemplatesUsingDELETE",
-                "consumes":[
-                    "application/json"
-                ],
-                "produces":[
-                    "*/*"
-                ],
-                "parameters":[
-                    {
-                        "name":"sqlTemplateId",
-                        "in":"path",
-                        "description":"sqlTemplateId",
-                        "required":true,
-                        "type":"integer",
-                        "format":"int32"
-                    },
-                    {
-                        "name":"session-token",
-                        "in":"header",
-                        "description":"session-token",
-                        "required":true,
-                        "type":"string"
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"OK"
-                    },
-                    "401":{
-                        "description":"Unauthorized"
-                    },
-                    "204":{
-                        "description":"No Content"
-                    },
-                    "403":{
-                        "description":"Forbidden"
                     }
                 }
             }
@@ -4469,33 +4371,6 @@
                 }
             },
             "description":"修改外部数据请求"
-        },
-        "UpdateSqlTemplateRequest":{
-            "type":"object",
-            "properties":{
-                "sqlDataType":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"模板数据类型(2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；8：档案和转换数据；9：统计数据、告警数据和外部数据)"
-                },
-                "sqlTemplateContent":{
-                    "type":"string",
-                    "description":"模版内容"
-                },
-                "sqlTemplateName":{
-                    "type":"string",
-                    "description":"模版名"
-                },
-                "sqlTemplateParam":{
-                    "type":"string",
-                    "description":"模版参数"
-                },
-                "sqlType":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"模版sql类型（0：查询；1：新增；2：修改；3：删除）"
-                }
-            }
         },
         "JSONObject":{
             "type":"object",
@@ -5756,33 +5631,6 @@
                 "tableName":{
                     "type":"string",
                     "description":"目标表名"
-                }
-            }
-        },
-        "AddSqlTemplateRequest":{
-            "type":"object",
-            "properties":{
-                "sqlDataType":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"模板数据类型(2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；8：档案和转换数据；9：统计数据、告警数据和外部数据)"
-                },
-                "sqlTemplateContent":{
-                    "type":"string",
-                    "description":"模版内容"
-                },
-                "sqlTemplateName":{
-                    "type":"string",
-                    "description":"模版名"
-                },
-                "sqlTemplateParam":{
-                    "type":"string",
-                    "description":"模版参数"
-                },
-                "sqlType":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"模版sql类型（0：查询；1：新增；2：修改；3：删除）"
                 }
             }
         },
