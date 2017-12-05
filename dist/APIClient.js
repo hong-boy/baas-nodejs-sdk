@@ -844,7 +844,7 @@ var APIClient = (function () {
             parameters = {};
         }
         var deferred = Q.defer();
-        var path = '/v1.0/devices/commands/sendings';
+        var path = '/v1.0/devices/commands/send';
         var body = {},
             queryParameters = {},
             headers = {},
@@ -917,7 +917,7 @@ var APIClient = (function () {
             parameters = {};
         }
         var deferred = Q.defer();
-        var path = '/v1.0/devices/commands/sendings';
+        var path = '/v1.0/devices/commands/send';
         var body = {},
             queryParameters = {},
             headers = {},
@@ -966,7 +966,7 @@ var APIClient = (function () {
      * @method
      * @name APIClient#getCommandStatusByCmdUuidUsingGET
      * @param {object} parameters - method options and parameters
-     * @param {string} parameters.cmdUuid - cmd_uuid
+     * @param {string} parameters.cmdUuid - cmdUuid
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.getCommandStatusByCmdUuidUsingGET = function (parameters) {
@@ -975,7 +975,7 @@ var APIClient = (function () {
             parameters = {};
         }
         var deferred = Q.defer();
-        var path = '/v1.0/devices/commands/sendings/{cmd_uuid}';
+        var path = '/v1.0/devices/commands/send/{cmdUuid}';
         var body = {},
             queryParameters = {},
             headers = {},
@@ -985,7 +985,7 @@ var APIClient = (function () {
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
-        path = path.replace('{cmd_uuid}', parameters['cmdUuid']);
+        path = path.replace('{cmdUuid}', parameters['cmdUuid']);
         pathParameters['cmdUuid'] = parameters['cmdUuid'];
 
         if (parameters['cmdUuid'] === undefined) {
@@ -1019,7 +1019,7 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
-     * 查询设备转授列表
+     * 查询设备转授列表(仅超管可用)
      * @method
      * @name APIClient#getDeviceDelegationsListUsingGET
      * @param {object} parameters - method options and parameters

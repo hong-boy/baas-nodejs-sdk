@@ -342,7 +342,10 @@
                 ],
                 "responses":{
                     "200":{
-                        "description":"OK"
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/ArchiveIdResponse"
+                        }
                     },
                     "201":{
                         "description":"Created"
@@ -617,7 +620,7 @@
                 }
             }
         },
-        "/v1.0/devices/commands/sendings":{
+        "/v1.0/devices/commands/send":{
             "get":{
                 "tags":[
                     "Ⅵ、命令相关API类"
@@ -753,7 +756,7 @@
                 }
             }
         },
-        "/v1.0/devices/commands/sendings/{cmd_uuid}":{
+        "/v1.0/devices/commands/send/{cmdUuid}":{
             "get":{
                 "tags":[
                     "Ⅵ、命令相关API类"
@@ -769,9 +772,9 @@
                 ],
                 "parameters":[
                     {
-                        "name":"cmd_uuid",
+                        "name":"cmdUuid",
                         "in":"path",
-                        "description":"cmd_uuid",
+                        "description":"cmdUuid",
                         "required":true,
                         "type":"string"
                     },
@@ -807,8 +810,8 @@
                 "tags":[
                     "Ⅴ、设备转授管理API类"
                 ],
-                "summary":"查询设备转授列表",
-                "description":"查询设备转授列表",
+                "summary":"查询设备转授列表(仅超管可用)",
+                "description":"查询设备转授列表(仅超管可用)",
                 "operationId":"getDeviceDelegationsListUsingGET",
                 "consumes":[
                     "application/json"
@@ -2461,7 +2464,10 @@
                 ],
                 "responses":{
                     "200":{
-                        "description":"OK"
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/ExternalDataIdResponse"
+                        }
                     },
                     "201":{
                         "description":"Created"
@@ -4150,6 +4156,16 @@
                 }
             }
         },
+        "ExternalDataIdResponse":{
+            "type":"object",
+            "properties":{
+                "recordId":{
+                    "type":"string",
+                    "description":"外部数据Id"
+                }
+            },
+            "description":"外部数据ID响应"
+        },
         "PageInfoOfDeviceDelegations":{
             "type":"object",
             "properties":{
@@ -4282,6 +4298,16 @@
                     "format":"int32"
                 }
             }
+        },
+        "ArchiveIdResponse":{
+            "type":"object",
+            "properties":{
+                "archiveId":{
+                    "type":"string",
+                    "description":"档案Id"
+                }
+            },
+            "description":"档案ID响应"
         },
         "AddUserRequest":{
             "type":"object",
@@ -5602,7 +5628,7 @@
         "CommandResult":{
             "type":"object",
             "properties":{
-                "cmd_uuid":{
+                "cmdUuid":{
                     "type":"string",
                     "description":"命令唯一标识码"
                 }
