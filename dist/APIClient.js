@@ -27,8 +27,8 @@ var APIClient = (function () {
      * @param{boolean} options.debug - 是否启用debug模式（可以打印出日志）（可选）
      */
     function APIClient(options) {
-        if (!lodash.isPlainObject(options) || !options.domain || !options.accessKey || !options.accessId) {
-            throw Error('Illegal parameters: All of options.doamin, options.accessKey and options.accessId is required!');
+        if (!lodash.isPlainObject(options) || !options.accessKey || !options.accessId) {
+            throw Error('Illegal parameters: All of options.accessKey and options.accessId is required!');
         }
         var domain = options.domain;
         var ca = options.ca;
@@ -36,7 +36,8 @@ var APIClient = (function () {
         this.debug = options.debug;
         this.accessKey = options.accessKey;
         this.accessId = options.accessId;
-        this.domain = domain ? domain : 'https://172.19.3.138:6549/';
+        this.domain = domain ? domain : 'https://baas.heclouds.com:443/api';
+        this.rejectUnauthorized = options.rejectUnauthorized !== false;
 
         if (/^https:\/\//.test(this.domain)) {
             this.ca = ca || fs.readFileSync(path.join(__dirname, './baas-chinamobile.pem')); // For https
@@ -157,7 +158,8 @@ var APIClient = (function () {
             uri: this.domain + url,
             qs: queryParameters,
             headers: headers,
-            body: body
+            body: body,
+            rejectUnauthorized: this.rejectUnauthorized
         };
 
         wrap4SignatureKey.call(this, method, lodash.assign({}, pathParameter, queryParameters), this.accessKey, this.accessId, req);

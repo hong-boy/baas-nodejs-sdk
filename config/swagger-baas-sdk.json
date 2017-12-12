@@ -6,8 +6,8 @@
         "title":"轻应用Baas平台API",
         "contact":{}
     },
-    "host":"172.19.3.138:6549",
-    "basePath":"/",
+    "host":"baas.heclouds.com:443",
+    "basePath":"/api",
     "tags":[
         {
             "name":"Ⅶ、数据查询相关API类",
@@ -881,7 +881,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceDelegations"
+                            "$ref":"#/definitions/PageInfoOfDeviceDelegationsDTO"
                         }
                     },
                     "401":{
@@ -1937,7 +1937,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceShares"
+                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
                         }
                     },
                     "401":{
@@ -2079,7 +2079,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceShares"
+                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
                         }
                     },
                     "401":{
@@ -2169,7 +2169,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceShares"
+                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
                         }
                     },
                     "401":{
@@ -4166,95 +4166,6 @@
             },
             "description":"外部数据ID响应"
         },
-        "PageInfoOfDeviceDelegations":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/DeviceDelegations"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
-        },
         "AddExternalData":{
             "type":"object",
             "properties":{
@@ -4379,6 +4290,95 @@
                 }
             },
             "description":"添加设备请求"
+        },
+        "PageInfoOfDeviceSharesDTO":{
+            "type":"object",
+            "properties":{
+                "endRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/DeviceSharesDTO"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
+                }
+            }
         },
         "UpdateExternalData":{
             "type":"object",
@@ -4691,33 +4691,6 @@
                 "tableName":{
                     "type":"string",
                     "description":"目标表名"
-                }
-            }
-        },
-        "DeviceShares":{
-            "type":"object",
-            "properties":{
-                "deviceId":{
-                    "type":"string"
-                },
-                "fromUser":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "permissions":{
-                    "type":"string"
-                },
-                "shareDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "shareId":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "toUser":{
-                    "type":"integer",
-                    "format":"int32"
                 }
             }
         },
@@ -5415,6 +5388,37 @@
             },
             "description":"添加设备分享信息请求"
         },
+        "DeviceSharesDTO":{
+            "type":"object",
+            "properties":{
+                "deviceId":{
+                    "type":"string"
+                },
+                "fromUserLoginName":{
+                    "type":"string"
+                },
+                "fromUserUserName":{
+                    "type":"string"
+                },
+                "permissions":{
+                    "type":"string"
+                },
+                "shareDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "shareId":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "toUserLoginName":{
+                    "type":"string"
+                },
+                "toUserUserName":{
+                    "type":"string"
+                }
+            }
+        },
         "Password":{
             "type":"object",
             "properties":{
@@ -5460,95 +5464,6 @@
                 }
             },
             "description":"查询设备分享响应"
-        },
-        "PageInfoOfDeviceShares":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/DeviceShares"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
         },
         "RegisterUserRequest":{
             "type":"object",
