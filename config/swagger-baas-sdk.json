@@ -6,7 +6,7 @@
         "title":"轻应用Baas平台API",
         "contact":{}
     },
-    "host":"baas.heclouds.com:443",
+    "host":"baas.heclouds.com:80",
     "basePath":"/api",
     "tags":[
         {
@@ -1747,14 +1747,14 @@
                 }
             }
         },
-        "/v1.0/devices/queryDatas":{
+        "/v1.0/devices/queryData":{
             "post":{
                 "tags":[
                     "Ⅶ、数据查询相关API类"
                 ],
                 "summary":"查询全局设备数据",
                 "description":"查询全局设备数据",
-                "operationId":"findDeviceDatasUsingPOST",
+                "operationId":"findDeviceDataUsingPOST",
                 "consumes":[
                     "application/json"
                 ],
@@ -1811,7 +1811,7 @@
                 ],
                 "summary":"查询统计数据",
                 "description":"查询统计数据",
-                "operationId":"findStatisticsDatasUsingPOST",
+                "operationId":"findStatisticsDataUsingPOST",
                 "consumes":[
                     "application/json"
                 ],
@@ -3388,8 +3388,8 @@
                 "parameters":[
                     {
                         "in":"body",
-                        "name":"findMongoDataRequest",
-                        "description":"findMongoDataRequest",
+                        "name":"mongoDataRequest",
+                        "description":"mongoDataRequest",
                         "required":true,
                         "schema":{
                             "$ref":"#/definitions/MongoDataRequest"

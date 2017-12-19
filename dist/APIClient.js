@@ -36,7 +36,7 @@ var APIClient = (function () {
         this.debug = options.debug;
         this.accessKey = options.accessKey;
         this.accessId = options.accessId;
-        this.domain = domain ? domain : 'https://baas.heclouds.com:443/api';
+        this.domain = domain ? domain : 'https://baas.heclouds.com:80/api';
         this.rejectUnauthorized = options.rejectUnauthorized !== false;
 
         if (/^https:\/\//.test(this.domain)) {
@@ -2007,18 +2007,18 @@ var APIClient = (function () {
     /**
      * 查询全局设备数据
      * @method
-     * @name APIClient#findDeviceDatasUsingPOST
+     * @name APIClient#findDeviceDataUsingPOST
      * @param {object} parameters - method options and parameters
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findDeviceDatasUsingPOST = function (parameters) {
-        logger(this, '-------------findDeviceDatasUsingPOST---------------');
+    APIClient.prototype.findDeviceDataUsingPOST = function (parameters) {
+        logger(this, '-------------findDeviceDataUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
         var deferred = Q.defer();
-        var path = '/v1.0/devices/queryDatas';
+        var path = '/v1.0/devices/queryData';
         var body = {},
             queryParameters = {},
             headers = {},
@@ -2065,13 +2065,13 @@ var APIClient = (function () {
     /**
      * 查询统计数据
      * @method
-     * @name APIClient#findStatisticsDatasUsingPOST
+     * @name APIClient#findStatisticsDataUsingPOST
      * @param {object} parameters - method options and parameters
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findStatisticsDatasUsingPOST = function (parameters) {
-        logger(this, '-------------findStatisticsDatasUsingPOST---------------');
+    APIClient.prototype.findStatisticsDataUsingPOST = function (parameters) {
+        logger(this, '-------------findStatisticsDataUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3729,7 +3729,7 @@ var APIClient = (function () {
      * @method
      * @name APIClient#updateExternalDataUsingPUT
      * @param {object} parameters - method options and parameters
-     * @param {} parameters.findMongoDataRequest - findMongoDataRequest
+     * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
     APIClient.prototype.updateExternalDataUsingPUT = function (parameters) {
@@ -3748,12 +3748,12 @@ var APIClient = (function () {
         headers['Accept'] = ['*/*'];
         headers['Content-Type'] = ['application/json'];
 
-        if (parameters['findMongoDataRequest'] !== undefined) {
-            body = parameters['findMongoDataRequest'];
+        if (parameters['mongoDataRequest'] !== undefined) {
+            body = parameters['mongoDataRequest'];
         }
 
-        if (parameters['findMongoDataRequest'] === undefined) {
-            deferred.reject(new Error('Missing required  parameter: findMongoDataRequest'));
+        if (parameters['mongoDataRequest'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: mongoDataRequest'));
             return deferred.promise;
         }
 
