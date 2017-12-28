@@ -6,7 +6,7 @@
  * @param {string} [domainOrOptions.domain] - The project domain
  * @param {object} [domainOrOptions.token] - auth token - object with value property and optional headerOrQueryName and isQuery properties
  */
-var APIClient = (function () {
+var APIClient = (function() {
     'use strict';
 
     var request = require('request');
@@ -36,7 +36,7 @@ var APIClient = (function () {
         this.debug = options.debug;
         this.accessKey = options.accessKey;
         this.accessId = options.accessId;
-        this.domain = domain ? domain : 'https://baas.heclouds.com:80/api';
+        this.domain = domain ? domain : 'https://baas.heclouds.com:443/api';
         this.rejectUnauthorized = options.rejectUnauthorized !== false;
 
         if (/^https:\/\//.test(this.domain)) {
@@ -122,7 +122,7 @@ var APIClient = (function () {
     function mergeQueryParams(parameters, queryParameters) {
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters)
-                .forEach(function (parameterName) {
+                .forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
                     queryParameters[parameterName] = parameter;
                 });
@@ -144,7 +144,7 @@ var APIClient = (function () {
      * @param {object} options.form - form data object
      * @param {object} deferred - promise object
      */
-    APIClient.prototype.request = function (options, deferred) {
+    APIClient.prototype.request = function(options, deferred) {
         var method = options.method,
             url = options.url,
             parameters = options.parameters,
@@ -175,7 +175,7 @@ var APIClient = (function () {
             req.json = true;
         }
         logger(this, 'Request: ', JSON.stringify(req));
-        request(req, function (error, response, body) {
+        request(req, function(error, response, body) {
             if (error) {
                 logger(this, 'error: ', error.message);
                 deferred.reject(error);
@@ -186,8 +186,7 @@ var APIClient = (function () {
             if (/^application\/(.*\\+)?json/.test(response.headers['content-type'])) {
                 try {
                     body = JSON.parse(body);
-                } catch (e) {
-                }
+                } catch (e) {}
             }
             if (response.statusCode >= 200 && response.statusCode <= 299) {
                 deferred.resolve({
@@ -215,7 +214,7 @@ var APIClient = (function () {
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteExternalDataBySQLUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteExternalDataBySQLUsingDELETE = function(parameters) {
         logger(this, '-------------deleteExternalDataBySQLUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -280,7 +279,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDevicesListUsingGET = function (parameters) {
+    APIClient.prototype.getDevicesListUsingGET = function(parameters) {
         logger(this, '-------------getDevicesListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -361,7 +360,7 @@ var APIClient = (function () {
      * @param {} parameters.addDevice - addDevice
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addDeviceUsingPOST = function (parameters) {
+    APIClient.prototype.addDeviceUsingPOST = function(parameters) {
         logger(this, '-------------addDeviceUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -420,7 +419,7 @@ var APIClient = (function () {
      * @param {string} parameters.archiveName - 档案类型
      * @param {string} parameters.archiveId - 设备档案ID
      */
-    APIClient.prototype.findSingleArchiveUsingGET = function (parameters) {
+    APIClient.prototype.findSingleArchiveUsingGET = function(parameters) {
         logger(this, '-------------findSingleArchiveUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -477,7 +476,7 @@ var APIClient = (function () {
      * @param {} parameters.addArchive - addArchive
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addArchivesUsingPOST = function (parameters) {
+    APIClient.prototype.addArchivesUsingPOST = function(parameters) {
         logger(this, '-------------addArchivesUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -535,7 +534,7 @@ var APIClient = (function () {
      * @param {} parameters.updateArchive - updateArchive
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateArchiveByIdUsingPUT = function (parameters) {
+    APIClient.prototype.updateArchiveByIdUsingPUT = function(parameters) {
         logger(this, '-------------updateArchiveByIdUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -594,7 +593,7 @@ var APIClient = (function () {
      * @param {string} parameters.archiveName - 档案类型
      * @param {string} parameters.archiveId - 设备档案ID
      */
-    APIClient.prototype.deleteArchivesUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteArchivesUsingDELETE = function(parameters) {
         logger(this, '-------------deleteArchivesUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -652,7 +651,7 @@ var APIClient = (function () {
      * @param {string} parameters.archiveName - 档案类型
      * @param {string} parameters.deviceId - 设备ID
      */
-    APIClient.prototype.findSingleArchiveByDeviceIdUsingGET = function (parameters) {
+    APIClient.prototype.findSingleArchiveByDeviceIdUsingGET = function(parameters) {
         logger(this, '-------------findSingleArchiveByDeviceIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -710,7 +709,7 @@ var APIClient = (function () {
      * @param {string} parameters.archiveName - 档案类型
      * @param {string} parameters.deviceId - 设备ID
      */
-    APIClient.prototype.deleteArchiveByDeviceIdUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteArchiveByDeviceIdUsingDELETE = function(parameters) {
         logger(this, '-------------deleteArchiveByDeviceIdUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -777,7 +776,7 @@ var APIClient = (function () {
      * @param {} parameters.assignDevice - assignDevice
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.assignDevicesUsingPUT = function (parameters) {
+    APIClient.prototype.assignDevicesUsingPUT = function(parameters) {
         logger(this, '-------------assignDevicesUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -840,7 +839,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getCommandStatusListUsingGET = function (parameters) {
+    APIClient.prototype.getCommandStatusListUsingGET = function(parameters) {
         logger(this, '-------------getCommandStatusListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -913,7 +912,7 @@ var APIClient = (function () {
      * @param {} parameters.sendCommandRequest - sendCommandRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.sendCommandsUsingPOST = function (parameters) {
+    APIClient.prototype.sendCommandsUsingPOST = function(parameters) {
         logger(this, '-------------sendCommandsUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -971,7 +970,7 @@ var APIClient = (function () {
      * @param {string} parameters.cmdUuid - cmdUuid
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getCommandStatusByCmdUuidUsingGET = function (parameters) {
+    APIClient.prototype.getCommandStatusByCmdUuidUsingGET = function(parameters) {
         logger(this, '-------------getCommandStatusByCmdUuidUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1034,7 +1033,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceDelegationsListUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceDelegationsListUsingGET = function(parameters) {
         logger(this, '-------------getDeviceDelegationsListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1111,7 +1110,7 @@ var APIClient = (function () {
      * @param {} parameters.request - request
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addDeviceDelegationsUsingPOST = function (parameters) {
+    APIClient.prototype.addDeviceDelegationsUsingPOST = function(parameters) {
         logger(this, '-------------addDeviceDelegationsUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1175,7 +1174,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceDelegateOthersUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceDelegateOthersUsingGET = function(parameters) {
         logger(this, '-------------getDeviceDelegateOthersUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1258,7 +1257,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceDelegateSelfUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceDelegateSelfUsingGET = function(parameters) {
         logger(this, '-------------getDeviceDelegateSelfUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1335,7 +1334,7 @@ var APIClient = (function () {
      * @param {integer} parameters.delegateId - delegateId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getDeviceDelegationsByIdUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceDelegationsByIdUsingGET = function(parameters) {
         logger(this, '-------------getDeviceDelegationsByIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1392,7 +1391,7 @@ var APIClient = (function () {
      * @param {integer} parameters.delegateId - delegateId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteDeviceDelegationsUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteDeviceDelegationsUsingDELETE = function(parameters) {
         logger(this, '-------------deleteDeviceDelegationsUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1449,7 +1448,7 @@ var APIClient = (function () {
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteArchivesBySQLUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteArchivesBySQLUsingDELETE = function(parameters) {
         logger(this, '-------------deleteArchivesBySQLUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1507,7 +1506,7 @@ var APIClient = (function () {
      * @param {string} parameters.deviceId - deviceId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.disableDevicesByIdUsingPUT = function (parameters) {
+    APIClient.prototype.disableDevicesByIdUsingPUT = function(parameters) {
         logger(this, '-------------disableDevicesByIdUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1564,7 +1563,7 @@ var APIClient = (function () {
      * @param {string} parameters.deviceId - deviceId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.enableDevicesByIdUsingPUT = function (parameters) {
+    APIClient.prototype.enableDevicesByIdUsingPUT = function(parameters) {
         logger(this, '-------------enableDevicesByIdUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1621,7 +1620,7 @@ var APIClient = (function () {
      * @param {} parameters.deviceImport - deviceImport
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addDevicesUsingPOST = function (parameters) {
+    APIClient.prototype.addDevicesUsingPOST = function(parameters) {
         logger(this, '-------------addDevicesUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1679,7 +1678,7 @@ var APIClient = (function () {
      * @param {string} parameters.deviceId - deviceId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getDevicesByIdUsingGET = function (parameters) {
+    APIClient.prototype.getDevicesByIdUsingGET = function(parameters) {
         logger(this, '-------------getDevicesByIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1737,7 +1736,7 @@ var APIClient = (function () {
      * @param {} parameters.updateDevice - updateDevice
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateDevicesUsingPUT = function (parameters) {
+    APIClient.prototype.updateDevicesUsingPUT = function(parameters) {
         logger(this, '-------------updateDevicesUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1811,7 +1810,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceLogsListUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceLogsListUsingGET = function(parameters) {
         logger(this, '-------------getDeviceLogsListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1896,7 +1895,7 @@ var APIClient = (function () {
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findDeviceAlarmUsingPOST = function (parameters) {
+    APIClient.prototype.findDeviceAlarmUsingPOST = function(parameters) {
         logger(this, '-------------findDeviceAlarmUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -1954,7 +1953,7 @@ var APIClient = (function () {
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findArchivesUsingPOST = function (parameters) {
+    APIClient.prototype.findArchivesUsingPOST = function(parameters) {
         logger(this, '-------------findArchivesUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2012,7 +2011,7 @@ var APIClient = (function () {
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findDeviceDataUsingPOST = function (parameters) {
+    APIClient.prototype.findDeviceDataUsingPOST = function(parameters) {
         logger(this, '-------------findDeviceDataUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2070,7 +2069,7 @@ var APIClient = (function () {
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findStatisticsDataUsingPOST = function (parameters) {
+    APIClient.prototype.findStatisticsDataUsingPOST = function(parameters) {
         logger(this, '-------------findStatisticsDataUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2134,7 +2133,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceSharesListUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceSharesListUsingGET = function(parameters) {
         logger(this, '-------------getDeviceSharesListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2211,7 +2210,7 @@ var APIClient = (function () {
      * @param {} parameters.request - request
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addDeviceSharesUsingPOST = function (parameters) {
+    APIClient.prototype.addDeviceSharesUsingPOST = function(parameters) {
         logger(this, '-------------addDeviceSharesUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2275,7 +2274,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceShareOthersUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceShareOthersUsingGET = function(parameters) {
         logger(this, '-------------getDeviceShareOthersUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2358,7 +2357,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceShareSelfUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceShareSelfUsingGET = function(parameters) {
         logger(this, '-------------getDeviceShareSelfUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2435,7 +2434,7 @@ var APIClient = (function () {
      * @param {integer} parameters.shareId - shareId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getDeviceSharesByIdUsingGET = function (parameters) {
+    APIClient.prototype.getDeviceSharesByIdUsingGET = function(parameters) {
         logger(this, '-------------getDeviceSharesByIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2492,7 +2491,7 @@ var APIClient = (function () {
      * @param {integer} parameters.shareId - shareId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteDeviceSharesUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteDeviceSharesUsingDELETE = function(parameters) {
         logger(this, '-------------deleteDeviceSharesUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2549,7 +2548,7 @@ var APIClient = (function () {
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateArchivesUsingPUT = function (parameters) {
+    APIClient.prototype.updateArchivesUsingPUT = function(parameters) {
         logger(this, '-------------updateArchivesUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2607,7 +2606,7 @@ var APIClient = (function () {
      * @param {string} parameters.deviceId - deviceId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteDevicesUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteDevicesUsingDELETE = function(parameters) {
         logger(this, '-------------deleteDevicesUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2665,7 +2664,7 @@ var APIClient = (function () {
      * @param {string} parameters.id - 外部数据id
      * @param {string} parameters.externalDataName - 外部数据名
      */
-    APIClient.prototype.findExternalDataByIdUsingGET = function (parameters) {
+    APIClient.prototype.findExternalDataByIdUsingGET = function(parameters) {
         logger(this, '-------------findExternalDataByIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2732,7 +2731,7 @@ var APIClient = (function () {
      * @param {} parameters.addExternalData - addExternalData
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addExternalDataUsingPOST = function (parameters) {
+    APIClient.prototype.addExternalDataUsingPOST = function(parameters) {
         logger(this, '-------------addExternalDataUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2790,7 +2789,7 @@ var APIClient = (function () {
      * @param {} parameters.updateExternalData - updateExternalData
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateExternalDataByIdUsingPUT = function (parameters) {
+    APIClient.prototype.updateExternalDataByIdUsingPUT = function(parameters) {
         logger(this, '-------------updateExternalDataByIdUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2849,7 +2848,7 @@ var APIClient = (function () {
      * @param {string} parameters.externalDataName - 外部数据名
      * @param {string} parameters.recordId - 外部数据id
      */
-    APIClient.prototype.deleteExternalDataUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteExternalDataUsingDELETE = function(parameters) {
         logger(this, '-------------deleteExternalDataUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2914,7 +2913,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.findCustomPermissionUsingGET = function (parameters) {
+    APIClient.prototype.findCustomPermissionUsingGET = function(parameters) {
         logger(this, '-------------findCustomPermissionUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -2978,7 +2977,7 @@ var APIClient = (function () {
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findCustomPermissionByUserUsingGET = function (parameters) {
+    APIClient.prototype.findCustomPermissionByUserUsingGET = function(parameters) {
         logger(this, '-------------findCustomPermissionByUserUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3028,7 +3027,7 @@ var APIClient = (function () {
      * @param {string} parameters.loginName - 用户名
      * @param {string} parameters.password - 密码
      */
-    APIClient.prototype.loginUsingGET = function (parameters) {
+    APIClient.prototype.loginUsingGET = function(parameters) {
         logger(this, '-------------loginUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3081,7 +3080,7 @@ var APIClient = (function () {
      * @param {string} parameters.address - 邮箱地址
      * @param {string} parameters.invalid - 失效时间
      */
-    APIClient.prototype.sendEmailVerificationUsingPOST = function (parameters) {
+    APIClient.prototype.sendEmailVerificationUsingPOST = function(parameters) {
         logger(this, '-------------sendEmailVerificationUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3143,7 +3142,7 @@ var APIClient = (function () {
      * @param {} parameters.emailVerificationRequest - emailVerificationRequest
      * @param {string} parameters.appToken - appToken
      */
-    APIClient.prototype.emailVerificationUsingPOST = function (parameters) {
+    APIClient.prototype.emailVerificationUsingPOST = function(parameters) {
         logger(this, '-------------emailVerificationUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3201,7 +3200,7 @@ var APIClient = (function () {
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findExternalDataUsingPOST = function (parameters) {
+    APIClient.prototype.findExternalDataUsingPOST = function(parameters) {
         logger(this, '-------------findExternalDataUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3259,7 +3258,7 @@ var APIClient = (function () {
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findStatTaskDataUsingPOST = function (parameters) {
+    APIClient.prototype.findStatTaskDataUsingPOST = function(parameters) {
         logger(this, '-------------findStatTaskDataUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3310,6 +3309,77 @@ var APIClient = (function () {
         return deferred.promise;
     };
     /**
+    * 查询表配置信息，返回格式：{
+      "tableName": [
+        {
+          "field_desc": "求均值",
+          "field_type": "6",
+          "field_name": "avgZ"
+           ......    }
+       ......  ]
+    }其中field_type，1：String；2：int；3：Float；4：Boolean；5：Long；6：Double；7：Date
+    * @method
+    * @name APIClient#findTableConfigUsingGET
+    * @param {object} parameters - method options and parameters
+         * @param {string} parameters.sessionToken - session-token
+         * @param {integer} parameters.tableType - 表类型,2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；
+         * @param {string} parameters.tableName - 表名
+    */
+    APIClient.prototype.findTableConfigUsingGET = function(parameters) {
+        logger(this, '-------------findTableConfigUsingGET---------------');
+        if (parameters === undefined) {
+            parameters = {};
+        }
+        var deferred = Q.defer();
+        var path = '/v1.0/queryTableConfig';
+        var body = {},
+            queryParameters = {},
+            headers = {},
+            form = {},
+            pathParameters = {};
+
+        headers['Accept'] = ['*/*'];
+        headers['Content-Type'] = ['application/json'];
+
+        if (parameters['sessionToken'] !== undefined) {
+            headers['session-token'] = parameters['sessionToken'];
+        }
+
+        if (parameters['sessionToken'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: sessionToken'));
+            return deferred.promise;
+        }
+
+        if (parameters['tableType'] !== undefined) {
+            queryParameters['tableType'] = parameters['tableType'];
+        }
+
+        if (parameters['tableType'] === undefined) {
+            deferred.reject(new Error('Missing required  parameter: tableType'));
+            return deferred.promise;
+        }
+
+        if (parameters['tableName'] !== undefined) {
+            queryParameters['tableName'] = parameters['tableName'];
+        }
+
+        queryParameters = mergeQueryParams(parameters, queryParameters);
+        logger(this, 'Parameter.pathParameters: ', pathParameters);
+        logger(this, 'Parameter.queryParamters: ', queryParameters);
+        this.request({
+            method: 'GET',
+            url: path,
+            pathParameters: pathParameters,
+            parameters: parameters,
+            body: body,
+            headers: headers,
+            queryParameters: queryParameters,
+            form: form
+        }, deferred);
+
+        return deferred.promise;
+    };
+    /**
      * 注册用户
      * @method
      * @name APIClient#registerUserUsingPOST
@@ -3317,7 +3387,7 @@ var APIClient = (function () {
      * @param {} parameters.registerUserRequest - registerUserRequest
      * @param {string} parameters.appToken - appToken
      */
-    APIClient.prototype.registerUserUsingPOST = function (parameters) {
+    APIClient.prototype.registerUserUsingPOST = function(parameters) {
         logger(this, '-------------registerUserUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3374,7 +3444,7 @@ var APIClient = (function () {
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.appToken - appToken
      */
-    APIClient.prototype.findRoleAllowRegUsingGET = function (parameters) {
+    APIClient.prototype.findRoleAllowRegUsingGET = function(parameters) {
         logger(this, '-------------findRoleAllowRegUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3422,7 +3492,7 @@ var APIClient = (function () {
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findRoleNameListUsingGET = function (parameters) {
+    APIClient.prototype.findRoleNameListUsingGET = function(parameters) {
         logger(this, '-------------findRoleNameListUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3472,7 +3542,7 @@ var APIClient = (function () {
      * @param {string} parameters.mobile - 手机号码
      * @param {string} parameters.invalid - 失效时间
      */
-    APIClient.prototype.sendSmsVerificationUsingPOST = function (parameters) {
+    APIClient.prototype.sendSmsVerificationUsingPOST = function(parameters) {
         logger(this, '-------------sendSmsVerificationUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3534,7 +3604,7 @@ var APIClient = (function () {
      * @param {} parameters.smsVerificationRequest - smsVerificationRequest
      * @param {string} parameters.appToken - appToken
      */
-    APIClient.prototype.checkCommandScriptUsingPOST = function (parameters) {
+    APIClient.prototype.checkCommandScriptUsingPOST = function(parameters) {
         logger(this, '-------------checkCommandScriptUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3598,7 +3668,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 当前页
      * @param {string} parameters.pageSize - 每页多少条
      */
-    APIClient.prototype.getTemplatesUsingGET = function (parameters) {
+    APIClient.prototype.getTemplatesUsingGET = function(parameters) {
         logger(this, '-------------getTemplatesUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3675,7 +3745,7 @@ var APIClient = (function () {
      * @param {integer} parameters.sqlTemplateId - sqlTemplateId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findTemplateByIdUsingGET = function (parameters) {
+    APIClient.prototype.findTemplateByIdUsingGET = function(parameters) {
         logger(this, '-------------findTemplateByIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3732,7 +3802,7 @@ var APIClient = (function () {
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateExternalDataUsingPUT = function (parameters) {
+    APIClient.prototype.updateExternalDataUsingPUT = function(parameters) {
         logger(this, '-------------updateExternalDataUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3796,7 +3866,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getUsersUsingGET = function (parameters) {
+    APIClient.prototype.getUsersUsingGET = function(parameters) {
         logger(this, '-------------getUsersUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3873,7 +3943,7 @@ var APIClient = (function () {
      * @param {} parameters.addUserRequest - addUserRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.insertUserUsingPOST = function (parameters) {
+    APIClient.prototype.insertUserUsingPOST = function(parameters) {
         logger(this, '-------------insertUserUsingPOST---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3932,7 +4002,7 @@ var APIClient = (function () {
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateUserUsingPUT = function (parameters) {
+    APIClient.prototype.updateUserUsingPUT = function(parameters) {
         logger(this, '-------------updateUserUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -3998,7 +4068,7 @@ var APIClient = (function () {
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteUserByUserIdUsingDELETE = function (parameters) {
+    APIClient.prototype.deleteUserByUserIdUsingDELETE = function(parameters) {
         logger(this, '-------------deleteUserByUserIdUsingDELETE---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -4055,7 +4125,7 @@ var APIClient = (function () {
      * @param {} parameters.password - password
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updatePasswordUsingPUT = function (parameters) {
+    APIClient.prototype.updatePasswordUsingPUT = function(parameters) {
         logger(this, '-------------updatePasswordUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -4113,7 +4183,7 @@ var APIClient = (function () {
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getUserByUserIdUsingGET = function (parameters) {
+    APIClient.prototype.getUserByUserIdUsingGET = function(parameters) {
         logger(this, '-------------getUserByUserIdUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -4172,7 +4242,7 @@ var APIClient = (function () {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.queryChildInfoUsingGET = function (parameters) {
+    APIClient.prototype.queryChildInfoUsingGET = function(parameters) {
         logger(this, '-------------queryChildInfoUsingGET---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -4237,7 +4307,7 @@ var APIClient = (function () {
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.disableUserUsingPUT = function (parameters) {
+    APIClient.prototype.disableUserUsingPUT = function(parameters) {
         logger(this, '-------------disableUserUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -4294,7 +4364,7 @@ var APIClient = (function () {
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.enableUserUsingPUT = function (parameters) {
+    APIClient.prototype.enableUserUsingPUT = function(parameters) {
         logger(this, '-------------enableUserUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};
@@ -4351,7 +4421,7 @@ var APIClient = (function () {
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.resetPasswordUsingPUT = function (parameters) {
+    APIClient.prototype.resetPasswordUsingPUT = function(parameters) {
         logger(this, '-------------resetPasswordUsingPUT---------------');
         if (parameters === undefined) {
             parameters = {};

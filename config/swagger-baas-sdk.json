@@ -6,7 +6,7 @@
         "title":"轻应用Baas平台API",
         "contact":{}
     },
-    "host":"baas.heclouds.com:80",
+    "host":"baas.heclouds.com:443",
     "basePath":"/api",
     "tags":[
         {
@@ -2976,6 +2976,66 @@
                 }
             }
         },
+        "/v1.0/queryTableConfig":{
+            "get":{
+                "tags":[
+                    "Ⅶ、数据查询相关API类"
+                ],
+                "summary":"查询表配置信息",
+                "description":"查询表配置信息，返回格式：{\n  \"tableName\": [\n    {\n      \"field_desc\": \"求均值\",\n      \"field_type\": \"6\",\n      \"field_name\": \"avgZ\"\n       ......    }\n   ......  ]\n}其中field_type，1：String；2：int；3：Float；4：Boolean；5：Long；6：Double；7：Date",
+                "operationId":"findTableConfigUsingGET",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "*/*"
+                ],
+                "parameters":[
+                    {
+                        "name":"session-token",
+                        "in":"header",
+                        "description":"session-token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"tableType",
+                        "in":"query",
+                        "description":"表类型,2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；",
+                        "required":true,
+                        "type":"integer",
+                        "format":"int32"
+                    },
+                    {
+                        "name":"tableName",
+                        "in":"query",
+                        "description":"表名",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "type":"object",
+                            "additionalProperties":{
+                                "$ref":"#/definitions/List"
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    },
+                    "403":{
+                        "description":"Forbidden"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+                }
+            }
+        },
         "/v1.0/register":{
             "post":{
                 "tags":[
@@ -5572,6 +5632,14 @@
                 "tableName":{
                     "type":"string",
                     "description":"目标表名"
+                }
+            }
+        },
+        "Type":{
+            "type":"object",
+            "properties":{
+                "typeName":{
+                    "type":"string"
                 }
             }
         },
