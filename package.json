@@ -1,47 +1,47 @@
 {
-    "name":"baas-nodejs-sdk",
-    "version":"2.1.6",
-    "description":"nodejs sdk of baas rest api",
-    "main":"index.js",
-    "scripts":{
-        "test":"mocha test/**/*.test.js",
-        "start":"node ./src/generator.js",
-        "doc":"node_modules/.bin/jsdoc --readme README.md dist/APIClient.js -d docs",
-        "build":"npm start"
+    "name": "baas-nodejs-sdk",
+    "version": "3.0.0",
+    "description": "nodejs sdk of baas rest api",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha test/**/*.test.js",
+        "start": "node ./src/generator.js",
+        "doc": "node_modules/.bin/jsdoc --readme README.md dist/APIClient.js -d docs",
+        "build": "npm start"
     },
-    "repository":{
-        "type":"git",
-        "url":"git+https://github.com/hong-boy/baas-nodejs-sdk.git"
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hong-boy/baas-nodejs-sdk.git"
     },
-    "keywords":[
+    "keywords": [
         "chinamobile",
         "baas api"
     ],
-    "author":"hong-boy",
-    "license":"MIT",
-    "bugs":{
-        "url":"https://github.com/hong-boy/baas-nodejs-sdk/issues"
+    "author": "hong-boy",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/hong-boy/baas-nodejs-sdk/issues"
     },
-    "homepage":"https://github.com/hong-boy/baas-nodejs-sdk#readme",
-    "devDependencies":{
-        "babel-core":"^6.24.1",
-        "babel-polyfill":"^6.23.0",
-        "babel-preset-es2015":"^6.24.1",
-        "babel-preset-es2015-node5":"^1.2.0",
-        "babel-preset-stage-0":"^6.24.1",
-        "babel-preset-stage-2":"^6.24.1",
-        "intelli-espower-loader":"^1.0.1",
-        "jsdoc":"^3.4.3",
-        "mocha":"^3.4.2",
-        "power-assert":"^1.4.2",
-        "swagger-js-codegen":"^1.10.0"
+    "homepage": "https://github.com/hong-boy/baas-nodejs-sdk#readme",
+    "devDependencies": {
+        "babel-core": "^6.24.1",
+        "babel-polyfill": "^6.23.0",
+        "babel-preset-es2015": "^6.24.1",
+        "babel-preset-es2015-node5": "^1.2.0",
+        "babel-preset-stage-0": "^6.24.1",
+        "babel-preset-stage-2": "^6.24.1",
+        "intelli-espower-loader": "^1.0.1",
+        "jsdoc": "^3.4.3",
+        "mocha": "^3.4.2",
+        "power-assert": "^1.4.2",
+        "swagger-js-codegen": "^1.10.0"
     },
-    "dependencies":{
-        "crypto":"^1.0.1",
-        "crypto-js":"^3.1.9-1",
-        "lodash":"^4.17.4",
-        "q":"^1.5.0",
-        "request":"^2.81.0",
-        "uuid":"^3.1.0"
+    "dependencies": {
+        "crypto": "^1.0.1",
+        "crypto-js": "^3.1.9-1",
+        "lodash": "^4.17.4",
+        "q": "^1.5.0",
+        "request": "^2.81.0",
+        "uuid": "^3.1.0"
     }
 }

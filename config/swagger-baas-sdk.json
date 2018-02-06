@@ -1,13 +1,12 @@
 {
     "swagger":"2.0",
     "info":{
-        "description":"lightapp API documentation",
-        "version":"V1.0",
-        "title":"轻应用Baas平台API",
-        "contact":{}
+        "description":"demo",
+        "version":"1.0",
+        "title":"轻应用Baas平台API"
     },
-    "host":"baas.heclouds.com:443",
-    "basePath":"/api",
+    "host":"demo.heclouds.com/baasapi",
+    "basePath":"/",
     "tags":[
         {
             "name":"Ⅶ、数据查询相关API类",
@@ -190,7 +189,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDevicesDTO"
+                            "$ref":"#/definitions/PageInfo«DevicesDTO»"
                         }
                     },
                     "401":{
@@ -237,7 +236,10 @@
                 ],
                 "responses":{
                     "200":{
-                        "description":"OK"
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/DeviceSingleImportResponse"
+                        }
                     },
                     "201":{
                         "description":"Created"
@@ -689,7 +691,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfCommandStatus"
+                            "$ref":"#/definitions/PageInfo«CommandStatus»"
                         }
                     },
                     "401":{
@@ -881,7 +883,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceDelegationsDTO"
+                            "$ref":"#/definitions/PageInfo«DeviceDelegationsDTO»"
                         }
                     },
                     "401":{
@@ -1023,7 +1025,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceDelegationsDTO"
+                            "$ref":"#/definitions/PageInfo«DeviceDelegationsDTO»"
                         }
                     },
                     "401":{
@@ -1113,7 +1115,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceDelegationsDTO"
+                            "$ref":"#/definitions/PageInfo«DeviceDelegationsDTO»"
                         }
                     },
                     "401":{
@@ -1618,7 +1620,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceLogs"
+                            "$ref":"#/definitions/PageInfo«DeviceLogs»"
                         }
                     },
                     "401":{
@@ -1937,7 +1939,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
+                            "$ref":"#/definitions/PageInfo«DeviceSharesDTO»"
                         }
                     },
                     "401":{
@@ -2079,7 +2081,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
+                            "$ref":"#/definitions/PageInfo«DeviceSharesDTO»"
                         }
                     },
                     "401":{
@@ -2169,7 +2171,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
+                            "$ref":"#/definitions/PageInfo«DeviceSharesDTO»"
                         }
                     },
                     "401":{
@@ -2639,7 +2641,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfCustomPermission"
+                            "$ref":"#/definitions/PageInfo«CustomPermission»"
                         }
                     },
                     "401":{
@@ -2700,15 +2702,16 @@
             }
         },
         "/v1.0/login":{
-            "get":{
+            "post":{
                 "tags":[
                     "Ⅰ、用户相关API类"
                 ],
                 "summary":"用户登录",
                 "description":"用户登录",
-                "operationId":"loginUsingGET",
+                "operationId":"loginUsingPOST",
                 "consumes":[
-                    "application/json"
+                    "application/json",
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces":[
                     "*/*"
@@ -2716,29 +2719,32 @@
                 "parameters":[
                     {
                         "name":"appToken",
-                        "in":"query",
+                        "in":"formData",
                         "description":"appToken",
-                        "required":false,
+                        "required":true,
                         "type":"string"
                     },
                     {
                         "name":"loginName",
-                        "in":"query",
-                        "description":"用户名",
-                        "required":false,
+                        "in":"formData",
+                        "description":"loginName",
+                        "required":true,
                         "type":"string"
                     },
                     {
                         "name":"password",
-                        "in":"query",
-                        "description":"密码",
-                        "required":false,
+                        "in":"formData",
+                        "description":"password",
+                        "required":true,
                         "type":"string"
                     }
                 ],
                 "responses":{
                     "200":{
                         "description":"OK"
+                    },
+                    "201":{
+                        "description":"Created"
                     },
                     "401":{
                         "description":"Unauthorized"
@@ -3366,7 +3372,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfSqlTemplate"
+                            "$ref":"#/definitions/PageInfo«SqlTemplate»"
                         }
                     },
                     "401":{
@@ -3558,7 +3564,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfUserDTO"
+                            "$ref":"#/definitions/PageInfo«UserDTO»"
                         }
                     },
                     "401":{
@@ -3879,7 +3885,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfoOfUserDTO"
+                            "$ref":"#/definitions/PageInfo«UserDTO»"
                         }
                     },
                     "401":{
@@ -4129,6 +4135,95 @@
                 }
             }
         },
+        "PageInfo«DevicesDTO»":{
+            "type":"object",
+            "properties":{
+                "endRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/DevicesDTO"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
+                }
+            }
+        },
         "DevicesDTO":{
             "type":"object",
             "properties":{
@@ -4213,6 +4308,109 @@
                 },
                 "customPermissionName":{
                     "type":"string"
+                }
+            }
+        },
+        "DeviceSingleImportResponse":{
+            "type":"object",
+            "properties":{
+                "apiKey":{
+                    "type":"string",
+                    "description":"设备apiKey"
+                },
+                "deviceId":{
+                    "type":"string",
+                    "description":"设备id"
+                }
+            },
+            "description":"单条导入设备响应"
+        },
+        "PageInfo«DeviceSharesDTO»":{
+            "type":"object",
+            "properties":{
+                "endRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/DeviceSharesDTO"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
                 }
             }
         },
@@ -4347,11 +4545,33 @@
                 "masterKey":{
                     "type":"string",
                     "description":"OneNet产品masterKey"
+                },
+                "protocol":{
+                    "type":"string",
+                    "description":"设备接入协议"
                 }
             },
             "description":"添加设备请求"
         },
-        "PageInfoOfDeviceSharesDTO":{
+        "UpdateExternalData":{
+            "type":"object",
+            "properties":{
+                "data":{
+                    "type":"object",
+                    "description":"修改的数据"
+                },
+                "externalDataName":{
+                    "type":"string",
+                    "description":"外部数据名"
+                },
+                "recordId":{
+                    "type":"string",
+                    "description":"外部数据记录id"
+                }
+            },
+            "description":"修改外部数据请求"
+        },
+        "PageInfo«CommandStatus»":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -4381,7 +4601,7 @@
                 "list":{
                     "type":"array",
                     "items":{
-                        "$ref":"#/definitions/DeviceSharesDTO"
+                        "$ref":"#/definitions/CommandStatus"
                     }
                 },
                 "navigateFirstPage":{
@@ -4440,106 +4660,7 @@
                 }
             }
         },
-        "UpdateExternalData":{
-            "type":"object",
-            "properties":{
-                "data":{
-                    "type":"object",
-                    "description":"修改的数据"
-                },
-                "externalDataName":{
-                    "type":"string",
-                    "description":"外部数据名"
-                },
-                "recordId":{
-                    "type":"string",
-                    "description":"外部数据记录id"
-                }
-            },
-            "description":"修改外部数据请求"
-        },
-        "JSONObject":{
-            "type":"object",
-            "additionalProperties":{
-                "type":"object"
-            }
-        },
-        "DelegateIdResponse":{
-            "type":"object",
-            "properties":{
-                "delegateId":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"转授Id"
-                }
-            },
-            "description":"添加转授响应"
-        },
-        "CommandStatus":{
-            "type":"object",
-            "properties":{
-                "cmdUuid":{
-                    "type":"string"
-                },
-                "commandContent":{
-                    "type":"string"
-                },
-                "commandId":{
-                    "type":"integer",
-                    "format":"int64"
-                },
-                "commandName":{
-                    "type":"string"
-                },
-                "createDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "deviceId":{
-                    "type":"string"
-                },
-                "status":{
-                    "type":"integer",
-                    "format":"int32"
-                }
-            }
-        },
-        "DeviceImport":{
-            "type":"object",
-            "properties":{
-                "devices":{
-                    "type":"array",
-                    "description":"批量导入的设备信息列表",
-                    "items":{
-                        "$ref":"#/definitions/AddDevice"
-                    }
-                }
-            },
-            "description":"批量导入设备请求"
-        },
-        "UpdateUserRequest":{
-            "type":"object",
-            "properties":{
-                "email":{
-                    "type":"string",
-                    "description":"邮箱地址"
-                },
-                "extension":{
-                    "type":"object",
-                    "description":"用户扩展信息"
-                },
-                "phone":{
-                    "type":"string",
-                    "description":"手机号"
-                },
-                "userName":{
-                    "type":"string",
-                    "description":"用户名"
-                }
-            },
-            "description":"修改用户信息请求"
-        },
-        "PageInfoOfDeviceDelegationsDTO":{
+        "PageInfo«DeviceDelegationsDTO»":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -4628,94 +4749,86 @@
                 }
             }
         },
-        "PageInfoOfSqlTemplate":{
+        "JSONObject":{
+            "type":"object",
+            "additionalProperties":{
+                "type":"object"
+            }
+        },
+        "DelegateIdResponse":{
             "type":"object",
             "properties":{
-                "endRow":{
+                "delegateId":{
                     "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/SqlTemplate"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
+                    "format":"int32",
+                    "description":"转授Id"
+                }
+            },
+            "description":"添加转授响应"
+        },
+        "CommandStatus":{
+            "type":"object",
+            "properties":{
+                "cmdUuid":{
                     "type":"string"
                 },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
+                "commandContent":{
+                    "type":"string"
                 },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
+                "commandId":{
                     "type":"integer",
                     "format":"int64"
+                },
+                "commandName":{
+                    "type":"string"
+                },
+                "createDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "deviceId":{
+                    "type":"string"
+                },
+                "status":{
+                    "type":"integer",
+                    "format":"int32"
                 }
             }
+        },
+        "DeviceImport":{
+            "type":"object",
+            "properties":{
+                "devices":{
+                    "type":"array",
+                    "description":"批量导入的设备信息列表",
+                    "items":{
+                        "$ref":"#/definitions/AddDevice"
+                    }
+                }
+            },
+            "description":"批量导入设备请求"
+        },
+        "UpdateUserRequest":{
+            "type":"object",
+            "properties":{
+                "email":{
+                    "type":"string",
+                    "description":"邮箱地址"
+                },
+                "extension":{
+                    "type":"object",
+                    "description":"用户扩展信息"
+                },
+                "phone":{
+                    "type":"string",
+                    "description":"手机号"
+                },
+                "userName":{
+                    "type":"string",
+                    "description":"用户名"
+                }
+            },
+            "description":"修改用户信息请求"
         },
         "AddDeviceDelegations":{
             "type":"object",
@@ -4903,7 +5016,7 @@
             },
             "description":"分享的权限"
         },
-        "PageInfoOfDeviceLogs":{
+        "PageInfo«SqlTemplate»":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -4933,185 +5046,7 @@
                 "list":{
                     "type":"array",
                     "items":{
-                        "$ref":"#/definitions/DeviceLogs"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
-        },
-        "PageInfoOfDevicesDTO":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/DevicesDTO"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
-        },
-        "PageInfoOfCustomPermission":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/CustomPermission"
+                        "$ref":"#/definitions/SqlTemplate"
                     }
                 },
                 "navigateFirstPage":{
@@ -5216,7 +5151,262 @@
                 }
             }
         },
-        "PageInfoOfUserDTO":{
+        "EmailIdResponse":{
+            "type":"object",
+            "properties":{
+                "emailId":{
+                    "type":"string",
+                    "description":"邮件的唯一标识码"
+                }
+            },
+            "description":"发送邮件响应"
+        },
+        "DeviceImportResponse":{
+            "type":"object",
+            "properties":{
+                "failedCount":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"导入失败的条数"
+                },
+                "failedDevices":{
+                    "type":"array",
+                    "description":"导入失败的具体信息",
+                    "items":{
+                        "$ref":"#/definitions/FailedDevices"
+                    }
+                },
+                "successCount":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"导入成功的条数"
+                }
+            },
+            "description":"批量导入设备响应"
+        },
+        "AddDeviceShares":{
+            "type":"object",
+            "properties":{
+                "deviceId":{
+                    "type":"string",
+                    "description":"设备Id"
+                },
+                "permissions":{
+                    "type":"array",
+                    "description":"分享的权限List",
+                    "items":{
+                        "$ref":"#/definitions/DeviceShare"
+                    }
+                },
+                "toUser":{
+                    "type":"string",
+                    "description":"被分享人loginName"
+                }
+            },
+            "description":"添加设备分享信息请求"
+        },
+        "DeviceSharesDTO":{
+            "type":"object",
+            "properties":{
+                "deviceId":{
+                    "type":"string"
+                },
+                "fromUserLoginName":{
+                    "type":"string"
+                },
+                "fromUserUserName":{
+                    "type":"string"
+                },
+                "permissions":{
+                    "type":"string"
+                },
+                "shareDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "shareId":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "toUserLoginName":{
+                    "type":"string"
+                },
+                "toUserUserName":{
+                    "type":"string"
+                }
+            }
+        },
+        "PageInfo«CustomPermission»":{
+            "type":"object",
+            "properties":{
+                "endRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/CustomPermission"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
+                }
+            }
+        },
+        "Password":{
+            "type":"object",
+            "properties":{
+                "newPassword":{
+                    "type":"string",
+                    "description":"新密码"
+                },
+                "oldPassword":{
+                    "type":"string",
+                    "description":"旧密码"
+                }
+            },
+            "description":"修改密码请求"
+        },
+        "FindDeviceSharesRsp":{
+            "type":"object",
+            "properties":{
+                "deviceId":{
+                    "type":"string",
+                    "description":"设备Id"
+                },
+                "fromUser":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"分享人Id"
+                },
+                "permissions":{
+                    "type":"array",
+                    "description":"分享的信息List",
+                    "items":{
+                        "$ref":"#/definitions/DeviceShare"
+                    }
+                },
+                "shareId":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"分享Id"
+                },
+                "toUser":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"被分享人Id"
+                }
+            },
+            "description":"查询设备分享响应"
+        },
+        "RegisterUserRequest":{
+            "type":"object",
+            "properties":{
+                "email":{
+                    "type":"string",
+                    "description":"邮箱地址"
+                },
+                "extension":{
+                    "type":"object",
+                    "description":"用户扩展数据"
+                },
+                "loginName":{
+                    "type":"string",
+                    "description":"登录名"
+                },
+                "password":{
+                    "type":"string",
+                    "description":"密码"
+                },
+                "phone":{
+                    "type":"string",
+                    "description":"手机号"
+                },
+                "roleId":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"角色Id"
+                },
+                "userName":{
+                    "type":"string",
+                    "description":"用户名"
+                }
+            },
+            "description":"注册用户请求"
+        },
+        "PageInfo«UserDTO»":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -5304,261 +5494,6 @@
                     "format":"int64"
                 }
             }
-        },
-        "EmailIdResponse":{
-            "type":"object",
-            "properties":{
-                "emailId":{
-                    "type":"string",
-                    "description":"邮件的唯一标识码"
-                }
-            },
-            "description":"发送邮件响应"
-        },
-        "PageInfoOfCommandStatus":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/CommandStatus"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
-        },
-        "DeviceImportResponse":{
-            "type":"object",
-            "properties":{
-                "failedCount":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"导入失败的条数"
-                },
-                "failedDevices":{
-                    "type":"array",
-                    "description":"导入失败的具体信息",
-                    "items":{
-                        "$ref":"#/definitions/FailedDevices"
-                    }
-                },
-                "successCount":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"导入成功的条数"
-                }
-            },
-            "description":"批量导入设备响应"
-        },
-        "AddDeviceShares":{
-            "type":"object",
-            "properties":{
-                "deviceId":{
-                    "type":"string",
-                    "description":"设备Id"
-                },
-                "permissions":{
-                    "type":"array",
-                    "description":"分享的权限List",
-                    "items":{
-                        "$ref":"#/definitions/DeviceShare"
-                    }
-                },
-                "toUser":{
-                    "type":"string",
-                    "description":"被分享人loginName"
-                }
-            },
-            "description":"添加设备分享信息请求"
-        },
-        "DeviceSharesDTO":{
-            "type":"object",
-            "properties":{
-                "deviceId":{
-                    "type":"string"
-                },
-                "fromUserLoginName":{
-                    "type":"string"
-                },
-                "fromUserUserName":{
-                    "type":"string"
-                },
-                "permissions":{
-                    "type":"string"
-                },
-                "shareDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "shareId":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "toUserLoginName":{
-                    "type":"string"
-                },
-                "toUserUserName":{
-                    "type":"string"
-                }
-            }
-        },
-        "Password":{
-            "type":"object",
-            "properties":{
-                "newPassword":{
-                    "type":"string",
-                    "description":"新密码"
-                },
-                "oldPassword":{
-                    "type":"string",
-                    "description":"旧密码"
-                }
-            },
-            "description":"修改密码请求"
-        },
-        "FindDeviceSharesRsp":{
-            "type":"object",
-            "properties":{
-                "deviceId":{
-                    "type":"string",
-                    "description":"设备Id"
-                },
-                "fromUser":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"分享人Id"
-                },
-                "permissions":{
-                    "type":"array",
-                    "description":"分享的信息List",
-                    "items":{
-                        "$ref":"#/definitions/DeviceShare"
-                    }
-                },
-                "shareId":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"分享Id"
-                },
-                "toUser":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"被分享人Id"
-                }
-            },
-            "description":"查询设备分享响应"
-        },
-        "RegisterUserRequest":{
-            "type":"object",
-            "properties":{
-                "email":{
-                    "type":"string",
-                    "description":"邮箱地址"
-                },
-                "extension":{
-                    "type":"object",
-                    "description":"用户扩展数据"
-                },
-                "loginName":{
-                    "type":"string",
-                    "description":"登录名"
-                },
-                "password":{
-                    "type":"string",
-                    "description":"密码"
-                },
-                "phone":{
-                    "type":"string",
-                    "description":"手机号"
-                },
-                "roleId":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"角色Id"
-                },
-                "userName":{
-                    "type":"string",
-                    "description":"用户名"
-                }
-            },
-            "description":"注册用户请求"
         },
         "ShareIdResponse":{
             "type":"object",
@@ -5709,6 +5644,95 @@
                 }
             },
             "description":"验证短信验证码请求"
+        },
+        "PageInfo«DeviceLogs»":{
+            "type":"object",
+            "properties":{
+                "endRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/DeviceLogs"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
+                }
+            }
         }
     }
 }
