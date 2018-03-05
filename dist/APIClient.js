@@ -1,6 +1,6 @@
 /*jshint -W069 */
 /**
- * demo
+ * lightapp API documentation
  * @class APIClient
  * @param {(string|object)} [domainOrOptions] - The project domain or options object. If object, see the object's optional properties.
  * @param {string} [domainOrOptions.domain] - The project domain
@@ -36,7 +36,7 @@ var APIClient = (function() {
         this.debug = options.debug;
         this.accessKey = options.accessKey;
         this.accessId = options.accessId;
-        this.domain = domain ? domain : 'https://demo.heclouds.com/baasapi/';
+        this.domain = domain ? domain : 'https://demo.heclouds.com/';
         this.rejectUnauthorized = options.rejectUnauthorized !== false;
 
         if (/^https:\/\//.test(this.domain)) {
@@ -209,13 +209,13 @@ var APIClient = (function() {
     /**
      * 根据sql删除外部数据
      * @method
-     * @name APIClient#deleteExternalDataBySQLUsingDELETE
+     * @name APIClient#deleteExternalDataBySQLUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteExternalDataBySQLUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteExternalDataBySQLUsingDELETE---------------');
+    APIClient.prototype.deleteExternalDataBySQLUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteExternalDataBySQLUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -267,7 +267,7 @@ var APIClient = (function() {
     /**
      * 查询设备列表
      * @method
-     * @name APIClient#getDevicesListUsingGET
+     * @name APIClient#getDevicesListUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.deviceName - 设备名
@@ -279,8 +279,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDevicesListUsingGET = function(parameters) {
-        logger(this, '-------------getDevicesListUsingGET---------------');
+    APIClient.prototype.getDevicesListUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDevicesListUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -355,13 +355,13 @@ var APIClient = (function() {
     /**
      * 导入单个设备
      * @method
-     * @name APIClient#addDeviceUsingPOST
+     * @name APIClient#addDeviceUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.addDevice - addDevice
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addDeviceUsingPOST = function(parameters) {
-        logger(this, '-------------addDeviceUsingPOST---------------');
+    APIClient.prototype.addDeviceUsingPOST_1 = function(parameters) {
+        logger(this, '-------------addDeviceUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -413,14 +413,14 @@ var APIClient = (function() {
     /**
      * 查询单个设备档案
      * @method
-     * @name APIClient#findSingleArchiveUsingGET
+     * @name APIClient#findSingleArchiveUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.archiveName - 档案类型
      * @param {string} parameters.archiveId - 设备档案ID
      */
-    APIClient.prototype.findSingleArchiveUsingGET = function(parameters) {
-        logger(this, '-------------findSingleArchiveUsingGET---------------');
+    APIClient.prototype.findSingleArchiveUsingGET_1 = function(parameters) {
+        logger(this, '-------------findSingleArchiveUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -471,13 +471,13 @@ var APIClient = (function() {
     /**
      * 新增设备档案
      * @method
-     * @name APIClient#addArchivesUsingPOST
+     * @name APIClient#addArchivesUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.addArchive - addArchive
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addArchivesUsingPOST = function(parameters) {
-        logger(this, '-------------addArchivesUsingPOST---------------');
+    APIClient.prototype.addArchivesUsingPOST_1 = function(parameters) {
+        logger(this, '-------------addArchivesUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -529,13 +529,13 @@ var APIClient = (function() {
     /**
      * 修改设备档案
      * @method
-     * @name APIClient#updateArchiveByIdUsingPUT
+     * @name APIClient#updateArchiveByIdUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.updateArchive - updateArchive
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateArchiveByIdUsingPUT = function(parameters) {
-        logger(this, '-------------updateArchiveByIdUsingPUT---------------');
+    APIClient.prototype.updateArchiveByIdUsingPUT_1 = function(parameters) {
+        logger(this, '-------------updateArchiveByIdUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -587,14 +587,14 @@ var APIClient = (function() {
     /**
      * 删除设备档案
      * @method
-     * @name APIClient#deleteArchivesUsingDELETE
+     * @name APIClient#deleteArchivesUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.archiveName - 档案类型
      * @param {string} parameters.archiveId - 设备档案ID
      */
-    APIClient.prototype.deleteArchivesUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteArchivesUsingDELETE---------------');
+    APIClient.prototype.deleteArchivesUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteArchivesUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -645,14 +645,14 @@ var APIClient = (function() {
     /**
      * 根据设备id查询设备档案
      * @method
-     * @name APIClient#findSingleArchiveByDeviceIdUsingGET
+     * @name APIClient#findSingleArchiveByDeviceIdUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.archiveName - 档案类型
      * @param {string} parameters.deviceId - 设备ID
      */
-    APIClient.prototype.findSingleArchiveByDeviceIdUsingGET = function(parameters) {
-        logger(this, '-------------findSingleArchiveByDeviceIdUsingGET---------------');
+    APIClient.prototype.findSingleArchiveByDeviceIdUsingGET_1 = function(parameters) {
+        logger(this, '-------------findSingleArchiveByDeviceIdUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -703,14 +703,14 @@ var APIClient = (function() {
     /**
      * 删除设备档案
      * @method
-     * @name APIClient#deleteArchiveByDeviceIdUsingDELETE
+     * @name APIClient#deleteArchiveByDeviceIdUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.archiveName - 档案类型
      * @param {string} parameters.deviceId - 设备ID
      */
-    APIClient.prototype.deleteArchiveByDeviceIdUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteArchiveByDeviceIdUsingDELETE---------------');
+    APIClient.prototype.deleteArchiveByDeviceIdUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteArchiveByDeviceIdUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -771,13 +771,13 @@ var APIClient = (function() {
     /**
      * 分配设备
      * @method
-     * @name APIClient#assignDevicesUsingPUT
+     * @name APIClient#assignDevicesUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.assignDevice - assignDevice
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.assignDevicesUsingPUT = function(parameters) {
-        logger(this, '-------------assignDevicesUsingPUT---------------');
+    APIClient.prototype.assignDevicesUsingPUT_1 = function(parameters) {
+        logger(this, '-------------assignDevicesUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -829,7 +829,7 @@ var APIClient = (function() {
     /**
      * 查询命令状态列表
      * @method
-     * @name APIClient#getCommandStatusListUsingGET
+     * @name APIClient#getCommandStatusListUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.commandName - 命令名称
@@ -839,8 +839,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getCommandStatusListUsingGET = function(parameters) {
-        logger(this, '-------------getCommandStatusListUsingGET---------------');
+    APIClient.prototype.getCommandStatusListUsingGET_1 = function(parameters) {
+        logger(this, '-------------getCommandStatusListUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -907,13 +907,13 @@ var APIClient = (function() {
     /**
      * 发送命令
      * @method
-     * @name APIClient#sendCommandsUsingPOST
+     * @name APIClient#sendCommandsUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.sendCommandRequest - sendCommandRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.sendCommandsUsingPOST = function(parameters) {
-        logger(this, '-------------sendCommandsUsingPOST---------------');
+    APIClient.prototype.sendCommandsUsingPOST_1 = function(parameters) {
+        logger(this, '-------------sendCommandsUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -965,13 +965,13 @@ var APIClient = (function() {
     /**
      * 查询命令状态
      * @method
-     * @name APIClient#getCommandStatusByCmdUuidUsingGET
+     * @name APIClient#getCommandStatusByCmdUuidUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.cmdUuid - cmdUuid
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getCommandStatusByCmdUuidUsingGET = function(parameters) {
-        logger(this, '-------------getCommandStatusByCmdUuidUsingGET---------------');
+    APIClient.prototype.getCommandStatusByCmdUuidUsingGET_1 = function(parameters) {
+        logger(this, '-------------getCommandStatusByCmdUuidUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1022,7 +1022,7 @@ var APIClient = (function() {
     /**
      * 查询设备转授列表(仅超管可用)
      * @method
-     * @name APIClient#getDeviceDelegationsListUsingGET
+     * @name APIClient#getDeviceDelegationsListUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.deviceId - 设备ID
@@ -1033,8 +1033,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceDelegationsListUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceDelegationsListUsingGET---------------');
+    APIClient.prototype.getDeviceDelegationsListUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceDelegationsListUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1105,13 +1105,13 @@ var APIClient = (function() {
     /**
      * 新增设备转授
      * @method
-     * @name APIClient#addDeviceDelegationsUsingPOST
+     * @name APIClient#addDeviceDelegationsUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.request - request
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addDeviceDelegationsUsingPOST = function(parameters) {
-        logger(this, '-------------addDeviceDelegationsUsingPOST---------------');
+    APIClient.prototype.addDeviceDelegationsUsingPOST_1 = function(parameters) {
+        logger(this, '-------------addDeviceDelegationsUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1163,7 +1163,7 @@ var APIClient = (function() {
     /**
      * 查询转授出去的设备列表
      * @method
-     * @name APIClient#getDeviceDelegateOthersUsingGET
+     * @name APIClient#getDeviceDelegateOthersUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.deviceId - 设备ID
@@ -1174,8 +1174,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceDelegateOthersUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceDelegateOthersUsingGET---------------');
+    APIClient.prototype.getDeviceDelegateOthersUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceDelegateOthersUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1246,7 +1246,7 @@ var APIClient = (function() {
     /**
      * 查询转授给自己的设备列表
      * @method
-     * @name APIClient#getDeviceDelegateSelfUsingGET
+     * @name APIClient#getDeviceDelegateSelfUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.deviceId - 设备ID
@@ -1257,8 +1257,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceDelegateSelfUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceDelegateSelfUsingGET---------------');
+    APIClient.prototype.getDeviceDelegateSelfUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceDelegateSelfUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1329,13 +1329,13 @@ var APIClient = (function() {
     /**
      * 查询设备转授
      * @method
-     * @name APIClient#getDeviceDelegationsByIdUsingGET
+     * @name APIClient#getDeviceDelegationsByIdUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.delegateId - delegateId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getDeviceDelegationsByIdUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceDelegationsByIdUsingGET---------------');
+    APIClient.prototype.getDeviceDelegationsByIdUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceDelegationsByIdUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1386,13 +1386,13 @@ var APIClient = (function() {
     /**
      * 收回设备转授
      * @method
-     * @name APIClient#deleteDeviceDelegationsUsingDELETE
+     * @name APIClient#deleteDeviceDelegationsUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.delegateId - delegateId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteDeviceDelegationsUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteDeviceDelegationsUsingDELETE---------------');
+    APIClient.prototype.deleteDeviceDelegationsUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteDeviceDelegationsUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1443,13 +1443,13 @@ var APIClient = (function() {
     /**
      * 根据sql删除设备档案
      * @method
-     * @name APIClient#deleteArchivesBySQLUsingDELETE
+     * @name APIClient#deleteArchivesBySQLUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteArchivesBySQLUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteArchivesBySQLUsingDELETE---------------');
+    APIClient.prototype.deleteArchivesBySQLUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteArchivesBySQLUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1501,13 +1501,13 @@ var APIClient = (function() {
     /**
      * 停用设备
      * @method
-     * @name APIClient#disableDevicesByIdUsingPUT
+     * @name APIClient#disableDevicesByIdUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.deviceId - deviceId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.disableDevicesByIdUsingPUT = function(parameters) {
-        logger(this, '-------------disableDevicesByIdUsingPUT---------------');
+    APIClient.prototype.disableDevicesByIdUsingPUT_1 = function(parameters) {
+        logger(this, '-------------disableDevicesByIdUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1558,13 +1558,13 @@ var APIClient = (function() {
     /**
      * 启用设备
      * @method
-     * @name APIClient#enableDevicesByIdUsingPUT
+     * @name APIClient#enableDevicesByIdUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.deviceId - deviceId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.enableDevicesByIdUsingPUT = function(parameters) {
-        logger(this, '-------------enableDevicesByIdUsingPUT---------------');
+    APIClient.prototype.enableDevicesByIdUsingPUT_1 = function(parameters) {
+        logger(this, '-------------enableDevicesByIdUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1615,13 +1615,13 @@ var APIClient = (function() {
     /**
      * 批量导入设备
      * @method
-     * @name APIClient#addDevicesUsingPOST
+     * @name APIClient#addDevicesUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.deviceImport - deviceImport
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addDevicesUsingPOST = function(parameters) {
-        logger(this, '-------------addDevicesUsingPOST---------------');
+    APIClient.prototype.addDevicesUsingPOST_1 = function(parameters) {
+        logger(this, '-------------addDevicesUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1673,13 +1673,13 @@ var APIClient = (function() {
     /**
      * 查询设备信息
      * @method
-     * @name APIClient#getDevicesByIdUsingGET
+     * @name APIClient#getDevicesByIdUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.deviceId - deviceId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getDevicesByIdUsingGET = function(parameters) {
-        logger(this, '-------------getDevicesByIdUsingGET---------------');
+    APIClient.prototype.getDevicesByIdUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDevicesByIdUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1730,14 +1730,14 @@ var APIClient = (function() {
     /**
      * 编辑设备
      * @method
-     * @name APIClient#updateDevicesUsingPUT
+     * @name APIClient#updateDevicesUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.deviceId - deviceId
      * @param {} parameters.updateDevice - updateDevice
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateDevicesUsingPUT = function(parameters) {
-        logger(this, '-------------updateDevicesUsingPUT---------------');
+    APIClient.prototype.updateDevicesUsingPUT_1 = function(parameters) {
+        logger(this, '-------------updateDevicesUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1797,7 +1797,7 @@ var APIClient = (function() {
     /**
      * 查询设备日志列表
      * @method
-     * @name APIClient#getDeviceLogsListUsingGET
+     * @name APIClient#getDeviceLogsListUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.deviceId - 设备ID
@@ -1810,8 +1810,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceLogsListUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceLogsListUsingGET---------------');
+    APIClient.prototype.getDeviceLogsListUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceLogsListUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1890,13 +1890,13 @@ var APIClient = (function() {
     /**
      * 查询告警数据
      * @method
-     * @name APIClient#findDeviceAlarmUsingPOST
+     * @name APIClient#findDeviceAlarmUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findDeviceAlarmUsingPOST = function(parameters) {
-        logger(this, '-------------findDeviceAlarmUsingPOST---------------');
+    APIClient.prototype.findDeviceAlarmUsingPOST_1 = function(parameters) {
+        logger(this, '-------------findDeviceAlarmUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -1948,13 +1948,13 @@ var APIClient = (function() {
     /**
      * 查询设备档案列表
      * @method
-     * @name APIClient#findArchivesUsingPOST
+     * @name APIClient#findArchivesUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findArchivesUsingPOST = function(parameters) {
-        logger(this, '-------------findArchivesUsingPOST---------------');
+    APIClient.prototype.findArchivesUsingPOST_1 = function(parameters) {
+        logger(this, '-------------findArchivesUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2006,13 +2006,13 @@ var APIClient = (function() {
     /**
      * 查询全局设备数据
      * @method
-     * @name APIClient#findDeviceDataUsingPOST
+     * @name APIClient#findDeviceDataUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findDeviceDataUsingPOST = function(parameters) {
-        logger(this, '-------------findDeviceDataUsingPOST---------------');
+    APIClient.prototype.findDeviceDataUsingPOST_1 = function(parameters) {
+        logger(this, '-------------findDeviceDataUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2064,13 +2064,13 @@ var APIClient = (function() {
     /**
      * 查询统计数据
      * @method
-     * @name APIClient#findStatisticsDataUsingPOST
+     * @name APIClient#findStatisticsDataUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findStatisticsDataUsingPOST = function(parameters) {
-        logger(this, '-------------findStatisticsDataUsingPOST---------------');
+    APIClient.prototype.findStatisticsDataUsingPOST_1 = function(parameters) {
+        logger(this, '-------------findStatisticsDataUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2122,7 +2122,7 @@ var APIClient = (function() {
     /**
      * 查询设备分享信息列表(仅超管可用)
      * @method
-     * @name APIClient#getDeviceSharesListUsingGET
+     * @name APIClient#getDeviceSharesListUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.deviceId - 设备ID
@@ -2133,8 +2133,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceSharesListUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceSharesListUsingGET---------------');
+    APIClient.prototype.getDeviceSharesListUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceSharesListUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2205,13 +2205,13 @@ var APIClient = (function() {
     /**
      * 新增设备分享信息
      * @method
-     * @name APIClient#addDeviceSharesUsingPOST
+     * @name APIClient#addDeviceSharesUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.request - request
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addDeviceSharesUsingPOST = function(parameters) {
-        logger(this, '-------------addDeviceSharesUsingPOST---------------');
+    APIClient.prototype.addDeviceSharesUsingPOST_1 = function(parameters) {
+        logger(this, '-------------addDeviceSharesUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2263,7 +2263,7 @@ var APIClient = (function() {
     /**
      * 查询分享出去的设备列表
      * @method
-     * @name APIClient#getDeviceShareOthersUsingGET
+     * @name APIClient#getDeviceShareOthersUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.deviceId - 设备id
@@ -2274,8 +2274,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceShareOthersUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceShareOthersUsingGET---------------');
+    APIClient.prototype.getDeviceShareOthersUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceShareOthersUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2346,7 +2346,7 @@ var APIClient = (function() {
     /**
      * 查询分享给自己的设备列表
      * @method
-     * @name APIClient#getDeviceShareSelfUsingGET
+     * @name APIClient#getDeviceShareSelfUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.deviceId - 设备id
@@ -2357,8 +2357,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getDeviceShareSelfUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceShareSelfUsingGET---------------');
+    APIClient.prototype.getDeviceShareSelfUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceShareSelfUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2429,13 +2429,13 @@ var APIClient = (function() {
     /**
      * 查询设备分享信息
      * @method
-     * @name APIClient#getDeviceSharesByIdUsingGET
+     * @name APIClient#getDeviceSharesByIdUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.shareId - shareId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getDeviceSharesByIdUsingGET = function(parameters) {
-        logger(this, '-------------getDeviceSharesByIdUsingGET---------------');
+    APIClient.prototype.getDeviceSharesByIdUsingGET_1 = function(parameters) {
+        logger(this, '-------------getDeviceSharesByIdUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2486,13 +2486,13 @@ var APIClient = (function() {
     /**
      * 收回设备分享
      * @method
-     * @name APIClient#deleteDeviceSharesUsingDELETE
+     * @name APIClient#deleteDeviceSharesUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.shareId - shareId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteDeviceSharesUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteDeviceSharesUsingDELETE---------------');
+    APIClient.prototype.deleteDeviceSharesUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteDeviceSharesUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2543,13 +2543,13 @@ var APIClient = (function() {
     /**
      * 根据SQL语句修改设备档案
      * @method
-     * @name APIClient#updateArchivesUsingPUT
+     * @name APIClient#updateArchivesUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateArchivesUsingPUT = function(parameters) {
-        logger(this, '-------------updateArchivesUsingPUT---------------');
+    APIClient.prototype.updateArchivesUsingPUT_1 = function(parameters) {
+        logger(this, '-------------updateArchivesUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2601,13 +2601,13 @@ var APIClient = (function() {
     /**
      * 删除设备
      * @method
-     * @name APIClient#deleteDevicesUsingDELETE
+     * @name APIClient#deleteDevicesUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.deviceId - deviceId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteDevicesUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteDevicesUsingDELETE---------------');
+    APIClient.prototype.deleteDevicesUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteDevicesUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2658,14 +2658,14 @@ var APIClient = (function() {
     /**
      * 根据id查询某一条外部数据
      * @method
-     * @name APIClient#findExternalDataByIdUsingGET
+     * @name APIClient#findExternalDataByIdUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.id - 外部数据id
      * @param {string} parameters.externalDataName - 外部数据名
      */
-    APIClient.prototype.findExternalDataByIdUsingGET = function(parameters) {
-        logger(this, '-------------findExternalDataByIdUsingGET---------------');
+    APIClient.prototype.findExternalDataByIdUsingGET_1 = function(parameters) {
+        logger(this, '-------------findExternalDataByIdUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2726,13 +2726,13 @@ var APIClient = (function() {
     /**
      * 添加外部数据
      * @method
-     * @name APIClient#addExternalDataUsingPOST
+     * @name APIClient#addExternalDataUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.addExternalData - addExternalData
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.addExternalDataUsingPOST = function(parameters) {
-        logger(this, '-------------addExternalDataUsingPOST---------------');
+    APIClient.prototype.addExternalDataUsingPOST_1 = function(parameters) {
+        logger(this, '-------------addExternalDataUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2784,13 +2784,13 @@ var APIClient = (function() {
     /**
      * 修改外部数据
      * @method
-     * @name APIClient#updateExternalDataByIdUsingPUT
+     * @name APIClient#updateExternalDataByIdUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.updateExternalData - updateExternalData
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateExternalDataByIdUsingPUT = function(parameters) {
-        logger(this, '-------------updateExternalDataByIdUsingPUT---------------');
+    APIClient.prototype.updateExternalDataByIdUsingPUT_1 = function(parameters) {
+        logger(this, '-------------updateExternalDataByIdUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2842,14 +2842,14 @@ var APIClient = (function() {
     /**
      * 删除外部数据
      * @method
-     * @name APIClient#deleteExternalDataUsingDELETE
+     * @name APIClient#deleteExternalDataUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.externalDataName - 外部数据名
      * @param {string} parameters.recordId - 外部数据id
      */
-    APIClient.prototype.deleteExternalDataUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteExternalDataUsingDELETE---------------');
+    APIClient.prototype.deleteExternalDataUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteExternalDataUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2905,7 +2905,7 @@ var APIClient = (function() {
     /**
      * 查询自定义权限
      * @method
-     * @name APIClient#findCustomPermissionUsingGET
+     * @name APIClient#findCustomPermissionUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.customPermissionId - 自定义权限的id（不支持模糊查询）
@@ -2913,8 +2913,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.findCustomPermissionUsingGET = function(parameters) {
-        logger(this, '-------------findCustomPermissionUsingGET---------------');
+    APIClient.prototype.findCustomPermissionUsingGET_1 = function(parameters) {
+        logger(this, '-------------findCustomPermissionUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -2973,12 +2973,12 @@ var APIClient = (function() {
     /**
      * 查询当前用户拥有的自定义权限
      * @method
-     * @name APIClient#findCustomPermissionByUserUsingGET
+     * @name APIClient#findCustomPermissionByUserUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findCustomPermissionByUserUsingGET = function(parameters) {
-        logger(this, '-------------findCustomPermissionByUserUsingGET---------------');
+    APIClient.prototype.findCustomPermissionByUserUsingGET_1 = function(parameters) {
+        logger(this, '-------------findCustomPermissionByUserUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3021,14 +3021,14 @@ var APIClient = (function() {
     /**
      * 用户登录
      * @method
-     * @name APIClient#loginUsingPOST
+     * @name APIClient#loginUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.appToken - appToken
      * @param {string} parameters.loginName - loginName
      * @param {string} parameters.password - password
      */
-    APIClient.prototype.loginUsingPOST = function(parameters) {
-        logger(this, '-------------loginUsingPOST---------------');
+    APIClient.prototype.loginUsingPOST_1 = function(parameters) {
+        logger(this, '-------------loginUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3089,14 +3089,14 @@ var APIClient = (function() {
     /**
      * 发送邮箱验证码
      * @method
-     * @name APIClient#sendEmailVerificationUsingPOST
+     * @name APIClient#sendEmailVerificationUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.appToken - appToken
      * @param {string} parameters.address - 邮箱地址
      * @param {string} parameters.invalid - 失效时间
      */
-    APIClient.prototype.sendEmailVerificationUsingPOST = function(parameters) {
-        logger(this, '-------------sendEmailVerificationUsingPOST---------------');
+    APIClient.prototype.sendEmailVerificationUsingPOST_1 = function(parameters) {
+        logger(this, '-------------sendEmailVerificationUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3152,13 +3152,13 @@ var APIClient = (function() {
     /**
      * 验证邮箱验证码
      * @method
-     * @name APIClient#emailVerificationUsingPOST
+     * @name APIClient#emailVerificationUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.emailVerificationRequest - emailVerificationRequest
      * @param {string} parameters.appToken - appToken
      */
-    APIClient.prototype.emailVerificationUsingPOST = function(parameters) {
-        logger(this, '-------------emailVerificationUsingPOST---------------');
+    APIClient.prototype.emailVerificationUsingPOST_1 = function(parameters) {
+        logger(this, '-------------emailVerificationUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3210,13 +3210,13 @@ var APIClient = (function() {
     /**
      * 查询外部数据
      * @method
-     * @name APIClient#findExternalDataUsingPOST
+     * @name APIClient#findExternalDataUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findExternalDataUsingPOST = function(parameters) {
-        logger(this, '-------------findExternalDataUsingPOST---------------');
+    APIClient.prototype.findExternalDataUsingPOST_1 = function(parameters) {
+        logger(this, '-------------findExternalDataUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3268,13 +3268,13 @@ var APIClient = (function() {
     /**
      * 查询离线统计数据
      * @method
-     * @name APIClient#findStatTaskDataUsingPOST
+     * @name APIClient#findStatTaskDataUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.findMongoDataRequest - findMongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findStatTaskDataUsingPOST = function(parameters) {
-        logger(this, '-------------findStatTaskDataUsingPOST---------------');
+    APIClient.prototype.findStatTaskDataUsingPOST_1 = function(parameters) {
+        logger(this, '-------------findStatTaskDataUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3334,14 +3334,14 @@ var APIClient = (function() {
        ......  ]
     }其中field_type，1：String；2：int；3：Float；4：Boolean；5：Long；6：Double；7：Date
     * @method
-    * @name APIClient#findTableConfigUsingGET
+    * @name APIClient#findTableConfigUsingGET_1
     * @param {object} parameters - method options and parameters
          * @param {string} parameters.sessionToken - session-token
          * @param {integer} parameters.tableType - 表类型,2：转换数据；3：实时统计数据；4：告警数据；5：离线统计数据；6：外部数据；7：档案数据；
          * @param {string} parameters.tableName - 表名
     */
-    APIClient.prototype.findTableConfigUsingGET = function(parameters) {
-        logger(this, '-------------findTableConfigUsingGET---------------');
+    APIClient.prototype.findTableConfigUsingGET_1 = function(parameters) {
+        logger(this, '-------------findTableConfigUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3397,13 +3397,13 @@ var APIClient = (function() {
     /**
      * 注册用户
      * @method
-     * @name APIClient#registerUserUsingPOST
+     * @name APIClient#registerUserUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.registerUserRequest - registerUserRequest
      * @param {string} parameters.appToken - appToken
      */
-    APIClient.prototype.registerUserUsingPOST = function(parameters) {
-        logger(this, '-------------registerUserUsingPOST---------------');
+    APIClient.prototype.registerUserUsingPOST_1 = function(parameters) {
+        logger(this, '-------------registerUserUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3455,12 +3455,12 @@ var APIClient = (function() {
     /**
      * 查询允许注册的角色
      * @method
-     * @name APIClient#findRoleAllowRegUsingGET
+     * @name APIClient#findRoleAllowRegUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.appToken - appToken
      */
-    APIClient.prototype.findRoleAllowRegUsingGET = function(parameters) {
-        logger(this, '-------------findRoleAllowRegUsingGET---------------');
+    APIClient.prototype.findRoleAllowRegUsingGET_1 = function(parameters) {
+        logger(this, '-------------findRoleAllowRegUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3503,12 +3503,12 @@ var APIClient = (function() {
     /**
      * 查询当前用户所能创建的角色
      * @method
-     * @name APIClient#findRoleNameListUsingGET
+     * @name APIClient#findRoleNameListUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findRoleNameListUsingGET = function(parameters) {
-        logger(this, '-------------findRoleNameListUsingGET---------------');
+    APIClient.prototype.findRoleNameListUsingGET_1 = function(parameters) {
+        logger(this, '-------------findRoleNameListUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3551,14 +3551,14 @@ var APIClient = (function() {
     /**
      * 发送短信验证码
      * @method
-     * @name APIClient#sendSmsVerificationUsingPOST
+     * @name APIClient#sendSmsVerificationUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.appToken - appToken
      * @param {string} parameters.mobile - 手机号码
      * @param {string} parameters.invalid - 失效时间
      */
-    APIClient.prototype.sendSmsVerificationUsingPOST = function(parameters) {
-        logger(this, '-------------sendSmsVerificationUsingPOST---------------');
+    APIClient.prototype.sendSmsVerificationUsingPOST_1 = function(parameters) {
+        logger(this, '-------------sendSmsVerificationUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3614,13 +3614,13 @@ var APIClient = (function() {
     /**
      * 验证短信验证码
      * @method
-     * @name APIClient#checkCommandScriptUsingPOST
+     * @name APIClient#checkCommandScriptUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.smsVerificationRequest - smsVerificationRequest
      * @param {string} parameters.appToken - appToken
      */
-    APIClient.prototype.checkCommandScriptUsingPOST = function(parameters) {
-        logger(this, '-------------checkCommandScriptUsingPOST---------------');
+    APIClient.prototype.checkCommandScriptUsingPOST_1 = function(parameters) {
+        logger(this, '-------------checkCommandScriptUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3672,7 +3672,7 @@ var APIClient = (function() {
     /**
      * 查询sql模版列表
      * @method
-     * @name APIClient#getTemplatesUsingGET
+     * @name APIClient#getTemplatesUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.sqlTemplateName - sql模板名
@@ -3683,8 +3683,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 当前页
      * @param {string} parameters.pageSize - 每页多少条
      */
-    APIClient.prototype.getTemplatesUsingGET = function(parameters) {
-        logger(this, '-------------getTemplatesUsingGET---------------');
+    APIClient.prototype.getTemplatesUsingGET_1 = function(parameters) {
+        logger(this, '-------------getTemplatesUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3755,13 +3755,13 @@ var APIClient = (function() {
     /**
      * 查询指定sql模版
      * @method
-     * @name APIClient#findTemplateByIdUsingGET
+     * @name APIClient#findTemplateByIdUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.sqlTemplateId - sqlTemplateId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.findTemplateByIdUsingGET = function(parameters) {
-        logger(this, '-------------findTemplateByIdUsingGET---------------');
+    APIClient.prototype.findTemplateByIdUsingGET_1 = function(parameters) {
+        logger(this, '-------------findTemplateByIdUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3812,13 +3812,13 @@ var APIClient = (function() {
     /**
      * 根据sql修改外部数据
      * @method
-     * @name APIClient#updateExternalDataUsingPUT
+     * @name APIClient#updateExternalDataUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.mongoDataRequest - mongoDataRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateExternalDataUsingPUT = function(parameters) {
-        logger(this, '-------------updateExternalDataUsingPUT---------------');
+    APIClient.prototype.updateExternalDataUsingPUT_1 = function(parameters) {
+        logger(this, '-------------updateExternalDataUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3870,7 +3870,7 @@ var APIClient = (function() {
     /**
      * 查询用户列表
      * @method
-     * @name APIClient#getUsersUsingGET
+     * @name APIClient#getUsersUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.loginName - 登录名
@@ -3881,8 +3881,8 @@ var APIClient = (function() {
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.getUsersUsingGET = function(parameters) {
-        logger(this, '-------------getUsersUsingGET---------------');
+    APIClient.prototype.getUsersUsingGET_1 = function(parameters) {
+        logger(this, '-------------getUsersUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -3953,13 +3953,13 @@ var APIClient = (function() {
     /**
      * 增加用户
      * @method
-     * @name APIClient#insertUserUsingPOST
+     * @name APIClient#insertUserUsingPOST_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.addUserRequest - addUserRequest
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.insertUserUsingPOST = function(parameters) {
-        logger(this, '-------------insertUserUsingPOST---------------');
+    APIClient.prototype.insertUserUsingPOST_1 = function(parameters) {
+        logger(this, '-------------insertUserUsingPOST_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -4011,14 +4011,14 @@ var APIClient = (function() {
     /**
      * 编辑子用户
      * @method
-     * @name APIClient#updateUserUsingPUT
+     * @name APIClient#updateUserUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.updateUserRequest - updateUserRequest
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updateUserUsingPUT = function(parameters) {
-        logger(this, '-------------updateUserUsingPUT---------------');
+    APIClient.prototype.updateUserUsingPUT_1 = function(parameters) {
+        logger(this, '-------------updateUserUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -4078,13 +4078,13 @@ var APIClient = (function() {
     /**
      * 删除子用户
      * @method
-     * @name APIClient#deleteUserByUserIdUsingDELETE
+     * @name APIClient#deleteUserByUserIdUsingDELETE_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.deleteUserByUserIdUsingDELETE = function(parameters) {
-        logger(this, '-------------deleteUserByUserIdUsingDELETE---------------');
+    APIClient.prototype.deleteUserByUserIdUsingDELETE_1 = function(parameters) {
+        logger(this, '-------------deleteUserByUserIdUsingDELETE_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -4135,13 +4135,13 @@ var APIClient = (function() {
     /**
      * 修改密码
      * @method
-     * @name APIClient#updatePasswordUsingPUT
+     * @name APIClient#updatePasswordUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {} parameters.password - password
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.updatePasswordUsingPUT = function(parameters) {
-        logger(this, '-------------updatePasswordUsingPUT---------------');
+    APIClient.prototype.updatePasswordUsingPUT_1 = function(parameters) {
+        logger(this, '-------------updatePasswordUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -4193,13 +4193,13 @@ var APIClient = (function() {
     /**
      * 查询单个用户
      * @method
-     * @name APIClient#getUserByUserIdUsingGET
+     * @name APIClient#getUserByUserIdUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.getUserByUserIdUsingGET = function(parameters) {
-        logger(this, '-------------getUserByUserIdUsingGET---------------');
+    APIClient.prototype.getUserByUserIdUsingGET_1 = function(parameters) {
+        logger(this, '-------------getUserByUserIdUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -4250,15 +4250,15 @@ var APIClient = (function() {
     /**
      * 查询子用户列表
      * @method
-     * @name APIClient#queryChildInfoUsingGET
+     * @name APIClient#queryChildInfoUsingGET_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      * @param {string} parameters.pageNum - 页数
      * @param {string} parameters.pageSize - 每页条数
      */
-    APIClient.prototype.queryChildInfoUsingGET = function(parameters) {
-        logger(this, '-------------queryChildInfoUsingGET---------------');
+    APIClient.prototype.queryChildInfoUsingGET_1 = function(parameters) {
+        logger(this, '-------------queryChildInfoUsingGET_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -4317,13 +4317,13 @@ var APIClient = (function() {
     /**
      * 停用子用户
      * @method
-     * @name APIClient#disableUserUsingPUT
+     * @name APIClient#disableUserUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.disableUserUsingPUT = function(parameters) {
-        logger(this, '-------------disableUserUsingPUT---------------');
+    APIClient.prototype.disableUserUsingPUT_1 = function(parameters) {
+        logger(this, '-------------disableUserUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -4374,13 +4374,13 @@ var APIClient = (function() {
     /**
      * 启用子用户
      * @method
-     * @name APIClient#enableUserUsingPUT
+     * @name APIClient#enableUserUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.enableUserUsingPUT = function(parameters) {
-        logger(this, '-------------enableUserUsingPUT---------------');
+    APIClient.prototype.enableUserUsingPUT_1 = function(parameters) {
+        logger(this, '-------------enableUserUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }
@@ -4431,13 +4431,13 @@ var APIClient = (function() {
     /**
      * 重置子用户密码
      * @method
-     * @name APIClient#resetPasswordUsingPUT
+     * @name APIClient#resetPasswordUsingPUT_1
      * @param {object} parameters - method options and parameters
      * @param {integer} parameters.userId - userId
      * @param {string} parameters.sessionToken - session-token
      */
-    APIClient.prototype.resetPasswordUsingPUT = function(parameters) {
-        logger(this, '-------------resetPasswordUsingPUT---------------');
+    APIClient.prototype.resetPasswordUsingPUT_1 = function(parameters) {
+        logger(this, '-------------resetPasswordUsingPUT_1---------------');
         if (parameters === undefined) {
             parameters = {};
         }

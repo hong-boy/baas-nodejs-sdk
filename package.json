@@ -1,6 +1,6 @@
 {
     "name": "baas-nodejs-sdk",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "description": "nodejs sdk of baas rest api",
     "main": "index.js",
     "scripts": {
@@ -31,7 +31,7 @@
         "babel-preset-stage-0": "^6.24.1",
         "babel-preset-stage-2": "^6.24.1",
         "intelli-espower-loader": "^1.0.1",
-        "jsdoc": "^3.4.3",
+        "jsdoc": "^3.5.5",
         "mocha": "^3.4.2",
         "power-assert": "^1.4.2",
         "swagger-js-codegen": "^1.10.0"

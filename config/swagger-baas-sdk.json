@@ -1,11 +1,12 @@
 {
     "swagger":"2.0",
     "info":{
-        "description":"demo",
-        "version":"1.0",
-        "title":"轻应用Baas平台API"
+        "description":"lightapp API documentation",
+        "version":"V1.0",
+        "title":"轻应用Baas平台API",
+        "contact":{}
     },
-    "host":"demo.heclouds.com/baasapi",
+    "host":"demo.heclouds.com",
     "basePath":"/",
     "tags":[
         {
@@ -65,7 +66,7 @@
                 ],
                 "summary":"根据sql删除外部数据",
                 "description":"根据sql删除外部数据",
-                "operationId":"deleteExternalDataBySQLUsingDELETE",
+                "operationId":"deleteExternalDataBySQLUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -113,7 +114,7 @@
                 ],
                 "summary":"查询设备列表",
                 "description":"查询设备列表",
-                "operationId":"getDevicesListUsingGET",
+                "operationId":"getDevicesListUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -189,7 +190,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«DevicesDTO»"
+                            "$ref":"#/definitions/PageInfoOfDevicesDTO"
                         }
                     },
                     "401":{
@@ -209,7 +210,7 @@
                 ],
                 "summary":"导入单个设备",
                 "description":"导入单个设备",
-                "operationId":"addDeviceUsingPOST",
+                "operationId":"addDeviceUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -263,7 +264,7 @@
                 ],
                 "summary":"查询单个设备档案",
                 "description":"查询单个设备档案",
-                "operationId":"findSingleArchiveUsingGET",
+                "operationId":"findSingleArchiveUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -317,7 +318,7 @@
                 ],
                 "summary":"新增设备档案",
                 "description":"新增设备档案",
-                "operationId":"addArchivesUsingPOST",
+                "operationId":"addArchivesUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -369,7 +370,7 @@
                 ],
                 "summary":"修改设备档案",
                 "description":"修改设备档案",
-                "operationId":"updateArchiveByIdUsingPUT",
+                "operationId":"updateArchiveByIdUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -418,7 +419,7 @@
                 ],
                 "summary":"删除设备档案",
                 "description":"删除设备档案",
-                "operationId":"deleteArchivesUsingDELETE",
+                "operationId":"deleteArchivesUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -471,7 +472,7 @@
                 ],
                 "summary":"根据设备id查询设备档案",
                 "description":"根据设备id查询设备档案",
-                "operationId":"findSingleArchiveByDeviceIdUsingGET",
+                "operationId":"findSingleArchiveByDeviceIdUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -525,7 +526,7 @@
                 ],
                 "summary":"根据设备id删除设备档案",
                 "description":"删除设备档案",
-                "operationId":"deleteArchiveByDeviceIdUsingDELETE",
+                "operationId":"deleteArchiveByDeviceIdUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -578,7 +579,7 @@
                 ],
                 "summary":"分配设备",
                 "description":"分配设备",
-                "operationId":"assignDevicesUsingPUT",
+                "operationId":"assignDevicesUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -629,7 +630,7 @@
                 ],
                 "summary":"查询命令状态列表",
                 "description":"查询命令状态列表",
-                "operationId":"getCommandStatusListUsingGET",
+                "operationId":"getCommandStatusListUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -691,7 +692,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«CommandStatus»"
+                            "$ref":"#/definitions/PageInfoOfCommandStatus"
                         }
                     },
                     "401":{
@@ -711,7 +712,7 @@
                 ],
                 "summary":"发送命令",
                 "description":"发送命令",
-                "operationId":"sendCommandsUsingPOST",
+                "operationId":"sendCommandsUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -765,7 +766,7 @@
                 ],
                 "summary":"查询命令状态",
                 "description":"查询命令状态",
-                "operationId":"getCommandStatusByCmdUuidUsingGET",
+                "operationId":"getCommandStatusByCmdUuidUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -814,7 +815,7 @@
                 ],
                 "summary":"查询设备转授列表(仅超管可用)",
                 "description":"查询设备转授列表(仅超管可用)",
-                "operationId":"getDeviceDelegationsListUsingGET",
+                "operationId":"getDeviceDelegationsListUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -883,7 +884,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«DeviceDelegationsDTO»"
+                            "$ref":"#/definitions/PageInfoOfDeviceDelegationsDTO"
                         }
                     },
                     "401":{
@@ -903,7 +904,7 @@
                 ],
                 "summary":"新增设备转授",
                 "description":"新增设备转授",
-                "operationId":"addDeviceDelegationsUsingPOST",
+                "operationId":"addDeviceDelegationsUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -956,7 +957,7 @@
                     "Ⅴ、设备转授管理API类"
                 ],
                 "summary":"查询转授出去的设备列表",
-                "operationId":"getDeviceDelegateOthersUsingGET",
+                "operationId":"getDeviceDelegateOthersUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1025,7 +1026,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«DeviceDelegationsDTO»"
+                            "$ref":"#/definitions/PageInfoOfDeviceDelegationsDTO"
                         }
                     },
                     "401":{
@@ -1046,7 +1047,7 @@
                     "Ⅴ、设备转授管理API类"
                 ],
                 "summary":"查询转授给自己的设备列表",
-                "operationId":"getDeviceDelegateSelfUsingGET",
+                "operationId":"getDeviceDelegateSelfUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1115,7 +1116,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«DeviceDelegationsDTO»"
+                            "$ref":"#/definitions/PageInfoOfDeviceDelegationsDTO"
                         }
                     },
                     "401":{
@@ -1137,7 +1138,7 @@
                 ],
                 "summary":"查询设备转授",
                 "description":"查询设备转授",
-                "operationId":"getDeviceDelegationsByIdUsingGET",
+                "operationId":"getDeviceDelegationsByIdUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1185,7 +1186,7 @@
                 ],
                 "summary":"收回设备转授",
                 "description":"收回设备转授",
-                "operationId":"deleteDeviceDelegationsUsingDELETE",
+                "operationId":"deleteDeviceDelegationsUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1232,7 +1233,7 @@
                 ],
                 "summary":"根据sql删除设备档案",
                 "description":"根据sql删除设备档案",
-                "operationId":"deleteArchivesBySQLUsingDELETE",
+                "operationId":"deleteArchivesBySQLUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1280,7 +1281,7 @@
                 ],
                 "summary":"停用设备",
                 "description":"停用设备",
-                "operationId":"disableDevicesByIdUsingPUT",
+                "operationId":"disableDevicesByIdUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1329,7 +1330,7 @@
                 ],
                 "summary":"启用设备",
                 "description":"启用设备",
-                "operationId":"enableDevicesByIdUsingPUT",
+                "operationId":"enableDevicesByIdUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1378,7 +1379,7 @@
                 ],
                 "summary":"批量导入设备",
                 "description":"批量导入设备",
-                "operationId":"addDevicesUsingPOST",
+                "operationId":"addDevicesUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1432,7 +1433,7 @@
                 ],
                 "summary":"查询设备信息",
                 "description":"查询设备信息",
-                "operationId":"getDevicesByIdUsingGET",
+                "operationId":"getDevicesByIdUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1479,7 +1480,7 @@
                 ],
                 "summary":"编辑设备",
                 "description":"编辑设备",
-                "operationId":"updateDevicesUsingPUT",
+                "operationId":"updateDevicesUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1537,7 +1538,7 @@
                 ],
                 "summary":"查询设备日志列表",
                 "description":"查询设备日志列表",
-                "operationId":"getDeviceLogsListUsingGET",
+                "operationId":"getDeviceLogsListUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1620,7 +1621,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«DeviceLogs»"
+                            "$ref":"#/definitions/PageInfoOfDeviceLogs"
                         }
                     },
                     "401":{
@@ -1642,7 +1643,7 @@
                 ],
                 "summary":"查询告警数据",
                 "description":"查询告警数据",
-                "operationId":"findDeviceAlarmUsingPOST",
+                "operationId":"findDeviceAlarmUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1699,7 +1700,7 @@
                 ],
                 "summary":"查询设备档案列表",
                 "description":"查询设备档案列表",
-                "operationId":"findArchivesUsingPOST",
+                "operationId":"findArchivesUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1756,7 +1757,7 @@
                 ],
                 "summary":"查询全局设备数据",
                 "description":"查询全局设备数据",
-                "operationId":"findDeviceDataUsingPOST",
+                "operationId":"findDeviceDataUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1813,7 +1814,7 @@
                 ],
                 "summary":"查询统计数据",
                 "description":"查询统计数据",
-                "operationId":"findStatisticsDataUsingPOST",
+                "operationId":"findStatisticsDataUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1870,7 +1871,7 @@
                 ],
                 "summary":"查询设备分享信息列表(仅超管可用)",
                 "description":"查询设备分享信息列表(仅超管可用)",
-                "operationId":"getDeviceSharesListUsingGET",
+                "operationId":"getDeviceSharesListUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -1939,7 +1940,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«DeviceSharesDTO»"
+                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
                         }
                     },
                     "401":{
@@ -1959,7 +1960,7 @@
                 ],
                 "summary":"新增设备分享信息",
                 "description":"新增设备分享信息",
-                "operationId":"addDeviceSharesUsingPOST",
+                "operationId":"addDeviceSharesUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2012,7 +2013,7 @@
                     "Ⅳ、设备分享API类"
                 ],
                 "summary":"查询分享出去的设备列表",
-                "operationId":"getDeviceShareOthersUsingGET",
+                "operationId":"getDeviceShareOthersUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2081,7 +2082,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«DeviceSharesDTO»"
+                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
                         }
                     },
                     "401":{
@@ -2102,7 +2103,7 @@
                     "Ⅳ、设备分享API类"
                 ],
                 "summary":"查询分享给自己的设备列表",
-                "operationId":"getDeviceShareSelfUsingGET",
+                "operationId":"getDeviceShareSelfUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2171,7 +2172,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«DeviceSharesDTO»"
+                            "$ref":"#/definitions/PageInfoOfDeviceSharesDTO"
                         }
                     },
                     "401":{
@@ -2193,7 +2194,7 @@
                 ],
                 "summary":"查询设备分享信息",
                 "description":"查询设备分享信息",
-                "operationId":"getDeviceSharesByIdUsingGET",
+                "operationId":"getDeviceSharesByIdUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2241,7 +2242,7 @@
                 ],
                 "summary":"收回设备分享",
                 "description":"收回设备分享",
-                "operationId":"deleteDeviceSharesUsingDELETE",
+                "operationId":"deleteDeviceSharesUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2288,7 +2289,7 @@
                 ],
                 "summary":"根据SQL语句修改设备档案",
                 "description":"根据SQL语句修改设备档案",
-                "operationId":"updateArchivesUsingPUT",
+                "operationId":"updateArchivesUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2339,7 +2340,7 @@
                 ],
                 "summary":"删除设备",
                 "description":"删除设备",
-                "operationId":"deleteDevicesUsingDELETE",
+                "operationId":"deleteDevicesUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2385,7 +2386,7 @@
                 ],
                 "summary":"根据id查询某一条外部数据",
                 "description":"根据id查询某一条外部数据",
-                "operationId":"findExternalDataByIdUsingGET",
+                "operationId":"findExternalDataByIdUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2439,7 +2440,7 @@
                 ],
                 "summary":"添加外部数据",
                 "description":"添加外部数据",
-                "operationId":"addExternalDataUsingPOST",
+                "operationId":"addExternalDataUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2491,7 +2492,7 @@
                 ],
                 "summary":"修改外部数据",
                 "description":"修改外部数据",
-                "operationId":"updateExternalDataByIdUsingPUT",
+                "operationId":"updateExternalDataByIdUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2540,7 +2541,7 @@
                 ],
                 "summary":"删除外部数据",
                 "description":"删除外部数据",
-                "operationId":"deleteExternalDataUsingDELETE",
+                "operationId":"deleteExternalDataUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2593,7 +2594,7 @@
                 ],
                 "summary":"查询自定义权限",
                 "description":"查询自定义权限",
-                "operationId":"findCustomPermissionUsingGET",
+                "operationId":"findCustomPermissionUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2641,7 +2642,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«CustomPermission»"
+                            "$ref":"#/definitions/PageInfoOfCustomPermission"
                         }
                     },
                     "401":{
@@ -2663,7 +2664,7 @@
                 ],
                 "summary":"查询当前用户拥有的自定义权限",
                 "description":"查询当前用户拥有的自定义权限",
-                "operationId":"findCustomPermissionByUserUsingGET",
+                "operationId":"findCustomPermissionByUserUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2708,7 +2709,7 @@
                 ],
                 "summary":"用户登录",
                 "description":"用户登录",
-                "operationId":"loginUsingPOST",
+                "operationId":"loginUsingPOST_1",
                 "consumes":[
                     "application/json",
                     "application/x-www-form-urlencoded"
@@ -2765,7 +2766,7 @@
                 ],
                 "summary":"发送邮箱验证码",
                 "description":"发送邮箱验证码",
-                "operationId":"sendEmailVerificationUsingPOST",
+                "operationId":"sendEmailVerificationUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2824,7 +2825,7 @@
                 ],
                 "summary":"验证邮箱验证码",
                 "description":"验证邮箱验证码",
-                "operationId":"emailVerificationUsingPOST",
+                "operationId":"emailVerificationUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2875,7 +2876,7 @@
                 ],
                 "summary":"查询外部数据",
                 "description":"查询外部数据",
-                "operationId":"findExternalDataUsingPOST",
+                "operationId":"findExternalDataUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2932,7 +2933,7 @@
                 ],
                 "summary":"查询离线统计数据",
                 "description":"查询离线统计数据",
-                "operationId":"findStatTaskDataUsingPOST",
+                "operationId":"findStatTaskDataUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -2989,7 +2990,7 @@
                 ],
                 "summary":"查询表配置信息",
                 "description":"查询表配置信息，返回格式：{\n  \"tableName\": [\n    {\n      \"field_desc\": \"求均值\",\n      \"field_type\": \"6\",\n      \"field_name\": \"avgZ\"\n       ......    }\n   ......  ]\n}其中field_type，1：String；2：int；3：Float；4：Boolean；5：Long；6：Double；7：Date",
-                "operationId":"findTableConfigUsingGET",
+                "operationId":"findTableConfigUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3049,7 +3050,7 @@
                 ],
                 "summary":"注册用户",
                 "description":"注册用户",
-                "operationId":"registerUserUsingPOST",
+                "operationId":"registerUserUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3103,7 +3104,7 @@
                 ],
                 "summary":"查询允许注册的角色",
                 "description":"查询允许注册的角色",
-                "operationId":"findRoleAllowRegUsingGET",
+                "operationId":"findRoleAllowRegUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3148,7 +3149,7 @@
                 ],
                 "summary":"查询当前用户所能创建的角色",
                 "description":"查询当前用户所能创建的角色",
-                "operationId":"findRoleNameListUsingGET",
+                "operationId":"findRoleNameListUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3193,7 +3194,7 @@
                 ],
                 "summary":"发送短信验证码",
                 "description":"发送短信验证码",
-                "operationId":"sendSmsVerificationUsingPOST",
+                "operationId":"sendSmsVerificationUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3252,7 +3253,7 @@
                 ],
                 "summary":"验证短信验证码",
                 "description":"验证短信验证码",
-                "operationId":"checkCommandScriptUsingPOST",
+                "operationId":"checkCommandScriptUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3303,7 +3304,7 @@
                 ],
                 "summary":"查询sql模版列表",
                 "description":"查询sql模版列表",
-                "operationId":"getTemplatesUsingGET",
+                "operationId":"getTemplatesUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3372,7 +3373,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«SqlTemplate»"
+                            "$ref":"#/definitions/PageInfoOfSqlTemplate"
                         }
                     },
                     "401":{
@@ -3394,7 +3395,7 @@
                 ],
                 "summary":"查询指定sql模版",
                 "description":"查询指定sql模版",
-                "operationId":"findTemplateByIdUsingGET",
+                "operationId":"findTemplateByIdUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3444,7 +3445,7 @@
                 ],
                 "summary":"根据sql修改外部数据",
                 "description":"根据sql修改外部数据",
-                "operationId":"updateExternalDataUsingPUT",
+                "operationId":"updateExternalDataUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3495,7 +3496,7 @@
                 ],
                 "summary":"查询用户列表",
                 "description":"查询用户列表",
-                "operationId":"getUsersUsingGET",
+                "operationId":"getUsersUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3564,7 +3565,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«UserDTO»"
+                            "$ref":"#/definitions/PageInfoOfUserDTO"
                         }
                     },
                     "401":{
@@ -3584,7 +3585,7 @@
                 ],
                 "summary":"增加用户",
                 "description":"增加用户",
-                "operationId":"insertUserUsingPOST",
+                "operationId":"insertUserUsingPOST_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3638,7 +3639,7 @@
                 ],
                 "summary":"编辑子用户",
                 "description":"编辑子用户",
-                "operationId":"updateUserUsingPUT",
+                "operationId":"updateUserUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3695,7 +3696,7 @@
                 ],
                 "summary":"删除子用户",
                 "description":"删除子用户",
-                "operationId":"deleteUserByUserIdUsingDELETE",
+                "operationId":"deleteUserByUserIdUsingDELETE_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3742,7 +3743,7 @@
                 ],
                 "summary":"修改密码",
                 "description":"修改密码",
-                "operationId":"updatePasswordUsingPUT",
+                "operationId":"updatePasswordUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3793,7 +3794,7 @@
                 ],
                 "summary":"查询单个用户",
                 "description":"查询单个用户",
-                "operationId":"getUserByUserIdUsingGET",
+                "operationId":"getUserByUserIdUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3843,7 +3844,7 @@
                 ],
                 "summary":"查询子用户列表",
                 "description":"查询子用户列表",
-                "operationId":"queryChildInfoUsingGET",
+                "operationId":"queryChildInfoUsingGET_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3885,7 +3886,7 @@
                     "200":{
                         "description":"OK",
                         "schema":{
-                            "$ref":"#/definitions/PageInfo«UserDTO»"
+                            "$ref":"#/definitions/PageInfoOfUserDTO"
                         }
                     },
                     "401":{
@@ -3907,7 +3908,7 @@
                 ],
                 "summary":"停用子用户",
                 "description":"停用子用户",
-                "operationId":"disableUserUsingPUT",
+                "operationId":"disableUserUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -3957,7 +3958,7 @@
                 ],
                 "summary":"启用子用户",
                 "description":"启用子用户",
-                "operationId":"enableUserUsingPUT",
+                "operationId":"enableUserUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -4007,7 +4008,7 @@
                 ],
                 "summary":"重置子用户密码",
                 "description":"重置子用户密码",
-                "operationId":"resetPasswordUsingPUT",
+                "operationId":"resetPasswordUsingPUT_1",
                 "consumes":[
                     "application/json"
                 ],
@@ -4135,95 +4136,6 @@
                 }
             }
         },
-        "PageInfo«DevicesDTO»":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/DevicesDTO"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
-        },
         "DevicesDTO":{
             "type":"object",
             "properties":{
@@ -4324,95 +4236,6 @@
                 }
             },
             "description":"单条导入设备响应"
-        },
-        "PageInfo«DeviceSharesDTO»":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/DeviceSharesDTO"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
         },
         "ExternalDataIdResponse":{
             "type":"object",
@@ -4542,36 +4365,22 @@
                     "example":false,
                     "description":"是否在OneNET上创建设备"
                 },
-                "masterKey":{
+                "mac":{
                     "type":"string",
-                    "description":"OneNet产品masterKey"
+                    "description":"设备唯一mac标识，与sn标识二选一"
                 },
-                "protocol":{
+                "registerCode":{
                     "type":"string",
-                    "description":"设备接入协议"
+                    "description":"OneNET设备注册码"
+                },
+                "sn":{
+                    "type":"string",
+                    "description":"设备唯一sn标识，与mac标识二选一"
                 }
             },
             "description":"添加设备请求"
         },
-        "UpdateExternalData":{
-            "type":"object",
-            "properties":{
-                "data":{
-                    "type":"object",
-                    "description":"修改的数据"
-                },
-                "externalDataName":{
-                    "type":"string",
-                    "description":"外部数据名"
-                },
-                "recordId":{
-                    "type":"string",
-                    "description":"外部数据记录id"
-                }
-            },
-            "description":"修改外部数据请求"
-        },
-        "PageInfo«CommandStatus»":{
+        "PageInfoOfDeviceSharesDTO":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -4601,7 +4410,7 @@
                 "list":{
                     "type":"array",
                     "items":{
-                        "$ref":"#/definitions/CommandStatus"
+                        "$ref":"#/definitions/DeviceSharesDTO"
                     }
                 },
                 "navigateFirstPage":{
@@ -4660,7 +4469,106 @@
                 }
             }
         },
-        "PageInfo«DeviceDelegationsDTO»":{
+        "UpdateExternalData":{
+            "type":"object",
+            "properties":{
+                "data":{
+                    "type":"object",
+                    "description":"修改的数据"
+                },
+                "externalDataName":{
+                    "type":"string",
+                    "description":"外部数据名"
+                },
+                "recordId":{
+                    "type":"string",
+                    "description":"外部数据记录id"
+                }
+            },
+            "description":"修改外部数据请求"
+        },
+        "JSONObject":{
+            "type":"object",
+            "additionalProperties":{
+                "type":"object"
+            }
+        },
+        "DelegateIdResponse":{
+            "type":"object",
+            "properties":{
+                "delegateId":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"转授Id"
+                }
+            },
+            "description":"添加转授响应"
+        },
+        "CommandStatus":{
+            "type":"object",
+            "properties":{
+                "cmdUuid":{
+                    "type":"string"
+                },
+                "commandContent":{
+                    "type":"string"
+                },
+                "commandId":{
+                    "type":"integer",
+                    "format":"int64"
+                },
+                "commandName":{
+                    "type":"string"
+                },
+                "createDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "deviceId":{
+                    "type":"string"
+                },
+                "status":{
+                    "type":"integer",
+                    "format":"int32"
+                }
+            }
+        },
+        "DeviceImport":{
+            "type":"object",
+            "properties":{
+                "devices":{
+                    "type":"array",
+                    "description":"批量导入的设备信息列表",
+                    "items":{
+                        "$ref":"#/definitions/AddDevice"
+                    }
+                }
+            },
+            "description":"批量导入设备请求"
+        },
+        "UpdateUserRequest":{
+            "type":"object",
+            "properties":{
+                "email":{
+                    "type":"string",
+                    "description":"邮箱地址"
+                },
+                "extension":{
+                    "type":"object",
+                    "description":"用户扩展信息"
+                },
+                "phone":{
+                    "type":"string",
+                    "description":"手机号"
+                },
+                "userName":{
+                    "type":"string",
+                    "description":"用户名"
+                }
+            },
+            "description":"修改用户信息请求"
+        },
+        "PageInfoOfDeviceDelegationsDTO":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -4749,86 +4657,94 @@
                 }
             }
         },
-        "JSONObject":{
-            "type":"object",
-            "additionalProperties":{
-                "type":"object"
-            }
-        },
-        "DelegateIdResponse":{
+        "PageInfoOfSqlTemplate":{
             "type":"object",
             "properties":{
-                "delegateId":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"转授Id"
-                }
-            },
-            "description":"添加转授响应"
-        },
-        "CommandStatus":{
-            "type":"object",
-            "properties":{
-                "cmdUuid":{
-                    "type":"string"
-                },
-                "commandContent":{
-                    "type":"string"
-                },
-                "commandId":{
-                    "type":"integer",
-                    "format":"int64"
-                },
-                "commandName":{
-                    "type":"string"
-                },
-                "createDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "deviceId":{
-                    "type":"string"
-                },
-                "status":{
+                "endRow":{
                     "type":"integer",
                     "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/SqlTemplate"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
                 }
             }
-        },
-        "DeviceImport":{
-            "type":"object",
-            "properties":{
-                "devices":{
-                    "type":"array",
-                    "description":"批量导入的设备信息列表",
-                    "items":{
-                        "$ref":"#/definitions/AddDevice"
-                    }
-                }
-            },
-            "description":"批量导入设备请求"
-        },
-        "UpdateUserRequest":{
-            "type":"object",
-            "properties":{
-                "email":{
-                    "type":"string",
-                    "description":"邮箱地址"
-                },
-                "extension":{
-                    "type":"object",
-                    "description":"用户扩展信息"
-                },
-                "phone":{
-                    "type":"string",
-                    "description":"手机号"
-                },
-                "userName":{
-                    "type":"string",
-                    "description":"用户名"
-                }
-            },
-            "description":"修改用户信息请求"
         },
         "AddDeviceDelegations":{
             "type":"object",
@@ -5016,7 +4932,7 @@
             },
             "description":"分享的权限"
         },
-        "PageInfo«SqlTemplate»":{
+        "PageInfoOfDeviceLogs":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -5046,7 +4962,7 @@
                 "list":{
                     "type":"array",
                     "items":{
-                        "$ref":"#/definitions/SqlTemplate"
+                        "$ref":"#/definitions/DeviceLogs"
                     }
                 },
                 "navigateFirstPage":{
@@ -5105,138 +5021,96 @@
                 }
             }
         },
-        "FailedDevices":{
+        "PageInfoOfDevicesDTO":{
             "type":"object",
             "properties":{
-                "deviceId":{
-                    "type":"string",
-                    "description":"设备ID"
-                },
-                "msg":{
-                    "type":"string",
-                    "description":"导入失败原因"
-                }
-            },
-            "description":"批量导入设备失败信息"
-        },
-        "DeviceDelegationsDTO":{
-            "type":"object",
-            "properties":{
-                "delegateDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "delegateId":{
+                "endRow":{
                     "type":"integer",
                     "format":"int32"
                 },
-                "delegateLevel":{
+                "firstPage":{
                     "type":"integer",
                     "format":"int32"
                 },
-                "deviceId":{
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/DevicesDTO"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
                     "type":"string"
                 },
-                "fromUserLoginName":{
-                    "type":"string"
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
                 },
-                "fromUserUserName":{
-                    "type":"string"
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
                 },
-                "toUserLoginName":{
-                    "type":"string"
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
                 },
-                "toUserUserName":{
-                    "type":"string"
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
                 }
             }
         },
-        "EmailIdResponse":{
-            "type":"object",
-            "properties":{
-                "emailId":{
-                    "type":"string",
-                    "description":"邮件的唯一标识码"
-                }
-            },
-            "description":"发送邮件响应"
-        },
-        "DeviceImportResponse":{
-            "type":"object",
-            "properties":{
-                "failedCount":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"导入失败的条数"
-                },
-                "failedDevices":{
-                    "type":"array",
-                    "description":"导入失败的具体信息",
-                    "items":{
-                        "$ref":"#/definitions/FailedDevices"
-                    }
-                },
-                "successCount":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"导入成功的条数"
-                }
-            },
-            "description":"批量导入设备响应"
-        },
-        "AddDeviceShares":{
-            "type":"object",
-            "properties":{
-                "deviceId":{
-                    "type":"string",
-                    "description":"设备Id"
-                },
-                "permissions":{
-                    "type":"array",
-                    "description":"分享的权限List",
-                    "items":{
-                        "$ref":"#/definitions/DeviceShare"
-                    }
-                },
-                "toUser":{
-                    "type":"string",
-                    "description":"被分享人loginName"
-                }
-            },
-            "description":"添加设备分享信息请求"
-        },
-        "DeviceSharesDTO":{
-            "type":"object",
-            "properties":{
-                "deviceId":{
-                    "type":"string"
-                },
-                "fromUserLoginName":{
-                    "type":"string"
-                },
-                "fromUserUserName":{
-                    "type":"string"
-                },
-                "permissions":{
-                    "type":"string"
-                },
-                "shareDate":{
-                    "type":"string",
-                    "format":"date-time"
-                },
-                "shareId":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "toUserLoginName":{
-                    "type":"string"
-                },
-                "toUserUserName":{
-                    "type":"string"
-                }
-            }
-        },
-        "PageInfo«CustomPermission»":{
+        "PageInfoOfCustomPermission":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -5325,88 +5199,57 @@
                 }
             }
         },
-        "Password":{
-            "type":"object",
-            "properties":{
-                "newPassword":{
-                    "type":"string",
-                    "description":"新密码"
-                },
-                "oldPassword":{
-                    "type":"string",
-                    "description":"旧密码"
-                }
-            },
-            "description":"修改密码请求"
-        },
-        "FindDeviceSharesRsp":{
+        "FailedDevices":{
             "type":"object",
             "properties":{
                 "deviceId":{
                     "type":"string",
-                    "description":"设备Id"
+                    "description":"设备ID"
                 },
-                "fromUser":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"分享人Id"
+                "deviceName":{
+                    "type":"string",
+                    "description":"设备名称"
                 },
-                "permissions":{
-                    "type":"array",
-                    "description":"分享的信息List",
-                    "items":{
-                        "$ref":"#/definitions/DeviceShare"
-                    }
-                },
-                "shareId":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"分享Id"
-                },
-                "toUser":{
-                    "type":"integer",
-                    "format":"int32",
-                    "description":"被分享人Id"
+                "msg":{
+                    "type":"string",
+                    "description":"导入失败原因"
                 }
             },
-            "description":"查询设备分享响应"
+            "description":"批量导入设备失败信息"
         },
-        "RegisterUserRequest":{
+        "DeviceDelegationsDTO":{
             "type":"object",
             "properties":{
-                "email":{
+                "delegateDate":{
                     "type":"string",
-                    "description":"邮箱地址"
+                    "format":"date-time"
                 },
-                "extension":{
-                    "type":"object",
-                    "description":"用户扩展数据"
-                },
-                "loginName":{
-                    "type":"string",
-                    "description":"登录名"
-                },
-                "password":{
-                    "type":"string",
-                    "description":"密码"
-                },
-                "phone":{
-                    "type":"string",
-                    "description":"手机号"
-                },
-                "roleId":{
+                "delegateId":{
                     "type":"integer",
-                    "format":"int32",
-                    "description":"角色Id"
+                    "format":"int32"
                 },
-                "userName":{
-                    "type":"string",
-                    "description":"用户名"
+                "delegateLevel":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "deviceId":{
+                    "type":"string"
+                },
+                "fromUserLoginName":{
+                    "type":"string"
+                },
+                "fromUserUserName":{
+                    "type":"string"
+                },
+                "toUserLoginName":{
+                    "type":"string"
+                },
+                "toUserUserName":{
+                    "type":"string"
                 }
-            },
-            "description":"注册用户请求"
+            }
         },
-        "PageInfo«UserDTO»":{
+        "PageInfoOfUserDTO":{
             "type":"object",
             "properties":{
                 "endRow":{
@@ -5494,6 +5337,261 @@
                     "format":"int64"
                 }
             }
+        },
+        "EmailIdResponse":{
+            "type":"object",
+            "properties":{
+                "emailId":{
+                    "type":"string",
+                    "description":"邮件的唯一标识码"
+                }
+            },
+            "description":"发送邮件响应"
+        },
+        "PageInfoOfCommandStatus":{
+            "type":"object",
+            "properties":{
+                "endRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "firstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "hasNextPage":{
+                    "type":"boolean"
+                },
+                "hasPreviousPage":{
+                    "type":"boolean"
+                },
+                "isFirstPage":{
+                    "type":"boolean"
+                },
+                "isLastPage":{
+                    "type":"boolean"
+                },
+                "lastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "list":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/CommandStatus"
+                    }
+                },
+                "navigateFirstPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigateLastPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatePages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "navigatepageNums":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer",
+                        "format":"int32"
+                    }
+                },
+                "nextPage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "orderBy":{
+                    "type":"string"
+                },
+                "pageNum":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pageSize":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "pages":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "prePage":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "size":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "startRow":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "total":{
+                    "type":"integer",
+                    "format":"int64"
+                }
+            }
+        },
+        "DeviceImportResponse":{
+            "type":"object",
+            "properties":{
+                "failedCount":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"导入失败的条数"
+                },
+                "failedDevices":{
+                    "type":"array",
+                    "description":"导入失败的具体信息",
+                    "items":{
+                        "$ref":"#/definitions/FailedDevices"
+                    }
+                },
+                "successCount":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"导入成功的条数"
+                }
+            },
+            "description":"批量导入设备响应"
+        },
+        "AddDeviceShares":{
+            "type":"object",
+            "properties":{
+                "deviceId":{
+                    "type":"string",
+                    "description":"设备Id"
+                },
+                "permissions":{
+                    "type":"array",
+                    "description":"分享的权限List",
+                    "items":{
+                        "$ref":"#/definitions/DeviceShare"
+                    }
+                },
+                "toUser":{
+                    "type":"string",
+                    "description":"被分享人loginName"
+                }
+            },
+            "description":"添加设备分享信息请求"
+        },
+        "DeviceSharesDTO":{
+            "type":"object",
+            "properties":{
+                "deviceId":{
+                    "type":"string"
+                },
+                "fromUserLoginName":{
+                    "type":"string"
+                },
+                "fromUserUserName":{
+                    "type":"string"
+                },
+                "permissions":{
+                    "type":"string"
+                },
+                "shareDate":{
+                    "type":"string",
+                    "format":"date-time"
+                },
+                "shareId":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "toUserLoginName":{
+                    "type":"string"
+                },
+                "toUserUserName":{
+                    "type":"string"
+                }
+            }
+        },
+        "Password":{
+            "type":"object",
+            "properties":{
+                "newPassword":{
+                    "type":"string",
+                    "description":"新密码"
+                },
+                "oldPassword":{
+                    "type":"string",
+                    "description":"旧密码"
+                }
+            },
+            "description":"修改密码请求"
+        },
+        "FindDeviceSharesRsp":{
+            "type":"object",
+            "properties":{
+                "deviceId":{
+                    "type":"string",
+                    "description":"设备Id"
+                },
+                "fromUser":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"分享人Id"
+                },
+                "permissions":{
+                    "type":"array",
+                    "description":"分享的信息List",
+                    "items":{
+                        "$ref":"#/definitions/DeviceShare"
+                    }
+                },
+                "shareId":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"分享Id"
+                },
+                "toUser":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"被分享人Id"
+                }
+            },
+            "description":"查询设备分享响应"
+        },
+        "RegisterUserRequest":{
+            "type":"object",
+            "properties":{
+                "email":{
+                    "type":"string",
+                    "description":"邮箱地址"
+                },
+                "extension":{
+                    "type":"object",
+                    "description":"用户扩展数据"
+                },
+                "loginName":{
+                    "type":"string",
+                    "description":"登录名"
+                },
+                "password":{
+                    "type":"string",
+                    "description":"密码"
+                },
+                "phone":{
+                    "type":"string",
+                    "description":"手机号"
+                },
+                "roleId":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"角色Id"
+                },
+                "userName":{
+                    "type":"string",
+                    "description":"用户名"
+                }
+            },
+            "description":"注册用户请求"
         },
         "ShareIdResponse":{
             "type":"object",
@@ -5644,95 +5742,6 @@
                 }
             },
             "description":"验证短信验证码请求"
-        },
-        "PageInfo«DeviceLogs»":{
-            "type":"object",
-            "properties":{
-                "endRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "firstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "hasNextPage":{
-                    "type":"boolean"
-                },
-                "hasPreviousPage":{
-                    "type":"boolean"
-                },
-                "isFirstPage":{
-                    "type":"boolean"
-                },
-                "isLastPage":{
-                    "type":"boolean"
-                },
-                "lastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "list":{
-                    "type":"array",
-                    "items":{
-                        "$ref":"#/definitions/DeviceLogs"
-                    }
-                },
-                "navigateFirstPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigateLastPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatePages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "navigatepageNums":{
-                    "type":"array",
-                    "items":{
-                        "type":"integer",
-                        "format":"int32"
-                    }
-                },
-                "nextPage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "orderBy":{
-                    "type":"string"
-                },
-                "pageNum":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pageSize":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "pages":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "prePage":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "size":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "startRow":{
-                    "type":"integer",
-                    "format":"int32"
-                },
-                "total":{
-                    "type":"integer",
-                    "format":"int64"
-                }
-            }
         }
     }
 }
