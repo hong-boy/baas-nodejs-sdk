@@ -14,7 +14,10 @@ npm install --save baas-nodejs-sdk
 ### Usage（ES6/Promise）
 ```js 
 var APIClient = require('baas-nodejs-sdk');
-var client = new APIClient();
+var client = new APIClient({
+    domain: 'http://demo.heclouds.com/baasapi/', // BaaS API服务地址
+    debug: false // 是否打印日志信息
+});
 
 // 用户登录
 var promise = client.loginUsingGET({
@@ -42,7 +45,10 @@ promise.then(function(ret){
 ### Usage（ES7/async-await）
 ```js 
 var APIClient = require('baas-nodejs-sdk');
-var client = new APIClient();
+var client = new APIClient({
+    domain: 'http://demo.heclouds.com/baasapi/', // BaaS API服务地址
+    debug: false // 是否打印日志信息
+});
 
 // 用户登录
 async function login(user){
