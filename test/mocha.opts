@@ -1,6 +1,4 @@
 --reporter spec
 -t 10000
 -s 5000
---require babel-polyfill intelli-espower-loader
---compilers js:babel-core/register
 ##--debug-brk

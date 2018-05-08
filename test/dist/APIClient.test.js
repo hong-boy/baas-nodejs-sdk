@@ -5,7 +5,7 @@ let sessionToken = null;
 
 const CONFIG_ENV_TEST = {
     debug: false,
-    domain: 'http://172.19.3.138:6549',
+    domain: 'http://demo.heclouds.com/baasapi/',
     accessId: 'PZwI2qTh',
     accessKey: '7896620c92b54d93a21bdea5b5aff2f2',
     user: {
@@ -22,7 +22,7 @@ async function getSessionToken() {
         return sessionToken;
     }
     try {
-        let ret = await client.loginUsingGET(CONFIG_ENV_TEST.user);
+        let ret = await client.loginUsingPost(CONFIG_ENV_TEST.user);
         sessionToken = ret.response.headers['session-token'];
         console.log('用户登录', sessionToken, ret.body);
         return sessionToken;
