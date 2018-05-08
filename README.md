@@ -8,11 +8,11 @@
 
 ## 如何使用
 ### 安装
-```  
+```
 npm install --save baas-nodejs-sdk
 ```
 ### Usage（ES6/Promise）
-```js 
+```js
 var APIClient = require('baas-nodejs-sdk');
 var client = new APIClient({
     domain: 'http://demo.heclouds.com/baasapi/', // BaaS API服务地址
@@ -20,7 +20,7 @@ var client = new APIClient({
 });
 
 // 用户登录
-var promise = client.loginUsingGET({
+var promise = client.loginUsingPOST({
     loginName: '',
     password: '',
     appToken: ''
@@ -43,7 +43,7 @@ promise.then(function(ret){
 ```
 
 ### Usage（ES7/async-await）
-```js 
+```js
 var APIClient = require('baas-nodejs-sdk');
 var client = new APIClient({
     domain: 'http://demo.heclouds.com/baasapi/', // BaaS API服务地址
@@ -54,7 +54,7 @@ var client = new APIClient({
 async function login(user){
     try{
         // 登录成功
-        let ret = await client.loginUsingGET(user);
+        let ret = await client.loginUsingPOST(user);
         let resp = ret.response;
         let body = ret.body;
         // 获取session-token
